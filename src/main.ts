@@ -1,8 +1,46 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { AppModule } from './modules/app/app.module';
+import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
+import configuration from '@app/common/config/config.provider';
+import httpsConfig from '@app/common/config/http.config';
+import { loadCorsConfiguration } from './common/config/cors.config';
+import { AppLoggerService } from './common/logger/logger.service';
+import { AllExceptionsFilter } from './common/filters/all-exception.filter';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    await app.listen(3000);
+    try {
+        const configService = new ConfigService(configuration());
+
+        const httpsOptions = httpsConfig(configService);
+
+        const app = await NestFactory.create(AppModule, {
+            ...(httpsOptions ? { httpsOptions } : {}),
+        });
+
+        app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+
+        app.enableCors(loadCorsConfiguration(configService.get('cors')));
+
+        const httpAdapter = app.get(HttpAdapterHost);
+
+        const loggerService = app.get<AppLoggerService>(AppLoggerService);
+
+        app.useGlobalFilters(new AllExceptionsFilter(loggerService, httpAdapter));
+
+        const appPort = configService.get<number>('appPort');
+
+        await app.listen(appPort);
+
+        process
+            .on('unhandledRejection', (reason, p) => loggerService.error({ reason, p }, 'Unhandled Rejection'))
+            .on('uncaughtException', (error: Error) => loggerService.error(error, 'Uncaught Exception'));
+
+        loggerService.log(`App listen on port: ${appPort}`);
+    } catch (e) {
+        console.log(e, 'Error on bootstrap!');
+
+        process.exit(1);
+    }
 }
 bootstrap();
