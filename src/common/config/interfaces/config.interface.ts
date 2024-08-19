@@ -1,3 +1,4 @@
+import { DatabaseType } from 'typeorm/driver/types/DatabaseType';
 import { AppProtocol, LogLevel } from './config.enum';
 
 export interface ConfigEnvironment {
@@ -6,6 +7,16 @@ export interface ConfigEnvironment {
     certsPathFile?: CertsPathFileEnvironmentVariables;
     cors: CorsEnvironmentVariables;
     log: LogEnvironmentVariables;
+    database: DatabaseEnvironmentVariables;
+}
+
+export interface DatabaseEnvironmentVariables {
+    type: DatabaseType;
+    host: string;
+    port: number;
+    username: string;
+    password: string;
+    database: string;
 }
 
 export interface CertsPathFileEnvironmentVariables {
