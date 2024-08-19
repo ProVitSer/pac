@@ -7,6 +7,7 @@ import httpsConfig from '@app/common/config/http.config';
 import { loadCorsConfiguration } from './common/config/cors.config';
 import { AppLoggerService } from './common/logger/logger.service';
 import { AllExceptionsFilter } from './common/filters/all-exception.filter';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {
     try {
@@ -25,6 +26,8 @@ async function bootstrap() {
         const httpAdapter = app.get(HttpAdapterHost);
 
         const loggerService = app.get<AppLoggerService>(AppLoggerService);
+
+        app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
         app.useGlobalFilters(new AllExceptionsFilter(loggerService, httpAdapter));
 
