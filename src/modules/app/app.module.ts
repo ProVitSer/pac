@@ -7,6 +7,11 @@ import { WinstonModule } from 'nest-winston';
 import { LogLevel } from '@app/common/config/interfaces/config.enum';
 import { createLogger } from '@app/common/config/logger.config';
 import { AppLoggerService } from '@app/common/logger/logger.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { databaseConfig } from '@app/common/config/database.config';
+import { CompaniesModule } from '../companies/companies.module';
+import { LicensesModule } from '../licenses/licenses.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
     imports: [
@@ -22,6 +27,25 @@ import { AppLoggerService } from '@app/common/logger/logger.service';
             },
             inject: [ConfigService],
         }),
+        TypeOrmModule.forRootAsync({
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => {
+                return databaseConfig(configService);
+            },
+        }),
+        CompaniesModule,
+        LicensesModule,
+        RouterModule.register([
+            {
+                path: 'api/v1',
+                children: [
+                    {
+                        path: 'companies',
+                        module: CompaniesModule,
+                    },
+                ],
+            },
+        ]),
     ],
     controllers: [AppController],
     providers: [AppService, AppLoggerService],
