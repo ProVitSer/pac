@@ -31,6 +31,14 @@ const DEV_CONF: ConfigEnvironment = {
         maxFiles: '14d',
         level: [LogLevel.console, LogLevel.info, LogLevel.error],
     },
+    database: {
+        type: 'postgres' as any,
+        host: 'localhost',
+        port: 5432,
+        username: 'postgres_user',
+        password: 'verySecretPasswd',
+        database: 'check_doc',
+    },
 };
 
 const PROD_CONF: ConfigEnvironment = {
@@ -55,5 +63,13 @@ const PROD_CONF: ConfigEnvironment = {
         mixSize: '20m',
         maxFiles: '14d',
         level: [LogLevel.info],
+    },
+    database: {
+        type: 'postgres' as any,
+        host: process.env.DATABASE_HOST,
+        port: parseInt(process.env.DATABASE_PORT),
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_NAME,
     },
 };
