@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+
+  database:
+    container_name: ${DATABASE_CONTAINER_NAME}
+    image: "postgres"
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pac
+    restart: unless-stopped
+
+    
+  pgadmin:
+    container_name: ${PGADMIN_CONTAINER_NAME}
+    image: dpage/pgadmin4:6.15
+    entrypoint: >
+      /bin/sh -c "
+      cp -f /pgadmin4/pgpass /var/lib/pgadmin/;
+      chmod 0600  /var/lib/pgadmin/pgpass;
+      chown 5050:5050 /var/lib/pgadmin/pgpass;
+      /entrypoint.sh
+      "
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    volumes:
+       - ./pgadmin/servers.json:/pgadmin4/servers.json
+       - ./pgadmin/pgpass:/pgadmin4/pgpass
+    ports:
+      - "${PGADMIN_PORT}:80"
+    networks:
+      - pac
+    restart: unless-stopped
+
+networks:
+  pac:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
