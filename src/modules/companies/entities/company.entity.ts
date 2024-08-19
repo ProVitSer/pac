@@ -1,4 +1,4 @@
-import { License } from '@app/modules/licenses/entities/license.entity';
+import { License } from '../../../modules/licenses/entities/license.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
 
 @Entity()

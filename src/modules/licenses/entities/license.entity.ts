@@ -1,4 +1,4 @@
-import { Company } from '@app/modules/companies/entities/company.entity';
+import { Company } from '../../../modules/companies/entities/company.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
