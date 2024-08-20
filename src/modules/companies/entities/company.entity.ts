@@ -6,14 +6,17 @@ export class Company {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ nullable: false })
     name: string;
 
     @Column({ nullable: false })
     contact_person_name: string;
 
     @Column({ nullable: false })
-    contact_info: string;
+    phone: string;
+
+    @Column({ nullable: false })
+    email: string;
 
     @OneToMany(() => License, (license) => license.company)
     licenses: License[];
