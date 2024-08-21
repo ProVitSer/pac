@@ -37,7 +37,7 @@ const DEV_CONF: ConfigEnvironment = {
         port: 5432,
         username: 'postgres_user',
         password: 'verySecretPasswd',
-        database: 'check_doc',
+        database: 'pac',
     },
 };
 
