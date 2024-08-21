@@ -1,13 +1,16 @@
 import { License } from '../../../modules/licenses/entities/license.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Company {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ nullable: false, unique: true })
+    client_id: string;
+
     @Column({ nullable: false })
-    name: string;
+    company_name: number;
 
     @Column({ nullable: false })
     contact_person_name: string;
@@ -15,12 +18,21 @@ export class Company {
     @Column({ nullable: false })
     phone: string;
 
-    @Column({ nullable: false })
+    @Column({ nullable: false, unique: true })
     email: string;
+
+    @Column({ nullable: true })
+    buh_id: string;
+
+    @Column({ default: 0 })
+    balance: number;
 
     @OneToMany(() => License, (license) => license.company)
     licenses: License[];
 
     @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
+    created_at: Date;
+
+    @UpdateDateColumn({ type: 'timestamp' })
+    updated_at: Date;
 }
