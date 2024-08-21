@@ -1,8 +1,8 @@
-import { License } from '../../../modules/licenses/entities/license.entity';
+import { License } from '../../licenses/entities/license.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, UpdateDateColumn } from 'typeorm';
 
 @Entity()
-export class Company {
+export class Client {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -22,7 +22,7 @@ export class Company {
     email: string;
 
     @Column({ nullable: true })
-    buh_id: string;
+    buh_id?: string;
 
     @Column({ default: 0 })
     balance: number;

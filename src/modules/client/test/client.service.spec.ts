@@ -2,25 +2,25 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { mock, instance } from 'ts-mockito';
-import { Company } from '../entities/company.entity';
-import { CompaniesService } from '../services/companies.service';
+import { Client } from '../entities/client.entity';
+import { ClientService } from '../services/client.service';
 import { LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { companies } from '../mocks/company';
+import { clients } from '../mocks/clients';
 
-describe('CompaniesService', () => {
-    let service: CompaniesService;
-    let repository: Repository<Company>;
+describe('ClientsService', () => {
+    let service: ClientService;
+    let repository: Repository<Client>;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let logger: LoggerService;
 
     beforeEach(async () => {
-        const mockedRepository = mock<Repository<Company>>(Repository);
+        const mockedRepository = mock<Repository<Client>>(Repository);
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                CompaniesService,
+                ClientService,
                 {
-                    provide: getRepositoryToken(Company),
+                    provide: getRepositoryToken(Client),
                     useValue: instance(mockedRepository),
                 },
                 {
@@ -33,8 +33,8 @@ describe('CompaniesService', () => {
             ],
         }).compile();
 
-        service = module.get<CompaniesService>(CompaniesService);
-        repository = module.get<Repository<Company>>(getRepositoryToken(Company));
+        service = module.get<ClientService>(ClientService);
+        repository = module.get<Repository<Client>>(getRepositoryToken(Client));
         logger = module.get<LoggerService>(WINSTON_MODULE_NEST_PROVIDER);
     });
 
@@ -43,54 +43,54 @@ describe('CompaniesService', () => {
     });
 
     it('should create a company', async () => {
-        jest.spyOn(repository, 'create').mockReturnValue(companies[0]);
+        jest.spyOn(repository, 'create').mockReturnValue(clients[0]);
 
-        jest.spyOn(repository, 'save').mockResolvedValue(companies[0]);
+        jest.spyOn(repository, 'save').mockResolvedValue(clients[0]);
 
-        const result = await service.createCompany(companies[0]);
+        const result = await service.createCompany(clients[0]);
 
-        expect(result).toEqual(companies[0]);
+        expect(result).toEqual(clients[0]);
     });
 
     it('should return all companies', async () => {
-        jest.spyOn(repository, 'create').mockReturnValue(companies[1]);
+        jest.spyOn(repository, 'create').mockReturnValue(clients[1]);
 
-        jest.spyOn(repository, 'save').mockResolvedValue(companies[1]);
+        jest.spyOn(repository, 'save').mockResolvedValue(clients[1]);
 
-        await service.createCompany(companies[1]);
+        await service.createCompany(clients[1]);
 
-        jest.spyOn(repository, 'find').mockResolvedValue(companies);
+        jest.spyOn(repository, 'find').mockResolvedValue(clients);
 
         const result = await service.getCompanies();
 
-        expect(result).toEqual(companies);
+        expect(result).toEqual(clients);
     });
 
     it('should return a company by id', async () => {
-        jest.spyOn(repository, 'findOne').mockResolvedValue(companies[1]);
+        jest.spyOn(repository, 'findOne').mockResolvedValue(clients[1]);
 
         const result = await service.getCompanyById(2);
 
-        expect(result).toEqual(companies[1]);
+        expect(result).toEqual(clients[1]);
     });
 
     it('should update a company', async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { name, ...otherCompanyInfo } = companies[0];
+        const { company_name, ...otherCompanyInfo } = clients[0];
 
         jest.spyOn(repository, 'update').mockResolvedValue({ affected: 1 } as any);
 
-        jest.spyOn(repository, 'findOne').mockResolvedValue({ ...otherCompanyInfo, name: companies[1].name });
+        jest.spyOn(repository, 'findOne').mockResolvedValue({ ...otherCompanyInfo, company_name: clients[1].company_name });
 
-        const result = await service.updateCompany(1, { name: companies[1].name });
+        const result = await service.updateCompany(1, { company_name: clients[1].company_name });
 
-        expect(result).toEqual({ ...otherCompanyInfo, name: companies[1].name });
+        expect(result).toEqual({ ...otherCompanyInfo, company_name: clients[1].company_name });
     });
 
     it('should throw an error if trying to update a non-existent company', async () => {
         jest.spyOn(repository, 'update').mockResolvedValue({ affected: 0 } as any);
 
-        await expect(service.updateCompany(3, { name: companies[1].name })).rejects.toThrow();
+        await expect(service.updateCompany(3, { company_name: clients[1].company_name })).rejects.toThrow();
     });
 
     it('should delete a company', async () => {

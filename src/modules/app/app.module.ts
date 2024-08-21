@@ -9,7 +9,7 @@ import { createLogger } from '@app/common/config/logger.config';
 import { AppLoggerService } from '@app/common/logger/logger.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from '@app/common/config/database.config';
-import { CompaniesModule } from '../companies/companies.module';
+import { ClientModule } from '../client/client.module';
 import { LicensesModule } from '../licenses/licenses.module';
 import { RouterModule } from '@nestjs/core';
 
@@ -33,15 +33,15 @@ import { RouterModule } from '@nestjs/core';
                 return databaseConfig(configService);
             },
         }),
-        CompaniesModule,
+        ClientModule,
         LicensesModule,
         RouterModule.register([
             {
                 path: 'api/v1',
                 children: [
                     {
-                        path: 'companies',
-                        module: CompaniesModule,
+                        path: 'client',
+                        module: ClientModule,
                     },
                 ],
             },

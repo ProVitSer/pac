@@ -1,19 +1,19 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Company } from '../entities/company.entity';
-import CompanyNotFoundException from '../exceptions/company-not-found.exception';
+import { Client } from '../entities/client.entity';
+import CompanyNotFoundException from '../exceptions/client-not-found.exception';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
-export class CompaniesService {
+export class ClientService {
     constructor(
-        @InjectRepository(Company)
-        private companiesRepository: Repository<Company>,
+        @InjectRepository(Client)
+        private companiesRepository: Repository<Client>,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
 
-    public async createCompany(companyData: Partial<Company>): Promise<Company> {
+    public async createCompany(companyData: Partial<Client>): Promise<Client> {
         const newCompany = await this.companiesRepository.create({
             ...companyData,
         });
@@ -22,11 +22,11 @@ export class CompaniesService {
         return newCompany;
     }
 
-    public async getCompanies(): Promise<Company[]> {
+    public async getCompanies(): Promise<Client[]> {
         return this.companiesRepository.find({ relations: ['licenses'] });
     }
 
-    public async getCompanyById(id: number): Promise<Company> {
+    public async getCompanyById(id: number): Promise<Client> {
         const company = await this.companiesRepository.findOne({
             where: { id },
             relations: {
@@ -40,7 +40,7 @@ export class CompaniesService {
         throw new CompanyNotFoundException(id);
     }
 
-    public async updateCompany(id: number, updateData: Partial<Company>): Promise<Company> {
+    public async updateCompany(id: number, updateData: Partial<Client>): Promise<Client> {
         await this.companiesRepository.update(id, updateData);
         const updatedCompany = await this.companiesRepository.findOne({
             where: {

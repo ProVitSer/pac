@@ -1,4 +1,4 @@
-import { Company } from '../../../modules/companies/entities/company.entity';
+import { Client } from '../../client/entities/client.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
@@ -6,8 +6,8 @@ export class License {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Company, (company) => company.licenses, { onDelete: 'CASCADE' })
-    company: Company;
+    @ManyToOne(() => Client, (client) => client.licenses, { onDelete: 'CASCADE' })
+    company: Client;
 
     @Column()
     type: string;
