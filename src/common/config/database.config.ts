@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DatabaseEnvironmentVariables } from './interfaces/config.interface';
+import * as path from 'path';
 
 export function databaseConfig(config: ConfigService): TypeOrmModuleOptions {
     const databaseConfig = config.get('database') as DatabaseEnvironmentVariables;
@@ -12,7 +13,7 @@ export function databaseConfig(config: ConfigService): TypeOrmModuleOptions {
         username: databaseConfig.username,
         password: databaseConfig.password,
         database: databaseConfig.database,
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities: [path.join(__dirname + '/../../modules/' + '/**/entities/*.entity{.ts,.js}')],
         synchronize: false,
     };
 }

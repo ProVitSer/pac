@@ -21,10 +21,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky install",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
-    "migration:run": "npm run typeorm migration:run -- -d ./src/common/config/typeorm.ts",
-    "migration:generate": "npm run typeorm -- -d ./src/common/config/typeorm.ts migration:generate ./src/database/migrations/",
-    "migration:create": "npm run typeorm -- migration:create ./src/database/migrations/",
-    "migration:revert": "npm run typeorm -- -d ./src/common/config/typeorm.ts migration:revert"
+    "migration:run": "npm run typeorm migration:run -- -d src/common/config/typeorm.ts",
+    "migration:generate": "npm run typeorm -- -d src/common/config/typeorm.ts migration:generate src/database/migrations/pac",
+    "migration:revert": "npm run typeorm -- -d src/common/config/typeorm.ts migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
