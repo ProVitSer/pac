@@ -1,8 +1,9 @@
 import { License } from '../../licenses/entities/license.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from 'typeorm';
+import { ClientInterface } from '../interfaces/client.interface';
 
 @Entity()
-export class Client {
+export class Client implements ClientInterface {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -22,12 +23,12 @@ export class Client {
     email: string;
 
     @Column({ nullable: true })
-    buh_id?: string;
+    buh_id: string;
 
     @Column({ default: 0 })
     balance: number;
 
-    @OneToOne(() => License, (license) => license.company)
+    @OneToOne(() => License, (license) => license.client_id)
     licenses: License;
 
     @Column({ default: false })
