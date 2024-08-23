@@ -12,6 +12,7 @@ import { databaseConfig } from '@app/common/config/database.config';
 import { ClientModule } from '../client/client.module';
 import { LicensesModule } from '../licenses/licenses.module';
 import { RouterModule } from '@nestjs/core';
+import { ProductModule } from '../product/product.module';
 
 @Module({
     imports: [
@@ -35,6 +36,7 @@ import { RouterModule } from '@nestjs/core';
         }),
         ClientModule,
         LicensesModule,
+        ProductModule,
         RouterModule.register([
             {
                 path: 'api/v1',
@@ -42,6 +44,24 @@ import { RouterModule } from '@nestjs/core';
                     {
                         path: 'client',
                         module: ClientModule,
+                    },
+                ],
+            },
+            {
+                path: 'api/v1',
+                children: [
+                    {
+                        path: 'licenses',
+                        module: LicensesModule,
+                    },
+                ],
+            },
+            {
+                path: 'api/v1',
+                children: [
+                    {
+                        path: 'product',
+                        module: ProductModule,
                     },
                 ],
             },
