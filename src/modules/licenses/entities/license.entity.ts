@@ -1,12 +1,13 @@
 import { Client } from '../../client/entities/client.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class License {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Client, (client) => client.licenses, { onDelete: 'CASCADE' })
+    @OneToOne(() => Client, (client) => client.licenses, { onDelete: 'CASCADE' })
+    @JoinColumn()
     company: Client;
 
     @Column()
