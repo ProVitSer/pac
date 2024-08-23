@@ -7,6 +7,8 @@ import { ClientService } from '../services/client.service';
 import { LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { clients } from '../mocks/clients';
+import ClientExistsException from '../exceptions/client-exists.exeption';
+import ClientNotFoundException from '../exceptions/client-not-found.exception';
 
 describe('ClientsService', () => {
     let service: ClientService;
@@ -42,66 +44,92 @@ describe('ClientsService', () => {
         expect(service).toBeDefined();
     });
 
-    it('should create a company', async () => {
+    it('should create a client', async () => {
         jest.spyOn(repository, 'create').mockReturnValue(clients[0]);
+
+        jest.spyOn(repository, 'update').mockResolvedValue({ affected: 0 } as any);
 
         jest.spyOn(repository, 'save').mockResolvedValue(clients[0]);
 
-        const result = await service.createCompany(clients[0]);
+        const result = await service.createClient(clients[0]);
 
         expect(result).toEqual(clients[0]);
+
+        expect(repository.create).toHaveBeenCalledWith(expect.objectContaining(clients[0]));
+
+        expect(repository.save).toHaveBeenCalledWith(clients[0]);
     });
 
-    it('should return all companies', async () => {
-        jest.spyOn(repository, 'create').mockReturnValue(clients[1]);
+    it('should throw an error if trying create exists client', async () => {
+        jest.spyOn(repository, 'findOne').mockResolvedValue(clients[0]);
 
-        jest.spyOn(repository, 'save').mockResolvedValue(clients[1]);
+        await expect(service.createClient(clients[0])).rejects.toThrow(ClientExistsException);
+    });
 
-        await service.createCompany(clients[1]);
-
+    it('should return all client', async () => {
         jest.spyOn(repository, 'find').mockResolvedValue(clients);
 
-        const result = await service.getCompanies();
+        const result = await service.getClients();
 
         expect(result).toEqual(clients);
+
+        expect(repository.find).toHaveBeenCalledWith({ where: { deleted: false }, relations: ['licenses'] });
     });
 
-    it('should return a company by id', async () => {
+    it('should return a client by id', async () => {
         jest.spyOn(repository, 'findOne').mockResolvedValue(clients[1]);
 
-        const result = await service.getCompanyById(2);
+        const result = await service.getClientByClientId(clients[1].client_id);
 
         expect(result).toEqual(clients[1]);
+
+        expect(repository.findOne).toHaveBeenCalledWith({
+            where: { client_id: clients[1].client_id, deleted: false },
+            relations: { licenses: true },
+        });
     });
 
-    it('should update a company', async () => {
+    it('should throw an error if trying search not exists client', async () => {
+        jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+
+        await expect(service.getClientByClientId(clients[1].client_id)).rejects.toThrow(ClientNotFoundException);
+    });
+
+    it('should update a client', async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { company_name, ...otherCompanyInfo } = clients[0];
+        const updatedClient = { ...clients[0], company_name: clients[1].company_name };
+
+        jest.spyOn(repository, 'findOne').mockResolvedValue(clients[0]);
+        jest.spyOn(repository, 'update').mockResolvedValue({ affected: 1 } as any);
+        jest.spyOn(repository, 'findOne').mockResolvedValue(updatedClient);
+
+        const result = await service.updateClient(clients[0].client_id, { company_name: clients[1].company_name });
+
+        expect(result).toEqual(updatedClient);
+        expect(repository.update).toHaveBeenCalledWith({ id: clients[0].id }, { company_name: clients[1].company_name });
+    });
+
+    it('should throw an error if trying to update a non-existent сдшуте', async () => {
+        jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+
+        await expect(service.updateClient(clients[2].client_id, { company_name: clients[1].company_name })).rejects.toThrow(
+            ClientNotFoundException,
+        );
+    });
+
+    it('should delete a client', async () => {
+        jest.spyOn(repository, 'findOne').mockResolvedValue(clients[1]);
 
         jest.spyOn(repository, 'update').mockResolvedValue({ affected: 1 } as any);
 
-        jest.spyOn(repository, 'findOne').mockResolvedValue({ ...otherCompanyInfo, company_name: clients[1].company_name });
+        await service.deleteClient(clients[1].client_id);
 
-        const result = await service.updateCompany(1, { company_name: clients[1].company_name });
-
-        expect(result).toEqual({ ...otherCompanyInfo, company_name: clients[1].company_name });
+        expect(repository.update).toHaveBeenCalledWith({ id: clients[1].id }, { deleted: true });
     });
 
-    it('should throw an error if trying to update a non-existent company', async () => {
-        jest.spyOn(repository, 'update').mockResolvedValue({ affected: 0 } as any);
+    it('should throw an error if trying to delete a non-existent client', async () => {
+        jest.spyOn(repository, 'findOne').mockResolvedValue(null);
 
-        await expect(service.updateCompany(3, { company_name: clients[1].company_name })).rejects.toThrow();
-    });
-
-    it('should delete a company', async () => {
-        jest.spyOn(repository, 'delete').mockResolvedValue({ affected: 1 } as any);
-
-        await expect(service.deleteCompany(1)).resolves.toBeUndefined();
-    });
-
-    it('should throw an error if trying to delete a non-existent company', async () => {
-        jest.spyOn(repository, 'delete').mockResolvedValue({ affected: 0 } as any);
-
-        await expect(service.deleteCompany(1)).rejects.toThrow();
+        await expect(service.deleteClient(clients[2].client_id)).rejects.toThrow(ClientNotFoundException);
     });
 });

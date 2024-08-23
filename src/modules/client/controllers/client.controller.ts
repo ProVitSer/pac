@@ -1,35 +1,37 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { ClientService } from '../services/client.service';
 import { Client } from '../entities/client.entity';
-import { CreateCompanyDto } from '../dto/create-client.dto';
-import { UpdateCompanyDto } from '../dto/update-client.dto';
+import { CreateClientDto } from '../dto/create-client.dto';
+import { UpdateClientDto } from '../dto/update-client.dto';
+import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
 
+@UseInterceptors(ErrorsInterceptor)
 @Controller()
 export class ClientController {
     constructor(private readonly clientService: ClientService) {}
 
     @Post()
-    async createCompany(@Body() company: CreateCompanyDto): Promise<Client> {
-        return this.clientService.createCompany(company);
+    async createCompany(@Body() client: CreateClientDto): Promise<Client> {
+        return this.clientService.createClient(client);
     }
 
     @Get()
     async getCompanies(): Promise<Client[]> {
-        return this.clientService.getCompanies();
+        return this.clientService.getClients();
     }
 
-    @Get(':id')
-    async getCompanyById(@Param('id') id: number): Promise<Client> {
-        return this.clientService.getCompanyById(id);
+    @Get(':clientId')
+    async getClientByClientId(@Param('clientId') clientId: number): Promise<Client> {
+        return this.clientService.getClientByClientId(clientId);
     }
 
-    @Put(':id')
-    async updateCompany(@Param('id') id: number, @Body() company: UpdateCompanyDto): Promise<Client> {
-        return this.clientService.updateCompany(id, company);
+    @Put(':clientId')
+    async updateClient(@Param('clientId') clientId: number, @Body() client: UpdateClientDto): Promise<Client> {
+        return this.clientService.updateClient(clientId, client);
     }
 
-    @Delete(':id')
-    async deleteCompany(@Param('id') id: number): Promise<void> {
-        return this.clientService.deleteCompany(id);
+    @Delete(':clientId')
+    async deleteClient(@Param('clientId') clientId: number): Promise<void> {
+        return this.clientService.deleteClient(clientId);
     }
 }

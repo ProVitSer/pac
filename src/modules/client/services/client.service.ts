@@ -2,62 +2,92 @@ import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Client } from '../entities/client.entity';
-import CompanyNotFoundException from '../exceptions/client-not-found.exception';
+import ClientNotFoundException from '../exceptions/client-not-found.exception';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { UniqueClientFields } from '../interfaces/client.interface';
+import ClientExistsException from '../exceptions/client-exists.exeption';
 
 @Injectable()
 export class ClientService {
     constructor(
         @InjectRepository(Client)
-        private companiesRepository: Repository<Client>,
+        private clientRepository: Repository<Client>,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
 
-    public async createCompany(companyData: Partial<Client>): Promise<Client> {
-        const newCompany = await this.companiesRepository.create({
-            ...companyData,
+    public async createClient(clientData: Partial<Client>): Promise<Client> {
+        const client = await this.checkClientByUniqueFileds({ phone: clientData.phone, email: clientData.email });
+
+        if (client) {
+            throw new ClientExistsException(`number ${clientData.phone} or ${clientData.email}`);
+        }
+
+        const newClient = await this.clientRepository.create({
+            client_id: this.generateClientId(),
+            ...clientData,
         });
-        await this.companiesRepository.save(newCompany);
+        await this.clientRepository.save(newClient);
 
-        return newCompany;
+        return newClient;
     }
 
-    public async getCompanies(): Promise<Client[]> {
-        return this.companiesRepository.find({ relations: ['licenses'] });
+    public async getClients(): Promise<Client[]> {
+        return this.clientRepository.find({ where: { deleted: false }, relations: ['licenses'] });
     }
 
-    public async getCompanyById(id: number): Promise<Client> {
-        const company = await this.companiesRepository.findOne({
-            where: { id },
+    public async getClientByClientId(clientId: number): Promise<Client> {
+        const client = await this.clientRepository.findOne({
+            where: { client_id: clientId, deleted: false },
             relations: {
                 licenses: true,
             },
         });
-        if (company) {
-            return company;
+
+        if (!client) {
+            throw new ClientNotFoundException(clientId);
         }
-        this.logger.warn('Tried to access a company that does not exist');
-        throw new CompanyNotFoundException(id);
+
+        return client;
     }
 
-    public async updateCompany(id: number, updateData: Partial<Client>): Promise<Client> {
-        await this.companiesRepository.update(id, updateData);
-        const updatedCompany = await this.companiesRepository.findOne({
+    public async updateClient(clientId: number, updateData: Partial<Client>): Promise<Client> {
+        const client = await this.clientRepository.findOne({
             where: {
-                id,
+                client_id: clientId,
+                deleted: false,
             },
         });
-        if (updatedCompany) {
-            return updatedCompany;
+        if (!client) {
+            throw new ClientNotFoundException(clientId);
         }
-        throw new CompanyNotFoundException(id);
+
+        await this.clientRepository.update({ id: client.id }, updateData);
+
+        return await this.getClientByClientId(clientId);
     }
 
-    public async deleteCompany(id: number): Promise<void> {
-        const deleteResponse = await this.companiesRepository.delete(id);
+    public async deleteClient(clientId: number): Promise<void> {
+        const client = await this.clientRepository.findOne({
+            where: {
+                client_id: clientId,
+                deleted: false,
+            },
+        });
 
-        if (!deleteResponse.affected) {
-            throw new CompanyNotFoundException(id);
+        if (!client) {
+            throw new ClientNotFoundException(clientId);
         }
+
+        await this.clientRepository.update({ id: client.id }, { deleted: true });
+    }
+
+    private async checkClientByUniqueFileds(data: UniqueClientFields): Promise<Client> {
+        return await this.clientRepository.findOne({
+            where: [{ phone: data.phone }, { email: data.email }],
+        });
+    }
+
+    private generateClientId(): number {
+        return Date.now();
     }
 }
