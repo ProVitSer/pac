@@ -1,6 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 
-class ClientExistsException extends NotFoundException {
+class ClientExistsException extends ConflictException {
     constructor(clientData: string) {
         super(`Client with ${clientData} exists`);
     }

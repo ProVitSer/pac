@@ -3,7 +3,7 @@ import { Client } from '../entities/client.entity';
 export const clients = [
     {
         id: 1,
-        client_id: '1724275996401',
+        client_id: 1724275996401,
         company_name: 'Test Company',
         contact_person_name: 'Ivanov Ivan Ivanovich',
         phone: '79991234567',
@@ -13,7 +13,7 @@ export const clients = [
     },
     {
         id: 2,
-        client_id: '1724275996402',
+        client_id: 1724275996402,
         company_name: 'Test Company 2',
         contact_person_name: 'Sidorov Ivan Ivanovich',
         phone: '79991234568',
@@ -23,7 +23,7 @@ export const clients = [
     },
     {
         id: 3,
-        client_id: '1724275996403',
+        client_id: 1724275996403,
         company_name: 'Test Company 3',
         contact_person_name: 'Sokolov Ivan Ivanovich',
         phone: '79991234569',

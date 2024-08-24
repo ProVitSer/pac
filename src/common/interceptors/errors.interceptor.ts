@@ -9,10 +9,11 @@ export class ErrorsInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler) {
         return next.handle().pipe(
             catchError((err: any) => {
-                console.log(err);
                 const error = every(['table'], partial(has, err))
                     ? new DatabaseException(err)
-                    : new HttpException((err?.message as Error) || 'Unknown error', HttpStatus.BAD_REQUEST, { cause: <Error>err });
+                    : err instanceof HttpException
+                      ? err
+                      : new HttpException((err?.message as Error) || 'Unknown error', HttpStatus.BAD_REQUEST, { cause: <Error>err });
 
                 return throwError(() => error);
             }),

@@ -8,7 +8,11 @@ export interface LicensesInterface {
     expiration_date: Date;
     is_active: boolean;
     is_test: boolean;
-    client_id: number;
+    order?: Date;
     created_at: Date;
     updated_at: Date;
+}
+
+export interface ActiveLicenseResponse {
+    is_active: boolean;
 }

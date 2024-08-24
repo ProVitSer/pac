@@ -73,7 +73,12 @@ describe('ClientsService', () => {
 
         expect(result).toEqual(clients);
 
-        expect(repository.find).toHaveBeenCalledWith({ where: { deleted: false }, relations: ['licenses'] });
+        expect(repository.find).toHaveBeenCalledWith({
+            where: { deleted: false },
+            relations: {
+                licenses: true,
+            },
+        });
     });
 
     it('should return a client by id', async () => {

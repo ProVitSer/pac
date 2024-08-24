@@ -15,5 +15,6 @@ export function databaseConfig(config: ConfigService): TypeOrmModuleOptions {
         database: databaseConfig.database,
         entities: [path.join(__dirname + '/../../modules/' + '/**/entities/*.entity{.ts,.js}')],
         synchronize: false,
+        logging: true,
     };
 }

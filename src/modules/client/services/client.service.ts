@@ -6,6 +6,7 @@ import ClientNotFoundException from '../exceptions/client-not-found.exception';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { UniqueClientFields } from '../interfaces/client.interface';
 import ClientExistsException from '../exceptions/client-exists.exeption';
+import { getUnixTime } from 'date-fns';
 
 @Injectable()
 export class ClientService {
@@ -32,7 +33,12 @@ export class ClientService {
     }
 
     public async getClients(): Promise<Client[]> {
-        return this.clientRepository.find({ where: { deleted: false }, relations: ['licenses'] });
+        return this.clientRepository.find({
+            where: { deleted: false },
+            relations: {
+                licenses: true,
+            },
+        });
     }
 
     public async getClientByClientId(clientId: number): Promise<Client> {
@@ -67,16 +73,7 @@ export class ClientService {
     }
 
     public async deleteClient(clientId: number): Promise<void> {
-        const client = await this.clientRepository.findOne({
-            where: {
-                client_id: clientId,
-                deleted: false,
-            },
-        });
-
-        if (!client) {
-            throw new ClientNotFoundException(clientId);
-        }
+        const client = await this.getClientByClientId(clientId);
 
         await this.clientRepository.update({ id: client.id }, { deleted: true });
     }
@@ -88,6 +85,6 @@ export class ClientService {
     }
 
     private generateClientId(): number {
-        return Date.now();
+        return getUnixTime(new Date());
     }
 }

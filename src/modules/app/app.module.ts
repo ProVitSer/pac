@@ -11,8 +11,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from '@app/common/config/database.config';
 import { ClientModule } from '../client/client.module';
 import { LicensesModule } from '../licenses/licenses.module';
-import { RouterModule } from '@nestjs/core';
+import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
 import { ProductModule } from '../product/product.module';
+import { PostInterceptor } from '@app/common/interceptors/post.interceptor';
+import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
 
 @Module({
     imports: [
@@ -68,7 +70,18 @@ import { ProductModule } from '../product/product.module';
         ]),
     ],
     controllers: [AppController],
-    providers: [AppService, AppLoggerService],
+    providers: [
+        AppService,
+        AppLoggerService,
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: PostInterceptor,
+        },
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: ErrorsInterceptor,
+        },
+    ],
     exports: [AppLoggerService],
 })
 export class AppModule {}

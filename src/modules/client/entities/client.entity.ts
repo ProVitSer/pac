@@ -1,5 +1,5 @@
-import { License } from '../../licenses/entities/license.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from 'typeorm';
+import { Licenses } from '../../licenses/entities/licenses.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, Index } from 'typeorm';
 import { ClientInterface } from '../interfaces/client.interface';
 
 @Entity()
@@ -7,7 +7,7 @@ export class Client implements ClientInterface {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: false, unique: true, type: 'bigint' })
+    @Column({ nullable: false, unique: true, type: 'integer' })
     client_id: number;
 
     @Column({ nullable: false })
@@ -16,20 +16,22 @@ export class Client implements ClientInterface {
     @Column({ nullable: false })
     contact_person_name: string;
 
+    @Index()
     @Column({ nullable: false, unique: true })
     phone: string;
 
+    @Index()
     @Column({ nullable: false, unique: true })
     email: string;
 
     @Column({ nullable: true })
-    buh_id: string;
+    buh_id?: string;
 
     @Column({ default: 0 })
     balance: number;
 
-    @OneToOne(() => License, (license) => license.client_id)
-    licenses: License;
+    @OneToOne(() => Licenses, (license) => license.client)
+    licenses: Licenses;
 
     @Column({ default: false })
     deleted: boolean;
