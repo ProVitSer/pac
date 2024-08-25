@@ -8,6 +8,10 @@
         {
           "include": "../src/database/migrations/*",
           "outDir": "./dist/src"
+        },
+        {
+          "include": "../src/modules/mail/templates/*",
+          "outDir": "./dist/src"
         }
       ]
   

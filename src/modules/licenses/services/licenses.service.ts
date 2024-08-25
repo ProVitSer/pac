@@ -18,6 +18,7 @@ import { Client } from '@app/modules/client/entities/client.entity';
 import { Product } from '@app/modules/product/entities/product.entity';
 import { ProductService } from '../../../modules/product/services/product.service';
 import { ActiveLicenseResponse } from '../interfaces/licenses.interface';
+import { NotificationsService } from '@app/modules/notifications/services/notifications.service';
 
 @Injectable()
 export class LicensesService {
@@ -27,6 +28,7 @@ export class LicensesService {
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
         private readonly clientService: ClientService,
         private readonly productService: ProductService,
+        private readonly notificationsService: NotificationsService,
     ) {}
 
     public async createLicense(data: CreateLicenseDto): Promise<Licenses> {
@@ -49,6 +51,8 @@ export class LicensesService {
         const newLicense = await this.licensesRepository.create(await this.createLicenseData(data, client, products));
 
         await this.licensesRepository.save(newLicense);
+
+        await this.notificationsService.licenseCreateNotification({ email: client.email, license: newLicense.license });
 
         return newLicense;
     }
@@ -126,6 +130,10 @@ export class LicensesService {
         }
 
         return lic;
+    }
+
+    public async getLicenses(): Promise<Licenses[]> {
+        return this.licensesRepository.find({});
     }
 
     private async getProducts(products_id: number[]): Promise<Product[]> {

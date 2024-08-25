@@ -15,6 +15,9 @@ import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
 import { ProductModule } from '../product/product.module';
 import { PostInterceptor } from '@app/common/interceptors/post.interceptor';
 import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
+import { MailModule } from '../mail/mail.module';
+import { AmqpModule } from '../amqp/amqp.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
     imports: [
@@ -39,6 +42,9 @@ import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
         ClientModule,
         LicensesModule,
         ProductModule,
+        MailModule,
+        AmqpModule,
+        NotificationsModule,
         RouterModule.register([
             {
                 path: 'api/v1',

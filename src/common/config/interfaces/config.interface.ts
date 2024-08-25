@@ -8,6 +8,26 @@ export interface ConfigEnvironment {
     cors: CorsEnvironmentVariables;
     log: LogEnvironmentVariables;
     database: DatabaseEnvironmentVariables;
+    mail: MailEnvironmentVariables;
+    amqp: AmqpEnvironmentVariables;
+}
+
+export interface AmqpEnvironmentVariables {
+    hostname: string;
+    port: string;
+    username: string;
+    password: string;
+    vhost: string;
+}
+export interface MailEnvironmentVariables {
+    host: string;
+    port: number;
+    secure: boolean;
+    from: string;
+    auth: {
+        user: string;
+        password: string;
+    };
 }
 
 export interface DatabaseEnvironmentVariables {

@@ -2,11 +2,11 @@ import { getEnv } from '../utils';
 import { AppProtocol, LogLevel, NodeEnvType } from './interfaces/config.enum';
 import { ConfigEnvironment } from './interfaces/config.interface';
 import { config as dotenvConfig } from 'dotenv';
+dotenvConfig({ path: '.env' });
 
 export default (): ConfigEnvironment => {
     switch (String(getEnv())) {
         case NodeEnvType.prod:
-            dotenvConfig({ path: '.env' });
             return PROD_CONF;
         case NodeEnvType.development:
             return DEV_CONF;
@@ -38,6 +38,23 @@ const DEV_CONF: ConfigEnvironment = {
         username: 'postgres_user',
         password: 'verySecretPasswd',
         database: 'pac',
+    },
+    mail: {
+        host: process.env.MAIL_HOST,
+        port: parseInt(process.env.MAIL_PORT),
+        secure: !!process.env.MAIL_SECURE,
+        from: process.env.MAIL_FROM,
+        auth: {
+            user: process.env.MAIL_AUTH_USER,
+            password: process.env.MAIL_AUTH_PASSWORD,
+        },
+    },
+    amqp: {
+        hostname: process.env.RABBITMQ_HOST,
+        port: process.env.RABBITMQ_PORT,
+        username: process.env.RABBITMQ_USER,
+        password: process.env.RABBITMQ_PASS,
+        vhost: process.env.RABBITMQ_VHOST,
     },
 };
 
@@ -71,5 +88,22 @@ const PROD_CONF: ConfigEnvironment = {
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
+    },
+    mail: {
+        host: process.env.MAIL_HOST,
+        port: parseInt(process.env.MAIL_PORT),
+        secure: !!process.env.MAIL_SECURE,
+        from: process.env.MAIL_FROM,
+        auth: {
+            user: process.env.MAIL_AUTH_USER,
+            password: process.env.MAIL_AUTH_PASSWORD,
+        },
+    },
+    amqp: {
+        hostname: process.env.RABBITMQ_HOST,
+        port: process.env.RABBITMQ_PORT,
+        username: process.env.RABBITMQ_USER,
+        password: process.env.RABBITMQ_PASS,
+        vhost: process.env.RABBITMQ_VHOST,
     },
 };
