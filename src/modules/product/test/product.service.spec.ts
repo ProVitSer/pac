@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductService } from '../services/product.service';
 import { Repository } from 'typeorm';
@@ -13,7 +14,6 @@ import ProductNotFoundException from '../exceptions/product-not-found.exception'
 describe('ProductService', () => {
     let service: ProductService;
     let repository: Repository<Product>;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let logger: LoggerService;
 
     beforeEach(async () => {

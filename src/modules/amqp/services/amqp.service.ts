@@ -1,7 +1,7 @@
 import { Inject, Injectable, LoggerService, OnModuleInit } from '@nestjs/common';
 import { QueueSenderBaseService } from './amqp-sender-base.service';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Exchange, Queues, RoutingKey } from '@app/common/constants/amqp';
+import { Exchange, Queues, RoutingKey } from '../../../common/constants/amqp';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
@@ -31,7 +31,6 @@ export class AmqpService extends QueueSenderBaseService implements OnModuleInit 
     }
 
     public override async sendMessage(exchange: Exchange, routingKey: RoutingKey, message: { [key: string]: any }) {
-        console.log(message);
         await this.amqpConnection.publish(exchange, routingKey, message);
     }
 

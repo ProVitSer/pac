@@ -1,4 +1,4 @@
-import { Exchange, RoutingKey } from '@app/common/constants/amqp';
+import { Exchange, RoutingKey } from '../../../common/constants/amqp';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

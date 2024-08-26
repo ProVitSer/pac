@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -11,14 +12,14 @@ import LicenseExistsException from '../exceptions/license-exists.exeption';
 import LicenseNotFoundException from '../exceptions/license-not-found.exeption';
 import { Product } from '../../../modules/product/entities/product.entity';
 import UpdateLicenseDto from '../dto/update-license.dto';
+import { NotificationsService } from '../../../modules/notifications/services/notifications.service';
 
 describe('LicensesService', () => {
     let service: LicensesService;
     let licensesRepository: Repository<Licenses>;
     let clientService: ClientService;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let notificationsService: NotificationsService;
     let productService: ProductService;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let logger: LoggerService;
 
     beforeEach(async () => {
@@ -42,6 +43,12 @@ describe('LicensesService', () => {
                     },
                 },
                 {
+                    provide: NotificationsService,
+                    useValue: {
+                        licenseCreateNotification: jest.fn(),
+                    },
+                },
+                {
                     provide: WINSTON_MODULE_NEST_PROVIDER,
                     useValue: {
                         log: jest.fn(),
@@ -55,6 +62,7 @@ describe('LicensesService', () => {
         licensesRepository = module.get<Repository<Licenses>>(getRepositoryToken(Licenses));
         clientService = module.get<ClientService>(ClientService);
         productService = module.get<ProductService>(ProductService);
+        notificationsService = module.get<NotificationsService>(NotificationsService);
         logger = module.get<LoggerService>(WINSTON_MODULE_NEST_PROVIDER);
     });
 
@@ -73,6 +81,8 @@ describe('LicensesService', () => {
             jest.spyOn(licensesRepository, 'create').mockReturnValue({} as any);
 
             jest.spyOn(licensesRepository, 'save').mockResolvedValueOnce({} as any);
+
+            jest.spyOn(notificationsService, 'licenseCreateNotification').mockResolvedValueOnce({} as any);
 
             const result = await service.createLicense(createLicenseDto);
 

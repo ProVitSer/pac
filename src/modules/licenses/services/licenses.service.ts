@@ -18,7 +18,7 @@ import { Client } from '@app/modules/client/entities/client.entity';
 import { Product } from '@app/modules/product/entities/product.entity';
 import { ProductService } from '../../../modules/product/services/product.service';
 import { ActiveLicenseResponse } from '../interfaces/licenses.interface';
-import { NotificationsService } from '@app/modules/notifications/services/notifications.service';
+import { NotificationsService } from '../../../modules/notifications/services/notifications.service';
 
 @Injectable()
 export class LicensesService {

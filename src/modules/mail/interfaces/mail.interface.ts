@@ -1,4 +1,4 @@
-import { TemplateTypes } from '@app/common/constants/templates';
+import { TemplateTypes } from '../../../common/constants/templates';
 
 interface TemplateVariables {
     [key: string]: string | number | unknown;

@@ -29,7 +29,6 @@ export class ProductService {
             ...productData,
         });
         await this.productRepository.save(newProduct);
-
         return newProduct;
     }
 

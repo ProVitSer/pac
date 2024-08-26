@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MailService } from '../services/mail.service';
-import { Exchange, Queues, RoutingKey } from '@app/common/constants/amqp';
+import { Exchange, Queues, RoutingKey } from '../../../common/constants/amqp';
 import { Nack, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { SendMailData } from '../interfaces/mail.interface';
 
