@@ -18,6 +18,7 @@ import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
 import { MailModule } from '../mail/mail.module';
 import { AmqpModule } from '../amqp/amqp.module';
 import { NotificationsModule } from '../notifications/notifications.module';
+import { SoftwareDistributionModule } from '../software-distribution/software-distribution.module';
 
 @Module({
     imports: [
@@ -45,6 +46,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
         MailModule,
         AmqpModule,
         NotificationsModule,
+        SoftwareDistributionModule,
         RouterModule.register([
             {
                 path: 'api/v1',
@@ -70,6 +72,15 @@ import { NotificationsModule } from '../notifications/notifications.module';
                     {
                         path: 'product',
                         module: ProductModule,
+                    },
+                ],
+            },
+            {
+                path: 'api/v1',
+                children: [
+                    {
+                        path: 'software-distribution',
+                        module: SoftwareDistributionModule,
                     },
                 ],
             },
