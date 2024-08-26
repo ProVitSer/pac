@@ -1,6 +1,6 @@
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { AttachmentsData, SendMailData } from '../interfaces/mail.interface';
+import { AttachmentsData, Contexts, SendMailData } from '../interfaces/mail.interface';
 import { Attachment } from 'nodemailer/lib/mailer';
 import { ConfigService } from '@nestjs/config';
 import { MailEnvironmentVariables } from '@app/common/config/interfaces/config.interface';
@@ -12,7 +12,7 @@ export class MailService {
         private readonly mailerService: MailerService,
     ) {}
 
-    public async sendMail(data: SendMailData): Promise<void> {
+    public async sendMail(data: SendMailData<Contexts>): Promise<void> {
         try {
             const mailData = this.formatMailData(data);
 
@@ -22,7 +22,7 @@ export class MailService {
         }
     }
 
-    private formatMailData({ from, to, subject, context, template, attachments }: SendMailData): ISendMailOptions {
+    private formatMailData({ from, to, subject, context, template, attachments }: SendMailData<Contexts>): ISendMailOptions {
         const mailData = {
             from: from || this.configService.get<MailEnvironmentVariables>('mail').from,
             to,

@@ -52,7 +52,7 @@ export class LicensesService {
 
         await this.licensesRepository.save(newLicense);
 
-        await this.notificationsService.licenseCreateNotification({ email: client.email, license: newLicense.license });
+        await this.notificationsService.licenseCreateNotification({ client, license: newLicense });
 
         return newLicense;
     }
@@ -133,7 +133,12 @@ export class LicensesService {
     }
 
     public async getLicenses(): Promise<Licenses[]> {
-        return this.licensesRepository.find({});
+        return this.licensesRepository.find({
+            relations: {
+                client: true,
+                products: true,
+            },
+        });
     }
 
     private async getProducts(products_id: number[]): Promise<Product[]> {

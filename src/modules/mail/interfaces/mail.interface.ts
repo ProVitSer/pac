@@ -1,14 +1,27 @@
 import { TemplateTypes } from '../../../common/constants/templates';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface TemplateVariables {
     [key: string]: string | number | unknown;
 }
 
-export type Contexts = TemplateVariables;
+export type Contexts = LicenseCreateContext | LicenseDeactivateContext | LicenseExpireContext;
 
-export interface SendMailData {
+export interface LicenseCreateContext {
+    fio: string;
+    expiration_date: string;
+    license: string;
+}
+
+export interface LicenseDeactivateContext extends LicenseCreateContext {}
+
+export interface LicenseExpireContext extends LicenseCreateContext {
+    expiration_day: string;
+}
+
+export interface SendMailData<T> {
     to: string | string[];
-    context: Contexts;
+    context: T;
     template: TemplateTypes;
     from?: string;
     subject: string;
