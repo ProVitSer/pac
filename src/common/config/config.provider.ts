@@ -56,6 +56,10 @@ const DEV_CONF: ConfigEnvironment = {
         password: process.env.RABBITMQ_PASS,
         vhost: process.env.RABBITMQ_VHOST,
     },
+    jwt: {
+        secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+        exp: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+    },
 };
 
 const PROD_CONF: ConfigEnvironment = {
@@ -105,5 +109,9 @@ const PROD_CONF: ConfigEnvironment = {
         username: process.env.RABBITMQ_USER,
         password: process.env.RABBITMQ_PASS,
         vhost: process.env.RABBITMQ_VHOST,
+    },
+    jwt: {
+        secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+        exp: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
     },
 };

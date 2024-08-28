@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -19,6 +19,9 @@ import { MailModule } from '../mail/mail.module';
 import { AmqpModule } from '../amqp/amqp.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { SoftwareDistributionModule } from '../software-distribution/software-distribution.module';
+import { UsersModule } from '../users/users.module';
+import { AuthModule } from '../auth/auth.module';
+import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
 
 @Module({
     imports: [
@@ -47,9 +50,10 @@ import { SoftwareDistributionModule } from '../software-distribution/software-di
         AmqpModule,
         NotificationsModule,
         SoftwareDistributionModule,
+        UsersModule,
         RouterModule.register([
             {
-                path: 'api/v1',
+                path: 'api',
                 children: [
                     {
                         path: 'client',
@@ -58,7 +62,7 @@ import { SoftwareDistributionModule } from '../software-distribution/software-di
                 ],
             },
             {
-                path: 'api/v1',
+                path: 'api',
                 children: [
                     {
                         path: 'licenses',
@@ -67,7 +71,7 @@ import { SoftwareDistributionModule } from '../software-distribution/software-di
                 ],
             },
             {
-                path: 'api/v1',
+                path: 'api',
                 children: [
                     {
                         path: 'product',
@@ -76,11 +80,29 @@ import { SoftwareDistributionModule } from '../software-distribution/software-di
                 ],
             },
             {
-                path: 'api/v1',
+                path: 'api',
                 children: [
                     {
                         path: 'software-distribution',
                         module: SoftwareDistributionModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'users',
+                        module: UsersModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'auth',
+                        module: AuthModule,
                     },
                 ],
             },
@@ -90,6 +112,7 @@ import { SoftwareDistributionModule } from '../software-distribution/software-di
     providers: [
         AppService,
         AppLoggerService,
+        LoggerMiddleware,
         {
             provide: APP_INTERCEPTOR,
             useClass: PostInterceptor,
@@ -101,4 +124,8 @@ import { SoftwareDistributionModule } from '../software-distribution/software-di
     ],
     exports: [AppLoggerService],
 })
-export class AppModule {}
+export class AppModule {
+    configure(consumer: MiddlewareConsumer): void {
+        consumer.apply(LoggerMiddleware).forRoutes();
+    }
+}

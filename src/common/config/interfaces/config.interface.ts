@@ -10,6 +10,12 @@ export interface ConfigEnvironment {
     database: DatabaseEnvironmentVariables;
     mail: MailEnvironmentVariables;
     amqp: AmqpEnvironmentVariables;
+    jwt: JwtEnvironmentVariables;
+}
+
+export interface JwtEnvironmentVariables {
+    secret: string;
+    exp: string;
 }
 
 export interface AmqpEnvironmentVariables {

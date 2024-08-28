@@ -2,6 +2,9 @@ import { IsBoolean, IsDate, IsNumber, IsOptional, IsString } from 'class-validat
 import { Licenses } from '../entities/licenses.entity';
 
 export class UpdateLicenseDto implements Partial<Licenses> {
+    @IsString()
+    license: string;
+
     @IsNumber({}, { each: true })
     @IsOptional()
     products_id?: number[];

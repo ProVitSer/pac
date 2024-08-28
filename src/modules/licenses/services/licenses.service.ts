@@ -92,8 +92,8 @@ export class LicensesService {
         await this.licensesRepository.update({ id: license.id }, { is_test: false, is_active: true });
     }
 
-    public async updateLicense(license: string, data: UpdateLicenseDto): Promise<Licenses> {
-        const { products_id, ...updateData } = data;
+    public async updateLicense(data: UpdateLicenseDto): Promise<Licenses> {
+        const { products_id, license, ...updateData } = data;
 
         const lic = await this.getLicense(license);
 

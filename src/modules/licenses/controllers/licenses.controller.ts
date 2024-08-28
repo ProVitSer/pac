@@ -43,9 +43,8 @@ export class LicensesController {
         return this.licensesService.setLicenseCommercial(data);
     }
 
-    @Put(':license')
-    async updateLicense(@Param('license') license: string, @Body() data: UpdateLicenseDto): Promise<Licenses> {
-        console.log(license);
-        return this.licensesService.updateLicense(license, data);
+    @Put()
+    async updateLicense(@Body() data: UpdateLicenseDto): Promise<Licenses> {
+        return this.licensesService.updateLicense(data);
     }
 }
