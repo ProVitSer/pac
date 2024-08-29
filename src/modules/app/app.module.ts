@@ -92,15 +92,6 @@ import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
                 path: 'api',
                 children: [
                     {
-                        path: 'users',
-                        module: UsersModule,
-                    },
-                ],
-            },
-            {
-                path: 'api',
-                children: [
-                    {
                         path: 'auth',
                         module: AuthModule,
                     },

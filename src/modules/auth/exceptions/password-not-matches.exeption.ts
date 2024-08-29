@@ -1,6 +1,6 @@
-import { ConflictException } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 
-export class PasswordNotMatchesException extends ConflictException {
+export class PasswordNotMatchesException extends UnauthorizedException {
     constructor() {
         super(`Password does not match`);
     }
