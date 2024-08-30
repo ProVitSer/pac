@@ -2,11 +2,11 @@ import { getEnv } from '../utils';
 import { AppProtocol, LogLevel, NodeEnvType } from './interfaces/config.enum';
 import { ConfigEnvironment } from './interfaces/config.interface';
 import { config as dotenvConfig } from 'dotenv';
+dotenvConfig({ path: '.env' });
 
 export default (): ConfigEnvironment => {
     switch (String(getEnv())) {
         case NodeEnvType.prod:
-            dotenvConfig({ path: '.env' });
             return PROD_CONF;
         case NodeEnvType.development:
             return DEV_CONF;
@@ -30,6 +30,36 @@ const DEV_CONF: ConfigEnvironment = {
         mixSize: '20m',
         maxFiles: '14d',
         level: [LogLevel.console, LogLevel.info, LogLevel.error],
+    },
+    database: {
+        type: 'postgres' as any,
+        host: 'localhost',
+        port: 5432,
+        username: 'postgres_user',
+        password: 'verySecretPasswd',
+        database: 'pac',
+    },
+    mail: {
+        host: process.env.MAIL_HOST,
+        port: parseInt(process.env.MAIL_PORT),
+        secure: !!process.env.MAIL_SECURE,
+        from: process.env.MAIL_FROM,
+        auth: {
+            user: process.env.MAIL_AUTH_USER,
+            password: process.env.MAIL_AUTH_PASSWORD,
+        },
+    },
+    amqp: {
+        hostname: process.env.RABBITMQ_HOST,
+        port: process.env.RABBITMQ_PORT,
+        username: process.env.RABBITMQ_USER,
+        password: process.env.RABBITMQ_PASS,
+        vhost: process.env.RABBITMQ_VHOST,
+    },
+    jwt: {
+        secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+        exp: parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME),
+        algorithm: 'HS256',
     },
 };
 
@@ -55,5 +85,35 @@ const PROD_CONF: ConfigEnvironment = {
         mixSize: '20m',
         maxFiles: '14d',
         level: [LogLevel.info],
+    },
+    database: {
+        type: 'postgres' as any,
+        host: process.env.DATABASE_HOST,
+        port: parseInt(process.env.DATABASE_PORT),
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_NAME,
+    },
+    mail: {
+        host: process.env.MAIL_HOST,
+        port: parseInt(process.env.MAIL_PORT),
+        secure: !!process.env.MAIL_SECURE,
+        from: process.env.MAIL_FROM,
+        auth: {
+            user: process.env.MAIL_AUTH_USER,
+            password: process.env.MAIL_AUTH_PASSWORD,
+        },
+    },
+    amqp: {
+        hostname: process.env.RABBITMQ_HOST,
+        port: process.env.RABBITMQ_PORT,
+        username: process.env.RABBITMQ_USER,
+        password: process.env.RABBITMQ_PASS,
+        vhost: process.env.RABBITMQ_VHOST,
+    },
+    jwt: {
+        secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+        exp: parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME),
+        algorithm: 'HS256',
     },
 };

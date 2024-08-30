@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+
+  database:
+    container_name: ${DATABASE_CONTAINER_NAME}
+    image: "postgres"
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pac
+    restart: unless-stopped
+
+
+  rabbitmq:
+    container_name: ${RABBITMQ_CONTAINER_NAME}
+    build:
+      context: ./docker/rabbitmq
+    hostname: "rabbitmq1"
+    volumes:
+     - ./docker/rabbitmq/rabbitmq.conf:/rabbitmq.conf
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+
+networks:
+  pac:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
