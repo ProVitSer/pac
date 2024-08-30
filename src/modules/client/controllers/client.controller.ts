@@ -1,11 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ClientService } from '../services/client.service';
 import { Client } from '../entities/client.entity';
 import { CreateClientDto } from '../dto/create-client.dto';
 import { UpdateClientDto } from '../dto/update-client.dto';
-import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
+import { Role } from '@app/common/interfaces/enums';
+import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
+import RoleGuard from '@app/modules/auth/guards/role.guard';
 
-@UseInterceptors(ErrorsInterceptor)
+@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class ClientController {
     constructor(private readonly clientService: ClientService) {}

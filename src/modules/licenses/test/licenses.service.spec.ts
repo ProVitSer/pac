@@ -126,7 +126,7 @@ describe('LicensesService', () => {
         it('should activate the license', async () => {
             const license: Licenses = { license: 'BFD1-6673-D960-F1D4', is_active: false } as any;
 
-            jest.spyOn(service, 'getLicense').mockResolvedValueOnce(license);
+            jest.spyOn(service, 'getLicenseInfo').mockResolvedValueOnce(license);
 
             const updateSpy = jest.spyOn(licensesRepository, 'update').mockResolvedValueOnce({} as any);
 
@@ -142,7 +142,7 @@ describe('LicensesService', () => {
         });
 
         it('should throw LicenseNotFoundException if license not found', async () => {
-            jest.spyOn(service, 'getLicense').mockResolvedValueOnce(null);
+            jest.spyOn(service, 'getLicenseInfo').mockResolvedValueOnce(null);
 
             await expect(service.activateLicense({ license: 'BFD1-6673-D960-F1D4' })).rejects.toThrow(LicenseNotFoundException);
         });
@@ -152,7 +152,7 @@ describe('LicensesService', () => {
         it('should deactivate the license', async () => {
             const license: Licenses = { id: 1, license: 'BFD1-6673-D960-F1D4', is_active: true } as any;
 
-            jest.spyOn(service, 'getLicense').mockResolvedValueOnce(license);
+            jest.spyOn(service, 'getLicenseInfo').mockResolvedValueOnce(license);
             const updateSpy = jest.spyOn(licensesRepository, 'update').mockResolvedValueOnce({} as any);
 
             await service.deactivateLicense({ license: 'BFD1-6673-D960-F1D4' });
@@ -165,7 +165,7 @@ describe('LicensesService', () => {
         it('should set the license to commercial', async () => {
             const license: Licenses = { id: 1, license: 'BFD1-6673-D960-F1D4', is_test: true } as any;
 
-            jest.spyOn(service, 'getLicense').mockResolvedValueOnce(license);
+            jest.spyOn(service, 'getLicenseInfo').mockResolvedValueOnce(license);
             const updateSpy = jest.spyOn(licensesRepository, 'update').mockResolvedValueOnce({} as any);
 
             await service.setLicenseCommercial({ license: 'BFD1-6673-D960-F1D4' });
@@ -178,16 +178,16 @@ describe('LicensesService', () => {
         it('should update the license and add new products', async () => {
             const existingProducts: Product[] = [{ id: 1 }, { id: 2 }] as any[];
             const newProducts: Product[] = [{ id: 3 }] as any[];
-            const updateLicenseDto: UpdateLicenseDto = { products_id: [3], is_active: true };
+            const updateLicenseDto: UpdateLicenseDto = { license: 'BFD1-6673-D960-F1D4', products_id: [3], is_active: true };
             const license: Licenses = { id: 1, products: existingProducts, license: 'BFD1-6673-D960-F1D4' } as any;
 
-            jest.spyOn(service, 'getLicense').mockResolvedValueOnce(license);
+            jest.spyOn(service, 'getLicenseInfo').mockResolvedValueOnce(license);
 
             jest.spyOn<LicensesService, any>(service, 'getProducts').mockResolvedValueOnce(newProducts);
 
             const saveSpy = jest.spyOn(licensesRepository, 'save').mockResolvedValueOnce(license);
 
-            const result = await service.updateLicense('BFD1-6673-D960-F1D4', updateLicenseDto);
+            const result = await service.updateLicense({ ...updateLicenseDto });
 
             expect(result.products.length).toBe(3);
             expect(saveSpy).toHaveBeenCalledWith(
@@ -202,7 +202,7 @@ describe('LicensesService', () => {
 
             jest.spyOn(licensesRepository, 'findOne').mockResolvedValueOnce(license);
 
-            const result = await service.getLicense('BFD1-6673-D960-F1D4');
+            const result = await service.getLicenseInfo('BFD1-6673-D960-F1D4');
 
             expect(result).toBe(license);
 
@@ -215,7 +215,7 @@ describe('LicensesService', () => {
         it('should throw LicenseNotFoundException if license not found', async () => {
             jest.spyOn(licensesRepository, 'findOne').mockResolvedValueOnce(null);
 
-            await expect(service.getLicense('BFD1-6673-D960-F1D4')).rejects.toThrow(LicenseNotFoundException);
+            await expect(service.getLicenseInfo('BFD1-6673-D960-F1D4')).rejects.toThrow(LicenseNotFoundException);
         });
     });
 });

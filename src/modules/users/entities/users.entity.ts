@@ -1,7 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { UsersInterface } from '../interfaces/users.interface';
-import { Permission, Role } from '@app/common/interfaces/enum';
+import { Permission, Role } from '../../../common/interfaces/enums';
 
 @Entity()
 export class Users implements UsersInterface {
@@ -34,7 +34,7 @@ export class Users implements UsersInterface {
         type: 'enum',
         enum: Permission,
         array: true,
-        default: [],
+        default: [Permission.Read],
     })
     permissions: Permission[];
 

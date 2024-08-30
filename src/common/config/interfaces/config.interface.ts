@@ -1,6 +1,5 @@
 import { DatabaseType } from 'typeorm/driver/types/DatabaseType';
 import { AppProtocol, LogLevel } from './config.enum';
-
 export interface ConfigEnvironment {
     appPort: number;
     appProtocol: AppProtocol;
@@ -15,7 +14,8 @@ export interface ConfigEnvironment {
 
 export interface JwtEnvironmentVariables {
     secret: string;
-    exp: string;
+    exp: number;
+    algorithm: any;
 }
 
 export interface AmqpEnvironmentVariables {

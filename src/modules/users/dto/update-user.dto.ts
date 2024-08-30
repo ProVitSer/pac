@@ -1,6 +1,6 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Users } from '../entities/users.entity';
-import { Permission, Role } from '@app/common/interfaces/enum';
+import { Permission, Role } from '@app/common/interfaces/enums';
 
 export class UpdateUserDto implements Partial<Users> {
     @IsNumber()

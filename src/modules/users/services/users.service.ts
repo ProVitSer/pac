@@ -8,7 +8,7 @@ import { UserNotFoundException } from '../exceptions/user-not-found.exeption';
 import UserExistsException from '../exceptions/user-exists.exeption';
 import { UserEmailNotFoundException } from '../exceptions/user-email-not-found.exeption';
 import ChangeUserPasswordDto from '../dto/change-user-password.dto';
-import { ArgonUtilService } from '@app/common/utils/argon.service';
+import { ArgonUtilService } from '../../../common/utils/argon.service';
 import { UserPasswordNotMatchesException } from '../exceptions/user-password-not-matches.exeption';
 import { CreateUserData } from '../interfaces/users.interface';
 

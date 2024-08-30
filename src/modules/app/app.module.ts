@@ -51,6 +51,7 @@ import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
         NotificationsModule,
         SoftwareDistributionModule,
         UsersModule,
+        AuthModule,
         RouterModule.register([
             {
                 path: 'api',

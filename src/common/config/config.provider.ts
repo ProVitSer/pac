@@ -58,7 +58,8 @@ const DEV_CONF: ConfigEnvironment = {
     },
     jwt: {
         secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-        exp: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+        exp: parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME),
+        algorithm: 'HS256',
     },
 };
 
@@ -112,6 +113,7 @@ const PROD_CONF: ConfigEnvironment = {
     },
     jwt: {
         secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-        exp: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+        exp: parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME),
+        algorithm: 'HS256',
     },
 };

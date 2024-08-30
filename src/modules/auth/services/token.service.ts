@@ -17,18 +17,19 @@ export class TokenService {
         };
     }
 
-    public async getAccessToken(userId: number) {
-        const { secret, exp } = this.configService.get<JwtEnvironmentVariables>('jwt') as JwtEnvironmentVariables;
-        return {
-            accessToken: await this.getToken({ userId }, secret, exp),
-        };
-    }
+    public async getToken(data: TokenPayload): Promise<string> {
+        const { secret, exp, algorithm } = this.configService.get<JwtEnvironmentVariables>('jwt') as JwtEnvironmentVariables;
 
-    public async getToken(data: TokenPayload, secret: string, expiresIn: string): Promise<string> {
-        return await this.jwtService.signAsync({ ...data }, { secret, expiresIn });
+        return await this.jwtService.signAsync({ ...data }, { secret, expiresIn: exp, algorithm });
     }
 
     public async verify(token: string) {
         return this.jwtService.verify(token);
+    }
+
+    public async getAccessToken(userId: number) {
+        return {
+            accessToken: await this.getToken({ userId }),
+        };
     }
 }

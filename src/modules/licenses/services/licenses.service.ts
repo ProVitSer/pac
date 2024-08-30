@@ -65,7 +65,7 @@ export class LicensesService {
     }
 
     public async activateLicense(data: ActivateLicenseDto): Promise<void> {
-        const licenses = await this.getLicense(data.license);
+        const licenses = await this.getLicenseInfo(data.license);
 
         if (!licenses) {
             throw new LicenseNotFoundException(data.license);
@@ -81,13 +81,13 @@ export class LicensesService {
     }
 
     public async deactivateLicense(data: DeactivateLicenseDto): Promise<void> {
-        const license = await this.getLicense(data.license);
+        const license = await this.getLicenseInfo(data.license);
 
         await this.licensesRepository.update({ id: license.id }, { is_active: false });
     }
 
     public async setLicenseCommercial(data: LicenseCommercialDto): Promise<void> {
-        const license = await this.getLicense(data.license);
+        const license = await this.getLicenseInfo(data.license);
 
         await this.licensesRepository.update({ id: license.id }, { is_test: false, is_active: true });
     }
@@ -95,7 +95,7 @@ export class LicensesService {
     public async updateLicense(data: UpdateLicenseDto): Promise<Licenses> {
         const { products_id, license, ...updateData } = data;
 
-        const lic = await this.getLicense(license);
+        const lic = await this.getLicenseInfo(license);
 
         if (products_id) {
             const products = await this.getProducts(data.products_id);
@@ -116,7 +116,7 @@ export class LicensesService {
         return lic;
     }
 
-    public async getLicense(license: string): Promise<Licenses> {
+    public async getLicenseInfo(license: string): Promise<Licenses> {
         const lic = await this.licensesRepository.findOne({
             where: { license: license },
             relations: {

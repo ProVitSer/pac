@@ -1,12 +1,12 @@
-import { UsersService } from '@app/modules/users/services/users.service';
+import { UsersService } from '../../../modules/users/services/users.service';
 import { Injectable } from '@nestjs/common';
 import RegisterDto from '../dto/register.dto';
-import { ArgonUtilService } from '@app/common/utils/argon.service';
+import { ArgonUtilService } from '../../../common/utils/argon.service';
 import { PasswordNotMatchesException } from '../exceptions/password-not-matches.exeption';
 import LoginDto from '../dto/login.dto';
 import { LoginResponse } from '../interfaces/auth.interface';
 import { TokenService } from './token.service';
-import { Users } from '@app/modules/users/entities/users.entity';
+import { Users } from '../../../modules/users/entities/users.entity';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,7 @@ export class AuthService {
 
     public async getAuthenticatedUser(email: string, plainTextPassword: string): Promise<Users> {
         const user = await this.usersService.getByEmail(email);
-
+        console.log(user);
         await this.verifyPassword(plainTextPassword, user.password);
 
         return user;
@@ -49,7 +49,7 @@ export class AuthService {
     }
 
     private async verifyPassword(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
-        const passwordMatches = await ArgonUtilService.verify(plainTextPassword, hashedPassword);
+        const passwordMatches = await ArgonUtilService.verify(hashedPassword, plainTextPassword);
 
         if (!passwordMatches) {
             throw new PasswordNotMatchesException();
@@ -61,13 +61,4 @@ export class AuthService {
     private async addLastLogin(id: number): Promise<void> {
         await this.usersService.updateById({ id, latest_activity: new Date() });
     }
-
-    // TODD
-
-    /*
-    private async updateRefreshToken(clientId: string, refreshToken: string): Promise<void> 
-    public async refreshToken(data: RefreshToken): Promise<RefreshTokenResponse> 
-    public async logout(clientId: string): Promise<LogoutResponse> 
-
-    */
 }

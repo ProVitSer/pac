@@ -1,9 +1,13 @@
 export enum Role {
     User = 'User',
+    Manager = 'Manager',
     Admin = 'Admin',
+    API = 'Api',
 }
 
 export enum Permission {
-    DeletePost = 'DeletePost',
-    CreateCategory = 'CreateCategory',
+    Delete = 'Delete',
+    Create = 'Create',
+    Update = 'Update',
+    Read = 'Read',
 }

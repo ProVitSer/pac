@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { formatDuration, intervalToDuration } from 'date-fns';
 import * as packageJson from '../../../../package.json';
-import { Health } from '@app/common/interfaces';
+import { Health } from '@app/common/interfaces/interfaces';
 
 @Injectable()
 export class AppService {
