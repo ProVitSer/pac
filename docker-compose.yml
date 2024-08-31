@@ -33,6 +33,16 @@ services:
       - "15672:15672"
       - "5672:5672"
 
+  asterisk:
+    image: asterisk:18
+    volumes:
+
+    ports:
+      - "6066:6066/tcp"
+      - "6066:6066/udp"
+      - "5038:5038"
+      - "8088:8088"
+      - "10000-11000:10000-11000/udp"
 
 networks:
   pac:

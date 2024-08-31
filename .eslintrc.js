@@ -23,7 +23,8 @@ module.exports = {
             "singleQuote": true,
             "trailingComma": "all",
             "printWidth": 140,
-            "tabWidth": 4
+            "tabWidth": 4,
+            "endOfLine": "crlf"
         }
       ],
       '@typescript-eslint/interface-name-prefix': 'off',
