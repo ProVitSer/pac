@@ -1,0 +1,4 @@
+AST_USER="asterisk"
+AST_GROUP="asterisk"
+COLOR=yes
+

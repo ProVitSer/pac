@@ -1,0 +1,6 @@
+
+globals {
+	CONSOLE-AEL="Console/dsp"; 		
+	OUTBOUND-TRUNK="Zap/g2";		
+	OUTBOUND-TRUNKMSD=1;	
+};

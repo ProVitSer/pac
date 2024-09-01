@@ -12,6 +12,7 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - postgres:/var/lib/postgresql/data
+      - pg_socket:/var/run/postgresql
     ports:
       - "5432:5432"
     networks:
@@ -32,17 +33,29 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    networks:
+      - pac
+    restart: unless-stopped
+
 
   asterisk:
-    image: asterisk:18
+    container_name: ${ASTERISK_CONTAINER_NAME}
+    build:
+      context: ./docker/asterisk
+    env_file:
+      - .env
     volumes:
-
+      - ./docker/asterisk/asterisk/:/etc/asterisk:rw
+      - pg_socket:/var/run/postgresql 
     ports:
       - "6066:6066/tcp"
       - "6066:6066/udp"
       - "5038:5038"
       - "8088:8088"
-      - "10000-11000:10000-11000/udp"
+      - "20000-20500:20000-20500/udp"
+    networks:
+      - pac
+    restart: unless-stopped
 
 networks:
   pac:
@@ -50,4 +63,4 @@ networks:
 
 volumes:
   postgres:
-  pgadmin:
+  pg_socket:

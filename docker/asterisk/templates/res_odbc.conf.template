@@ -1,0 +1,12 @@
+
+[ENV]
+[asterisk]
+enabled => yes
+dsn => asterisk
+username => ${DATABASE_USERNAME}
+password => ${DATABASE_PASSWORD}
+pre-connect => yes
+sanitysql => select 1
+max_connections => 20
+connect_timeout => 5
+negative_connection_cache => 600
