@@ -1,4 +1,4 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import {
     CalleridPrivacy,
     ConnectedLineMethod,
@@ -19,7 +19,7 @@ import {
 
 @Entity('ps_endpoints')
 export class PsEndpoints {
-    @Column()
+    @PrimaryColumn()
     id: string;
 
     @Column({ nullable: true })

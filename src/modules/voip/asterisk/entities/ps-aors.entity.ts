@@ -1,9 +1,9 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { DefaultYesNoAsterisk } from '../interfaces/asterisk.enum';
 
 @Entity('ps_aors')
 export class PsAors {
-    @Column()
+    @PrimaryColumn()
     id: string;
 
     @Column({ nullable: true })
@@ -51,7 +51,7 @@ export class PsAors {
     })
     support_path: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true, precision: 53 })
+    @Column({ nullable: true })
     qualify_timeout: number | null;
 
     @Column({ nullable: true })

@@ -1,9 +1,9 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { DefaultYesNoAsterisk, Method, Protokol } from '../interfaces/asterisk.enum';
 
 @Entity('ps_transports')
 export class PsTransports {
-    @Column({ length: 40 })
+    @PrimaryColumn({ length: 40 })
     id: string;
 
     @Column({ nullable: true })

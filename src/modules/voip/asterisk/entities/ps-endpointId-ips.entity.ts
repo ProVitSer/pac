@@ -1,9 +1,9 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { DefaultYesNoAsterisk } from '../interfaces/asterisk.enum';
 
 @Entity('ps_endpoint_id_ips')
 export class PsEndpointIdIps {
-    @Column()
+    @PrimaryColumn()
     id: string;
 
     @Column({ nullable: true })

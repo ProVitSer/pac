@@ -1,16 +1,16 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { AuthType } from '../interfaces/asterisk.enum';
 
 @Entity('ps_auths')
 export class PsAuths {
-    @Column()
+    @PrimaryColumn()
     id: string;
 
     @Column({
         type: 'enum',
         enum: AuthType,
     })
-    authType: AuthType;
+    auth_type: AuthType;
 
     @Column({ nullable: true })
     nonce_lifetime: number | null;
