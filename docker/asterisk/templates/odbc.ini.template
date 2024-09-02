@@ -2,7 +2,7 @@
 Driver = PostgreSQL
 Description = PostgreSQL connection database
 Server = ${DATABASE_CONTAINER_NAME}
-Port = 5432
+Port = ${DATABASE_PORT}
 Database = ${DATABASE_NAME}
 UserName = ${DATABASE_USERNAME}
 Password = ${DATABASE_PASSWORD}

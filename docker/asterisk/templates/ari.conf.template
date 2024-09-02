@@ -1,5 +1,5 @@
 [general]
-enabled = years
+enabled = yes
 pretty=no
 websocket_write_timeout=100
 allowed_origins=*

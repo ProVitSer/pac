@@ -107,5 +107,4 @@ RUN chown -R asterisk:asterisk /etc/asterisk /var/lib/asterisk /var/log/asterisk
 
 WORKDIR /etc/asterisk
 
-CMD ["asterisk", "-f"]
-# CMD /usr/local/bin/configure_templates.sh && asterisk -f
+CMD /usr/local/bin/configure_templates.sh && asterisk -f
