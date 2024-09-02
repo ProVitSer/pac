@@ -10,6 +10,31 @@ export interface ConfigEnvironment {
     mail: MailEnvironmentVariables;
     amqp: AmqpEnvironmentVariables;
     jwt: JwtEnvironmentVariables;
+    voip: VoipEnvironmentVariables;
+}
+
+export interface VoipEnvironmentVariables {
+    asterisk: AsteriskEnvironmentVariables;
+}
+
+export interface AsteriskEnvironmentVariables {
+    ami: {
+        providerName: string;
+        host: string;
+        port: number;
+        username: string;
+        secret: string;
+    };
+    ari: AsteriskAriEnvironmentVariables[];
+}
+
+export interface AsteriskAriEnvironmentVariables {
+    providerName: string;
+    host: string;
+    port: number;
+    stasis: string;
+    user: string;
+    password: string;
 }
 
 export interface JwtEnvironmentVariables {

@@ -33,11 +33,11 @@ const DEV_CONF: ConfigEnvironment = {
     },
     database: {
         type: 'postgres' as any,
-        host: 'localhost',
-        port: 5432,
-        username: 'postgres_user',
-        password: 'verySecretPasswd',
-        database: 'pac',
+        host: process.env.DATABASE_HOST,
+        port: parseInt(process.env.DATABASE_PORT),
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_NAME,
     },
     mail: {
         host: process.env.MAIL_HOST,
@@ -60,6 +60,35 @@ const DEV_CONF: ConfigEnvironment = {
         secret: process.env.JWT_ACCESS_TOKEN_SECRET,
         exp: parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME),
         algorithm: 'HS256',
+    },
+    voip: {
+        asterisk: {
+            ami: {
+                providerName: process.env.ASTERISK_AMI_PROVIDER_NAME,
+                host: process.env.ASTERISK_AMI_HOST,
+                port: parseInt(process.env.ASTERISK_AMI_PORT),
+                username: process.env.ASTERISK_AMI_CALL_USER,
+                secret: process.env.ASTERISK_AMI_CALL_PASSWORD,
+            },
+            ari: [
+                {
+                    providerName: process.env.ASTERISK_ARI_CALL_PROVIDER_NAME,
+                    host: process.env.ASTERISK_ARI_HOST,
+                    port: parseInt(process.env.ASTERISK_ARI_POST),
+                    stasis: process.env.ASTERISK_ARI_CALL_USER,
+                    user: process.env.ASTERISK_ARI_CALL_USER,
+                    password: process.env.ASTERISK_ARI_CALL_PASSWORD,
+                },
+                {
+                    providerName: process.env.ASTERISK_ARI_ROUTE_USER_PROVIDER_NAME,
+                    host: process.env.ASTERISK_ARI_HOST,
+                    port: parseInt(process.env.ASTERISK_ARI_POST),
+                    stasis: process.env.ASTERISK_ARI_ROUTE_USER,
+                    user: process.env.ASTERISK_ARI_ROUTE_USER,
+                    password: process.env.ASTERISK_ARI_ROUTE_PASSWORD,
+                },
+            ],
+        },
     },
 };
 
@@ -115,5 +144,34 @@ const PROD_CONF: ConfigEnvironment = {
         secret: process.env.JWT_ACCESS_TOKEN_SECRET,
         exp: parseInt(process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME),
         algorithm: 'HS256',
+    },
+    voip: {
+        asterisk: {
+            ami: {
+                providerName: process.env.ASTERISK_AMI_PROVIDER_NAME,
+                host: process.env.ASTERISK_AMI_HOST,
+                port: parseInt(process.env.ASTERISK_AMI_PORT),
+                username: process.env.ASTERISK_AMI_CALL_USER,
+                secret: process.env.ASTERISK_AMI_CALL_PASSWORD,
+            },
+            ari: [
+                {
+                    providerName: process.env.ASTERISK_ARI_CALL_PROVIDER_NAME,
+                    host: process.env.ASTERISK_ARI_HOST,
+                    port: parseInt(process.env.ASTERISK_ARI_POST),
+                    stasis: process.env.ASTERISK_ARI_CALL_USER,
+                    user: process.env.ASTERISK_ARI_CALL_USER,
+                    password: process.env.ASTERISK_ARI_CALL_PASSWORD,
+                },
+                {
+                    providerName: process.env.ASTERISK_ARI_ROUTE_USER_PROVIDER_NAME,
+                    host: process.env.ASTERISK_ARI_HOST,
+                    port: parseInt(process.env.ASTERISK_ARI_POST),
+                    stasis: process.env.ASTERISK_ARI_ROUTE_USER,
+                    user: process.env.ASTERISK_ARI_ROUTE_USER,
+                    password: process.env.ASTERISK_ARI_ROUTE_PASSWORD,
+                },
+            ],
+        },
     },
 };
