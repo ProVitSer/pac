@@ -1,7 +1,7 @@
 import { Licenses } from '../../licenses/entities/licenses.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, Index, OneToMany } from 'typeorm';
 import { ClientInterface } from '../interfaces/client.interface';
-import { Voip } from '@app/modules/voip/entities/voip.entity';
+import { Voip } from '../../../modules/voip/entities/voip.entity';
 
 @Entity()
 export class Client implements ClientInterface {
