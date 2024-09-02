@@ -1,6 +1,7 @@
 import { Licenses } from '../../licenses/entities/licenses.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, Index, OneToMany } from 'typeorm';
 import { ClientInterface } from '../interfaces/client.interface';
+import { Voip } from '@app/modules/voip/entities/voip.entity';
 
 @Entity()
 export class Client implements ClientInterface {
@@ -32,6 +33,9 @@ export class Client implements ClientInterface {
 
     @OneToOne(() => Licenses, (license) => license.client)
     licenses: Licenses;
+
+    @OneToMany(() => Voip, (voip) => voip.client)
+    voip: Voip[];
 
     @Column({ default: false })
     deleted: boolean;

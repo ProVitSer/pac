@@ -22,6 +22,7 @@ import { SoftwareDistributionModule } from '../software-distribution/software-di
 import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
+import { VoipModule } from '../voip/voip.module';
 
 @Module({
     imports: [
@@ -52,6 +53,7 @@ import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
         SoftwareDistributionModule,
         UsersModule,
         AuthModule,
+        VoipModule,
         RouterModule.register([
             {
                 path: 'api',
