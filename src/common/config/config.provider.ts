@@ -69,6 +69,7 @@ const DEV_CONF: ConfigEnvironment = {
                 port: parseInt(process.env.ASTERISK_AMI_PORT),
                 username: process.env.ASTERISK_AMI_CALL_USER,
                 secret: process.env.ASTERISK_AMI_CALL_PASSWORD,
+                logLevel: parseInt(process.env.ASTERISK_AMI_LOG_LEVEL) || 1,
             },
             ari: [
                 {
@@ -153,6 +154,7 @@ const PROD_CONF: ConfigEnvironment = {
                 port: parseInt(process.env.ASTERISK_AMI_PORT),
                 username: process.env.ASTERISK_AMI_CALL_USER,
                 secret: process.env.ASTERISK_AMI_CALL_PASSWORD,
+                logLevel: parseInt(process.env.ASTERISK_AMI_LOG_LEVEL) || 1,
             },
             ari: [
                 {

@@ -24,6 +24,7 @@ export interface AsteriskEnvironmentVariables {
         port: number;
         username: string;
         secret: string;
+        logLevel?: number;
     };
     ari: AsteriskAriEnvironmentVariables[];
 }
