@@ -7,10 +7,15 @@ import Ari from 'ari-client';
 import { AsteriskAriEnvironmentVariables, AsteriskEnvironmentVariables, ConfigEnvironment } from './interfaces/config.interface';
 
 const asteriskAriFactory = async (ari: AsteriskAriEnvironmentVariables): Promise<{ ariClient: Ari.Client }> => {
-    const url = `${ari.host}:${ari.port}`;
+    const url = `http://${ari.host}:${ari.port}`;
 
     return {
-        ariClient: await ARI.connect(url, ari.user, ari.password),
+        ariClient: await ARI.connect(url, ari.user, ari.password, (err: Error) => {
+            if (err) {
+                console.log(err);
+                process.exit(1);
+            }
+        }),
     };
 };
 
@@ -50,7 +55,6 @@ const asteriskAmiFactory = async (asterisk: AsteriskEnvironmentVariables): Promi
 };
 
 const createAsteriskAmiProvider = (asterisk: AsteriskEnvironmentVariables): FactoryProvider<any> => {
-    asteriskAmiFactory(asterisk);
     return {
         provide: asterisk.ami.providerName,
         useFactory: async () => {
