@@ -57,7 +57,21 @@ export class AmiListenter implements OnApplicationBootstrap {
 
             this.amiClient.on('namiInvalidPeer', () => this.invalidPeer());
 
-            this.amiClient.on('*' as AsteriskEventType, (event: AsteriskUnionEventData) => this.parseNamiEvent(event.Event, event));
+            this.amiClient.on(`namiEvent${AsteriskEventType.Hangup}` as AsteriskEventType, (event: AsteriskUnionEventData) =>
+                this.parseNamiEvent(event.event, event),
+            );
+
+            this.amiClient.on(`namiEvent${AsteriskEventType.Registry}` as AsteriskEventType, (event: AsteriskUnionEventData) =>
+                this.parseNamiEvent(event.event, event),
+            );
+
+            this.amiClient.on(`namiEvent${AsteriskEventType.VarSet}`, (event: AsteriskUnionEventData) =>
+                this.parseNamiEvent(event.event, event),
+            );
+
+            this.amiClient.on(`namiEvent${AsteriskEventType.Newchannel}` as AsteriskEventType, (event: AsteriskUnionEventData) =>
+                this.parseNamiEvent(event.event, event),
+            );
         } catch (e) {
             this.logger.error(`${ERROR_AMI}: ${e}`);
         }
@@ -66,7 +80,6 @@ export class AmiListenter implements OnApplicationBootstrap {
     private parseNamiEvent(eventType: AsteriskEventType, eventData: AsteriskUnionEventData): Promise<void> {
         try {
             const provider = this.getProvider(eventType);
-
             return provider.parseEvent(eventData);
         } catch (e) {
             this.logger.error(e);
@@ -77,6 +90,7 @@ export class AmiListenter implements OnApplicationBootstrap {
         if (this.providerExists(eventType)) {
             return this.providers[eventType];
         }
+        throw new Error('Event provider not exists');
     }
 
     private providerExists(eventType: AsteriskEventType): boolean {
