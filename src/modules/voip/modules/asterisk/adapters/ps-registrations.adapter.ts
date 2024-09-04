@@ -22,7 +22,7 @@ export class PsRegistrationsAdapter {
         this.retry_interval = DEFAULT_RETRY_INTERVAL;
         this.expiration = DEFAULT_EXPIRATION;
         this.auth_rejection_permanent = DefaultYesNoAsterisk.yes;
-        this.contact_user = data.trunkId;
+        this.contact_user = data.authId;
         this.server_uri = `sip:${data.pbxIp}`;
         this.client_uri = `sip:${data.authId}@${data.pbxIp}`;
         this.forbidden_retry_interval = DEFAULT_FORBIDDEN_RETRY_INTERVAL;

@@ -26,6 +26,6 @@ const amiProvidersName = getAsteriskAmiProvidesName();
         RegistrationStatusAction,
         SendResiterAction,
     ],
-    exports: [amiProvidersName],
+    exports: [amiProvidersName, OriginateAction, RegistrationStatusAction, SendResiterAction, AmiListenter],
 })
 export class AmiModule {}
