@@ -1,73 +1,46 @@
 import { AsteriskEventType, AsteriskUnionEventData, ChannelStateDesc, RegisterStatus } from './ami.enum';
 
 export interface BaseEventData {
-    Event: AsteriskEventType;
+    event: AsteriskEventType;
+    channel: string;
+    channelState: string;
+    channelStateDesc: ChannelStateDesc;
+    callerIDNum: string;
+    callerIDName: string;
+    connectedLineNum: string;
+    connectedLineName: string;
+    language: string;
+    accountCode: string;
+    context: string;
+    exten: string;
+    priority: string;
+    uniqueid: string;
+    linkedid: string;
 }
 export interface RegistryEventData {
-    Event: AsteriskEventType.Registry;
-    ChannelType: string;
-    Username: string;
-    Domain: string;
-    Status: RegisterStatus;
-    Cause: string;
+    event: AsteriskEventType.Registry;
+    channelType: string;
+    username: string;
+    domain: string;
+    status: RegisterStatus;
+    cause: string;
 }
 
 export interface VarSetEventData {
-    Event: AsteriskEventType.VarSet;
-    Channel: string;
-    ChannelState: string;
-    ChannelStateDesc: ChannelStateDesc;
-    CallerIDNum: string;
-    CallerIDName: string;
-    ConnectedLineNum: string;
-    ConnectedLineName: string;
-    Language: string;
-    AccountCode: string;
-    Context: string;
-    Exten: string;
-    Priority: string;
-    Uniqueid: string;
-    Linkedid: string;
-    Variable: string;
-    Value: string;
+    event: AsteriskEventType.VarSet;
+    variable: string;
+    value: string;
 }
 
 export interface NewchannelEventData {
-    Event: AsteriskEventType.Newchannel;
-    Channel: string;
-    ChannelState: string;
-    ChannelStateDesc: ChannelStateDesc;
-    CallerIDNum: string;
-    CallerIDName: string;
-    ConnectedLineNum: string;
-    ConnectedLineName: string;
-    Language: string;
-    AccountCode: string;
-    Context: string;
-    Exten: string;
-    Priority: string;
-    Uniqueid: string;
-    Linkedid: string;
+    event: AsteriskEventType.Newchannel;
 }
 
 export interface HangupEventData {
-    Event: AsteriskEventType.Hangup;
-    Channel: string;
-    ChannelState: string;
-    ChannelStateDesc: ChannelStateDesc;
-    CallerIDNum: string;
-    CallerIDName: string;
-    ConnectedLineNum: string;
-    ConnectedLineName: string;
-    Language: string;
-    AccountCode: string;
-    Context: string;
-    Exten: string;
-    Priority: string;
-    Uniqueid: string;
-    Linkedid: string;
-    Cause: string;
-    'Cause-txt': string;
+    event: AsteriskEventType.Hangup;
+
+    cause: string;
+    'cause-txt': string;
 }
 
 export interface AsteriskAmiEventProviderInterface {
@@ -78,7 +51,7 @@ export type AsteriskAmiEventProviders = {
     [key in AsteriskEventType]?: AsteriskAmiEventProviderInterface;
 };
 
-export interface OriginateCallData {
+export interface AmiOriginateCallData {
     srcNumber: string;
     dstNumber: string;
     clientTrunkId: string;

@@ -128,7 +128,7 @@ export enum AsteriskEventType {
     NewCallerid = 'NewCallerid',
     NewConnectedLine = 'NewConnectedLine',
     NewExten = 'NewExten',
-    Newchannel = 'Newchannel',
+    Newchannel = 'NewChannel',
     Newstate = 'Newstate',
     OriginateResponse = 'OriginateResponse',
     ParkedCall = 'ParkedCall',
