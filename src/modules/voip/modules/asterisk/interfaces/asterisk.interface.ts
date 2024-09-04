@@ -1,4 +1,4 @@
-import { TrunkType } from '@app/modules/voip/interfaces/voip.enum';
+import { CreateTrunkData } from '@app/modules/voip/interfaces/voip.interface';
 
 export interface UsersInterface {
     id: number;
@@ -27,18 +27,10 @@ export interface CreateUserData {
     phone_number: string;
 }
 
-export interface CreateTrunkData {
-    clientId: number;
-    authId: string;
-    authPassword: string;
-    pbxIp: string;
-    trunkType: TrunkType;
-}
-
 export interface CreateTrunkDataWithTrunkId extends CreateTrunkData {
     trunkId: string;
 }
 
-export interface CreateTrunkResult {
-    trinkId: string;
+export interface AsteriskOriginateResult {
+    uniqueid: string;
 }
