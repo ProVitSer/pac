@@ -130,3 +130,13 @@ export enum OutgoingCallOfferPref {
     remote_merge = 'remote_merge',
     remote_first = 'remote_first',
 }
+
+export enum AsteriskContext {
+    client_trunk = 'client-trunk',
+}
+
+export enum ChannelType {
+    PJSIP = 'PJSIP',
+    SIP = 'SIP',
+    LOCAL = 'local',
+}

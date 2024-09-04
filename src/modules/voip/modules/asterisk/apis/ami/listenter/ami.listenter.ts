@@ -18,6 +18,7 @@ import { VarSetEvent } from '../events/var-set.event';
 
 @Injectable()
 export class AmiListenter implements OnApplicationBootstrap {
+    private amiClient: any;
     constructor(
         @Inject(configuration().voip.asterisk.ami.providerName) private readonly ami: any,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
@@ -36,23 +37,27 @@ export class AmiListenter implements OnApplicationBootstrap {
         };
     }
 
+    public get client() {
+        return this.amiClient;
+    }
+
     async onApplicationBootstrap() {
         try {
-            const amiClient = await this.ami;
+            this.amiClient = await this.ami;
 
-            amiClient.logLevel = configuration().voip.asterisk.ami.logLevel;
+            this.amiClient.logLevel = configuration().voip.asterisk.ami.logLevel;
 
-            amiClient.open();
+            this.amiClient.open();
 
-            amiClient.on('namiConnected', () => this.logger.log(AMI_CONNECT_SUCCESS));
+            this.amiClient.on('namiConnected', () => this.logger.log(AMI_CONNECT_SUCCESS));
 
-            amiClient.on('namiConnectionClose', () => this.connectionClose(amiClient));
+            this.amiClient.on('namiConnectionClose', () => this.connectionClose(this.amiClient));
 
-            amiClient.on('namiLoginIncorrect', () => this.loginIncorrect());
+            this.amiClient.on('namiLoginIncorrect', () => this.loginIncorrect());
 
-            amiClient.on('namiInvalidPeer', () => this.invalidPeer());
+            this.amiClient.on('namiInvalidPeer', () => this.invalidPeer());
 
-            amiClient.on('*' as AsteriskEventType, (event: AsteriskUnionEventData) => this.parseNamiEvent(event.Event, event));
+            this.amiClient.on('*' as AsteriskEventType, (event: AsteriskUnionEventData) => this.parseNamiEvent(event.Event, event));
         } catch (e) {
             this.logger.error(`${ERROR_AMI}: ${e}`);
         }

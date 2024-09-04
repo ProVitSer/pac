@@ -77,3 +77,15 @@ export interface AsteriskAmiEventProviderInterface {
 export type AsteriskAmiEventProviders = {
     [key in AsteriskEventType]?: AsteriskAmiEventProviderInterface;
 };
+
+export interface OriginateCallData {
+    srcNumber: string;
+    dstNumber: string;
+    clientTrunkId: string;
+}
+
+export interface RegistrationStatusData {
+    trunkId: string;
+}
+
+export interface SendResiterData extends RegistrationStatusData {}
