@@ -140,3 +140,8 @@ export enum ChannelType {
     SIP = 'SIP',
     LOCAL = 'local',
 }
+
+export enum PjsipTransport {
+    udp = 'transport-udp',
+    tcp = 'transport-tcp',
+}

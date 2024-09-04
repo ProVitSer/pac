@@ -1,3 +1,5 @@
+import { TrunkType } from '@app/modules/voip/interfaces/voip.enum';
+
 export interface UsersInterface {
     id: number;
     email: string;
@@ -23,4 +25,20 @@ export interface CreateUserData {
     name: string;
     password: string;
     phone_number: string;
+}
+
+export interface CreateTrunkData {
+    clientId: number;
+    authId: string;
+    authPassword: string;
+    pbxIp: string;
+    trunkType: TrunkType;
+}
+
+export interface CreateTrunkDataWithTrunkId extends CreateTrunkData {
+    trunkId: string;
+}
+
+export interface CreateTrunkResult {
+    trinkId: string;
 }

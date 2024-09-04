@@ -22,6 +22,9 @@ export class Voip implements VoipInterface {
     })
     trunk_type: TrunkType;
 
+    @Column()
+    active: boolean;
+
     @CreateDateColumn()
     created_at: Date;
 
