@@ -100,6 +100,15 @@ import { VoipModule } from '../voip/voip.module';
                     },
                 ],
             },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'voip',
+                        module: VoipModule,
+                    },
+                ],
+            },
         ]),
     ],
     controllers: [AppController],
