@@ -1,4 +1,4 @@
-import { Client } from '@app/modules/client/entities/client.entity';
+import { Client } from '../../../modules/client/entities/client.entity';
 import { OriginateCallStatus, TrunkStatus, TrunkType } from './voip.enum';
 
 export interface VoipInterface {

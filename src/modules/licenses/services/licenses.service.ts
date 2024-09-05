@@ -14,7 +14,7 @@ import ActivateLicenseDto from '../dto/activate-license.dto';
 import { addMonths } from 'date-fns';
 import LicenseNotFoundException from '../exceptions/license-not-found.exeption';
 import { ClientService } from '../../../modules/client/services/client.service';
-import { Client } from '@app/modules/client/entities/client.entity';
+import { Client } from '../../../modules/client/entities/client.entity';
 import { Product } from '@app/modules/product/entities/product.entity';
 import { ProductService } from '../../../modules/product/services/product.service';
 import { ActiveLicenseResponse } from '../interfaces/licenses.interface';

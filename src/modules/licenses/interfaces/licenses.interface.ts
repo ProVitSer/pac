@@ -1,4 +1,4 @@
-import { Client } from '@app/modules/client/entities/client.entity';
+import { Client } from '../../../modules/client/entities/client.entity';
 import { Product } from '@app/modules/product/entities/product.entity';
 
 export interface LicensesInterface {

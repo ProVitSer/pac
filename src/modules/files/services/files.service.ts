@@ -9,22 +9,16 @@ import { FileType } from '../interfaces/files.enum';
 
 @Injectable()
 export class FilesService {
-    private readonly audioDir: string;
-
     constructor(
         private readonly configService: ConfigService,
         @InjectRepository(Files)
         private readonly fileRepository: Repository<Files>,
-    ) {
-        this.audioDir = this.configService.get<string>('files.audioDir');
-
-        if (!fs.existsSync(this.audioDir)) {
-            fs.mkdirSync(this.audioDir, { recursive: true });
-        }
-    }
+    ) {}
 
     async saveAudioFile(file: Express.Multer.File, voipId: number): Promise<Files> {
-        const filePath = path.join(this.audioDir, file.filename);
+        const audioDir = this.configService.get<string>('files.audioDir');
+
+        const filePath = path.join(audioDir, file.filename);
 
         fs.renameSync(file.path, filePath);
 

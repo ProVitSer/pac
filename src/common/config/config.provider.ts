@@ -91,6 +91,10 @@ const DEV_CONF: ConfigEnvironment = {
             ],
         },
     },
+    files: {
+        tmpDir: process.env.FILES_TMP_DIR,
+        audioDir: process.env.FILES_AUDIO_DIR,
+    },
 };
 
 const PROD_CONF: ConfigEnvironment = {
@@ -175,5 +179,9 @@ const PROD_CONF: ConfigEnvironment = {
                 },
             ],
         },
+    },
+    files: {
+        tmpDir: process.env.FILES_TMP_DIR,
+        audioDir: process.env.FILES_AUDIO_DIR,
     },
 };

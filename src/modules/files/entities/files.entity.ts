@@ -1,7 +1,7 @@
-import { Voip } from '@app/modules/voip/entities/voip.entity';
+import { Voip } from '../../../modules/voip/entities/voip.entity';
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { FileType } from '../interfaces/files.enum';
-import { Client } from '@app/modules/client/entities/client.entity';
+import { Client } from '../../../modules/client/entities/client.entity';
 
 @Entity()
 export class Files {
