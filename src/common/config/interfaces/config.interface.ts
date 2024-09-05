@@ -11,8 +11,13 @@ export interface ConfigEnvironment {
     amqp: AmqpEnvironmentVariables;
     jwt: JwtEnvironmentVariables;
     voip: VoipEnvironmentVariables;
+    files: FileEnvironmentVariables;
 }
 
+export interface FileEnvironmentVariables {
+    tmpDir: string;
+    audioDir: string;
+}
 export interface VoipEnvironmentVariables {
     asterisk: AsteriskEnvironmentVariables;
 }

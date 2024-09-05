@@ -23,6 +23,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
 import { VoipModule } from '../voip/voip.module';
+import { FilesModule } from '../files/files.module';
 
 @Module({
     imports: [
@@ -54,6 +55,7 @@ import { VoipModule } from '../voip/voip.module';
         UsersModule,
         AuthModule,
         VoipModule,
+        FilesModule,
         RouterModule.register([
             {
                 path: 'api',
@@ -106,6 +108,15 @@ import { VoipModule } from '../voip/voip.module';
                     {
                         path: 'voip',
                         module: VoipModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'file',
+                        module: FilesModule,
                     },
                 ],
             },
