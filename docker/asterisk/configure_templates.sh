@@ -5,4 +5,5 @@ envsubst < /tmp/ari.conf.template > /etc/asterisk/ari.conf
 envsubst < /tmp/manager.conf.template > /etc/asterisk/manager.conf
 envsubst < /tmp/http.conf.template > /etc/asterisk/http.conf
 envsubst < /tmp/res_pgsql.conf.template > /etc/asterisk/res_pgsql.conf
+envsubst < /tmp/cdr_pgsql.conf.template > /etc/asterisk/cdr_pgsql.conf
 

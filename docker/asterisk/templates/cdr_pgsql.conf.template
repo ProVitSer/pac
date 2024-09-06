@@ -1,0 +1,15 @@
+[global]
+hostname= ${DATABASE_CONTAINER_NAME}
+port=${DATABASE_PORT}
+dbname=${DATABASE_NAME}
+password=${DATABASE_PASSWORD}
+user= ${DATABASE_USERNAME}
+appname=asterisk    
+table=cdr		
+encoding=utf8	 
+timezone=UTC
+
+
+[aliases]
+client_id=client_id
+trunk_type=trunk_type
