@@ -24,6 +24,7 @@ import { AuthModule } from '../auth/auth.module';
 import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
 import { VoipModule } from '../voip/voip.module';
 import { FilesModule } from '../files/files.module';
+import { CdrModule } from '../cdr/cdr.module';
 
 @Module({
     imports: [
@@ -56,6 +57,7 @@ import { FilesModule } from '../files/files.module';
         AuthModule,
         VoipModule,
         FilesModule,
+        CdrModule,
         RouterModule.register([
             {
                 path: 'api',
@@ -106,17 +108,8 @@ import { FilesModule } from '../files/files.module';
                 path: 'api',
                 children: [
                     {
-                        path: 'voip',
-                        module: VoipModule,
-                    },
-                ],
-            },
-            {
-                path: 'api',
-                children: [
-                    {
-                        path: 'file',
-                        module: FilesModule,
+                        path: 'cdr',
+                        module: CdrModule,
                     },
                 ],
             },
