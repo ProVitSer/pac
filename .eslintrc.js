@@ -24,7 +24,7 @@ module.exports = {
             "trailingComma": "all",
             "printWidth": 140,
             "tabWidth": 4,
-            "endOfLine": "crlf"
+            "endOfLine": "lf"
         }
       ],
       '@typescript-eslint/interface-name-prefix': 'off',
