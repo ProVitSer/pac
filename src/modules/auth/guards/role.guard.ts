@@ -6,8 +6,6 @@ import { Role } from '@app/common/interfaces/enums';
 const RoleGuard = (roles: Role[]): Type<CanActivate> => {
     class RoleGuardMixin extends JwtAuthenticationGuard {
         async canActivate(context: ExecutionContext) {
-            await super.canActivate(context);
-
             const request = context.switchToHttp().getRequest<RequestWithUser>();
 
             const user = request.user;
