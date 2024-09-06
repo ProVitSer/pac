@@ -18,6 +18,7 @@ export class PsEndpointsAdapter {
     from_domain: string;
     send_pai: DefaultYesNoAsterisk;
     send_rpid: DefaultYesNoAsterisk;
+    set_var: string;
 
     constructor(data: CreateTrunkDataWithTrunkId) {
         this.id = data.trunkId;
@@ -35,5 +36,6 @@ export class PsEndpointsAdapter {
         this.from_domain = data.authId;
         this.send_pai = DefaultYesNoAsterisk.yes;
         this.send_rpid = DefaultYesNoAsterisk.yes;
+        this.set_var = `CLIENT_ID=${data.clientId};TRUNK_TYPE=${data.trunkType}`;
     }
 }
