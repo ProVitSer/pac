@@ -13,6 +13,8 @@ RUN apt-get update && apt-get upgrade -y && \
     libncurses5-dev \
     subversion \
     libsqlite3-dev \
+    sqlite3 \
+    libpq-dev \
     libjansson-dev \
     libxml2-dev \
     libxml2 \
@@ -25,6 +27,7 @@ RUN apt-get update && apt-get upgrade -y && \
     sngrep \
     aptitude \
     libedit-dev \
+    ncurses-dev  \
     gettext \
     tcpdump && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -38,16 +41,18 @@ RUN mkdir -p /tmp/asterisk && cd /tmp/asterisk && \
     menuselect/menuselect \
     --disable BUILD_NATIVE \
     --enable pbx_ael   \
-    --enable app_macro  \
     --enable res_config_mysql  \
     --disable pbx_lua  \
-    --disable format_mp3  \
     --enable func_odbc  \
     --enable func_sorcery  \
     --enable pbx_realtime  \
     --enable res_odbc  \
     --enable codec_opus  \
     --enable codec_silk  \
+    --enable cdr_pgsql  \
+    --enable format_mp3  \
+    --enable app_macro  \
+    --enable res_config_pgsql  \
     --disable codec_g729a  \
     --disable chan_mgcp  \
     --disable chan_skinny  \
@@ -56,8 +61,6 @@ RUN mkdir -p /tmp/asterisk && cd /tmp/asterisk && \
     --disable cdr_custom  \
     --disable cdr_manager  \
     --disable cdr_csv  \
-    --disable pbx_realtime  \
-    --disable pbx_ael  \
     --disable pbx_dundi  \
     --disable astcanary  \
     --disable astdb2sqlite3  \
