@@ -8,6 +8,8 @@ import { loadCorsConfiguration } from './common/config/cors.config';
 import { AppLoggerService } from './common/logger/logger.service';
 import { AllExceptionsFilter } from './common/filters/all-exception.filter';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { ErrorsInterceptor } from './common/interceptors/errors.interceptor';
+import { PostInterceptor } from './common/interceptors/post.interceptor';
 
 async function bootstrap() {
     try {
@@ -22,6 +24,8 @@ async function bootstrap() {
         app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
         app.enableCors(loadCorsConfiguration(configService.get('cors')));
+
+        app.useGlobalInterceptors(new ErrorsInterceptor(), new PostInterceptor());
 
         const httpAdapter = app.get(HttpAdapterHost);
 

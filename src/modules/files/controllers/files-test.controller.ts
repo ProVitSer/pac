@@ -1,36 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, Param, ParseIntPipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FilesService } from '../services/files.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import * as path from 'path';
-import { ConfigEnvironment } from '@app/common/config/interfaces/config.interface';
-import configuration from '@app/common/config/config.provider';
+import { Controller, Post, Req, Res, UseInterceptors } from '@nestjs/common';
+import { Request, Response } from 'express';
+import { AudioFilesService } from '../services/audio-files.service';
+import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
 
 @Controller()
 export class FilesController {
-    constructor(private readonly filesService: FilesService) {}
+    constructor(private readonly audioFilesService: AudioFilesService) {}
 
-    @Post('upload/:voipId/:fileType')
-    @UseInterceptors(
-        FileInterceptor('file', {
-            storage: diskStorage({
-                destination: (req, file, callback) => {
-                    const config = configuration() as any;
+    @UseInterceptors(ErrorsInterceptor)
+    @Post('audio/upload')
+    async uploadFile(@Req() req: Request, @Res() res: Response) {
+        try {
+            console.log(req.headers);
+            const fileName = req.headers['filename'] as string;
+            const fileType = (req.headers['file-type'] as string) || 'audio';
+            const clientId = Number(req.headers['clientid']);
 
-                    callback(null, config.files.tmpDir);
-                },
-                filename: (req, file, callback) => {
-                    const ext = path.extname(file.originalname);
-                    const filename = `${Date.now()}${ext}`;
-                    callback(null, filename);
-                },
-            }),
-        }),
-    )
-    async uploadFile(
-        @UploadedFile() file: Express.Multer.File,
-        @Param('voipId', ParseIntPipe) voipId: number,
-        @Param('fileType') fileType: string,
-    ) {}
+            const filePath = await this.audioFilesService.saveAudioFile(req, { stream: req, fileName, fileType, clientId });
+            return res.status(201).json({ filePath });
+        } catch (error) {
+            return res.status(500).json({ message: 'Error saving file', error });
+        }
+    }
 }

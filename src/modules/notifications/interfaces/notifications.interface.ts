@@ -1,4 +1,4 @@
-import { Client } from '@app/modules/client/entities/client.entity';
+import { Client } from '../../../modules/client/entities/client.entity';
 import { Licenses } from '@app/modules/licenses/entities/licenses.entity';
 
 export interface LicenseCreateNotification {

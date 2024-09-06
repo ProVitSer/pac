@@ -14,12 +14,12 @@ export class ClientController {
     constructor(private readonly clientService: ClientService) {}
 
     @Post()
-    async createCompany(@Body() client: CreateClientDto): Promise<Client> {
+    async createClient(@Body() client: CreateClientDto): Promise<Client> {
         return this.clientService.createClient(client);
     }
 
     @Get()
-    async getCompanies(): Promise<Client[]> {
+    async getClients(): Promise<Client[]> {
         return this.clientService.getClients();
     }
 

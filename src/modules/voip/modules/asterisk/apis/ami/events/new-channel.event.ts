@@ -8,6 +8,7 @@ export class NewChannelEvent implements AsteriskAmiEventProviderInterface {
 
     async parseEvent(event: NewchannelEventData): Promise<void> {
         try {
+            console.log('NewChannelEvent', event);
         } catch (e) {
             this.logger.error(event);
         }

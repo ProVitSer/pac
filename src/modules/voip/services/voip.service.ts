@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable } from '@nestjs/common';
 import { VoipPbxService } from '../interfaces/voip.interface';
 import { TrunkType } from '../interfaces/voip.enum';
@@ -6,7 +7,7 @@ import { TrunkType } from '../interfaces/voip.enum';
 export class VoipService {
     constructor(@Inject('Asterisk') private readonly voipPbxService: VoipPbxService) {}
 
-    public async addNewTrunk() {
+    public async addNewTrunk(voip: any) {
         const result = await this.voipPbxService.addTrunk({
             clientId: 123121111,
             trunkType: TrunkType.call,

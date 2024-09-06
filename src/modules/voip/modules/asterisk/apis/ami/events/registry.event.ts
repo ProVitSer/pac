@@ -8,6 +8,7 @@ export class RegistryEvent implements AsteriskAmiEventProviderInterface {
 
     async parseEvent(event: RegistryEventData): Promise<void> {
         try {
+            console.log('RegistryEvent', event);
         } catch (e) {
             this.logger.error(event);
         }

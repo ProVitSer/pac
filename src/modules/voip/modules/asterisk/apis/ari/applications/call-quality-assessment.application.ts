@@ -16,13 +16,13 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
     public async onApplicationBootstrap() {
         this.ariCall.ariClient.on('StasisStart', async (event: StasisStart, incoming: Channel) => {
             try {
-                console.log(`Подключение к каналу оценки качества  ${JSON.stringify(event)}`);
+                this.logger.log(`Подключение к каналу оценки качества  ${JSON.stringify(event)}`);
 
                 await this.handleCall(incoming);
 
                 return;
             } catch (e) {
-                console.log(e);
+                this.logger.error(e);
             }
         });
 
@@ -38,7 +38,7 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             incomingChannel.on('ChannelDtmfReceived', async (event: ChannelDtmfReceived, _channel: Channel) => {
                 const digit = event.digit;
-                console.log(digit);
+                console.log('ChannelDtmfReceived', digit);
                 resolve();
             });
         });

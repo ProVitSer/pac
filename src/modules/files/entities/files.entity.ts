@@ -1,6 +1,4 @@
-import { Voip } from '../../../modules/voip/entities/voip.entity';
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { FileType } from '../interfaces/files.enum';
 import { Client } from '../../../modules/client/entities/client.entity';
 
 @Entity()
@@ -9,7 +7,13 @@ export class Files {
     id: number;
 
     @Column({ nullable: false })
-    filename: string;
+    file_name: string;
+
+    @Column({ nullable: false })
+    generated_file_name: string;
+
+    @Column({ nullable: false })
+    generated_file_path: string;
 
     @Column({ nullable: false })
     path: string;
@@ -23,11 +27,11 @@ export class Files {
     @Column({ nullable: true })
     description?: string;
 
-    @Column({ nullable: false, type: 'enum', enum: FileType })
-    file_type: FileType;
+    // @Column({ nullable: false, type: 'enum', enum: FileType })
+    // file_type: FileType;
 
-    @ManyToOne(() => Voip, (voip) => voip.files)
-    voip: Voip;
+    @Column({ nullable: false })
+    file_type: string;
 
     @ManyToOne(() => Client, (client) => client.files, { onDelete: 'CASCADE' })
     client: Client;

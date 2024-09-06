@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { VoipService } from './services/voip.service';
+import { VoipService } from '../services/voip.service';
 
 @Controller()
 export class VoipController {

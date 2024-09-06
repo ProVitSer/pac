@@ -45,7 +45,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./docker/asterisk/asterisk/:/etc/asterisk:rw
+      - asterisk/:/etc/asterisk:rw
       - pg_socket:/var/run/postgresql 
     ports:
       - "6066:6066/tcp"

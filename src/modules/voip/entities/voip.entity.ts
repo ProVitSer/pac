@@ -1,8 +1,7 @@
 import { Client } from '../../client/entities/client.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinTable, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinTable, ManyToOne } from 'typeorm';
 import { VoipInterface } from '../interfaces/voip.interface';
 import { TrunkType } from '../interfaces/voip.enum';
-import { Files } from '../../../modules/files/entities/files.entity';
 
 @Entity()
 export class Voip implements VoipInterface {
@@ -25,9 +24,6 @@ export class Voip implements VoipInterface {
 
     @Column()
     active: boolean;
-
-    @OneToMany(() => Files, (file) => file.voip, { cascade: true })
-    files: Files[];
 
     @CreateDateColumn()
     created_at: Date;
