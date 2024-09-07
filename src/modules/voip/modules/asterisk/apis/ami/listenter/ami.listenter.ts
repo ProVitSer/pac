@@ -15,6 +15,7 @@ import { NewChannelEvent } from '../events/new-channel.event';
 import { HangupEvent } from '../events/hangup.event';
 import { RegistryEvent } from '../events/registry.event';
 import { VarSetEvent } from '../events/var-set.event';
+import { OutboundRegistrationDetailEvent } from '../events/outbound-registration-detail.event';
 
 @Injectable()
 export class AmiListenter implements OnApplicationBootstrap {
@@ -26,6 +27,7 @@ export class AmiListenter implements OnApplicationBootstrap {
         private readonly varSet: VarSetEvent,
         private readonly registry: RegistryEvent,
         private readonly hangup: HangupEvent,
+        private readonly outboundRegistrationDetail: OutboundRegistrationDetailEvent,
     ) {}
 
     private get providers(): AsteriskAmiEventProviders {
@@ -34,6 +36,7 @@ export class AmiListenter implements OnApplicationBootstrap {
             [AsteriskEventType.Registry]: this.registry,
             [AsteriskEventType.VarSet]: this.varSet,
             [AsteriskEventType.Newchannel]: this.newChannel,
+            [AsteriskEventType.OutboundRegistrationDetail]: this.outboundRegistrationDetail,
         };
     }
 
@@ -71,6 +74,10 @@ export class AmiListenter implements OnApplicationBootstrap {
 
             this.amiClient.on(`namiEvent${AsteriskEventType.Newchannel}` as AsteriskEventType, (event: AsteriskUnionEventData) =>
                 this.parseNamiEvent(event.event, event),
+            );
+            this.amiClient.on(
+                `namiEvent${AsteriskEventType.OutboundRegistrationDetail}` as AsteriskEventType,
+                (event: AsteriskUnionEventData) => this.parseNamiEvent(event.event, event),
             );
         } catch (e) {
             this.logger.error(`${ERROR_AMI}: ${e}`);

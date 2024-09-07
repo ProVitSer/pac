@@ -7,13 +7,17 @@ import { RegistryEvent } from './events/registry.event';
 import { VarSetEvent } from './events/var-set.event';
 import { BaseAction } from './actions/base.action';
 import { OriginateAction } from './actions/originate.action';
-import { RegistrationStatusAction } from './actions/registration-status.action';
+import { PjsipShowRegistrationsOutboundAction } from './actions/pjsip-show-registrations-outbound.action';
 import { SendResiterAction } from './actions/send-register.action';
+import { OutboundRegistrationDetailEvent } from './events/outbound-registration-detail.event';
+import { Voip } from '@app/modules/voip/entities/voip.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 const asteriskAmiProviders = createAsteriskAmi();
 const amiProvidersName = getAsteriskAmiProvidesName();
 
 @Module({
+    imports: [TypeOrmModule.forFeature([Voip])],
     providers: [
         asteriskAmiProviders,
         AmiListenter,
@@ -23,9 +27,10 @@ const amiProvidersName = getAsteriskAmiProvidesName();
         HangupEvent,
         BaseAction,
         OriginateAction,
-        RegistrationStatusAction,
+        PjsipShowRegistrationsOutboundAction,
+        OutboundRegistrationDetailEvent,
         SendResiterAction,
     ],
-    exports: [amiProvidersName, OriginateAction, RegistrationStatusAction, SendResiterAction, AmiListenter],
+    exports: [amiProvidersName, OriginateAction, PjsipShowRegistrationsOutboundAction, SendResiterAction, AmiListenter],
 })
 export class AmiModule {}

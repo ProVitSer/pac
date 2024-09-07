@@ -1,4 +1,5 @@
-import { AsteriskEventType, AsteriskUnionEventData, ChannelStateDesc, RegisterStatus } from './ami.enum';
+import { TrunkRegistryStatus } from '@app/modules/voip/interfaces/voip.enum';
+import { ActionResult, AsteriskEventType, AsteriskUnionEventData, ChannelStateDesc, RegisterStatus } from './ami.enum';
 
 export interface BaseEventData {
     event: AsteriskEventType;
@@ -24,6 +25,17 @@ export interface RegistryEventData {
     domain: string;
     status: RegisterStatus;
     cause: string;
+}
+
+export interface BaseActionResult {
+    lines: string[];
+    EOL: string;
+    variables: any;
+    response: ActionResult;
+    actionid: string;
+    message: string;
+    output: string;
+    events: string[];
 }
 
 export interface VarSetEventData {
@@ -62,3 +74,35 @@ export interface RegistrationStatusData {
 }
 
 export interface SendResiterData extends RegistrationStatusData {}
+
+export interface OutboundRegistrationDetailEventData {
+    lines: string[];
+    EOL: string;
+    variables: any;
+    event: AsteriskEventType.OutboundRegistrationDetail;
+    actionid: string;
+    objecttype: string;
+    objectname: string;
+    maxretries: string;
+    clienturi: string;
+    securitynegotiation: string;
+    authrejectionpermanent: string;
+    serveruri: string;
+    maxrandominitialdelay: string;
+    supportpath: string;
+    retryinterval: string;
+    contactheaderparams: string;
+    expiration: string;
+    transport: string;
+    line: string;
+    contactuser: string;
+    endpoint: string;
+    forbiddenretryinterval: string;
+    outboundauth: string;
+    securitymechanisms: string;
+    outboundproxy: string;
+    fatalretryinterval: string;
+    supportoutbound: string;
+    status: TrunkRegistryStatus;
+    nextreg: string;
+}

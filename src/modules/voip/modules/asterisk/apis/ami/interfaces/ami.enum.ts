@@ -1,4 +1,11 @@
-import { BaseEventData, HangupEventData, NewchannelEventData, RegistryEventData, VarSetEventData } from './ami.interface';
+import {
+    BaseEventData,
+    HangupEventData,
+    NewchannelEventData,
+    OutboundRegistrationDetailEventData,
+    RegistryEventData,
+    VarSetEventData,
+} from './ami.interface';
 
 export enum AsteriskEventType {
     AGIExecEnd = 'AGIExecEnd',
@@ -180,6 +187,7 @@ export enum AsteriskEventType {
     VarSet = 'VarSet',
     VoicemailPasswordChange = 'VoicemailPasswordChange',
     Wink = 'Wink',
+    OutboundRegistrationDetail = 'OutboundRegistrationDetail',
 }
 
 export enum RegisterStatus {
@@ -203,4 +211,14 @@ export enum ChannelStateDesc {
     Unknown = 'Unknown',
 }
 
-export type AsteriskUnionEventData = RegistryEventData | VarSetEventData | NewchannelEventData | HangupEventData | BaseEventData;
+export type AsteriskUnionEventData =
+    | RegistryEventData
+    | VarSetEventData
+    | NewchannelEventData
+    | HangupEventData
+    | BaseEventData
+    | OutboundRegistrationDetailEventData;
+
+export enum ActionResult {
+    Success = 'Success',
+}

@@ -9,14 +9,29 @@ export class BaseAction {
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
 
-    public async sendAction<T>(action: any): Promise<T> {
+    public async sendPromiseAction<T>(action: any): Promise<T> {
         try {
-            this.logger.log(`[AMI ACTION] ` + action);
+            this.logger.log(`[AMI ACTION] ` + JSON.stringify(action));
 
             return await new Promise((resolve) => {
                 this.amiListenter.client.send(action, (event: T) => {
                     resolve(event);
                 });
+            });
+        } catch (e) {
+            this.logger.error(e);
+
+            throw e;
+        }
+    }
+
+    public async sendAction(action: any): Promise<void> {
+        try {
+            this.logger.log(`[AMI ACTION] ` + JSON.stringify(action));
+
+            return await new Promise((resolve) => {
+                this.amiListenter.client.send(action);
+                resolve();
             });
         } catch (e) {
             this.logger.error(e);

@@ -23,7 +23,7 @@ export class OriginateAction extends BaseAction {
             action.ChannelId = uuid.v4();
 
             try {
-                await this.sendAction(action);
+                await this.sendPromiseAction(action);
             } catch (e) {
                 throw new Error(AMI_ORIGINATE_ERROR);
             }

@@ -4,12 +4,14 @@ export enum TrunkType {
     telegram = 'telegram',
 }
 
-export enum TrunkStatus {
-    up = 'up',
-    down = 'down',
-}
-
 export enum OriginateCallStatus {
     successful = 'successful',
     error = 'erro',
+}
+
+export enum TrunkRegistryStatus {
+    Registered = 'Registered',
+    Unregistered = 'Unregistered',
+    Rejected = 'Rejected',
+    Failed = 'Failed',
 }

@@ -1,7 +1,7 @@
 import { Client } from '../../client/entities/client.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinTable, ManyToOne } from 'typeorm';
 import { VoipInterface } from '../interfaces/voip.interface';
-import { TrunkType } from '../interfaces/voip.enum';
+import { TrunkRegistryStatus, TrunkType } from '../interfaces/voip.enum';
 
 @Entity()
 export class Voip implements VoipInterface {
@@ -21,6 +21,14 @@ export class Voip implements VoipInterface {
         nullable: false,
     })
     trunk_type: TrunkType;
+
+    @Column({
+        type: 'enum',
+        enum: TrunkRegistryStatus,
+        nullable: false,
+        default: TrunkRegistryStatus.Unregistered,
+    })
+    trunk_status: TrunkRegistryStatus;
 
     @Column()
     active: boolean;

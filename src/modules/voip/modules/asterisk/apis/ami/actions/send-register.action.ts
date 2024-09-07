@@ -11,7 +11,7 @@ export class SendResiterAction extends BaseAction {
 
             action.Command = `pjsip send register ${data.trunkId}`;
 
-            await this.sendAction(action);
+            this.sendAction(action);
         } catch (e) {
             throw e;
         }
