@@ -6,7 +6,9 @@ import ClientNotFoundException from '../exceptions/client-not-found.exception';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { UniqueClientFields } from '../interfaces/client.interface';
 import ClientExistsException from '../exceptions/client-exists.exeption';
-import { getUnixTime } from 'date-fns';
+import CreateClientDto from '../dto/create-client.dto';
+import { CreateClientAdapter } from '../adapters/create-client.adapter';
+import UpdateClientDto from '../dto/update-client.dto';
 
 @Injectable()
 export class ClientService {
@@ -16,17 +18,15 @@ export class ClientService {
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
 
-    public async createClient(clientData: Partial<Client>): Promise<Client> {
-        const client = await this.checkClientByUniqueFileds({ phone: clientData.phone, email: clientData.email });
+    public async createClient(clientData: CreateClientDto): Promise<Client> {
+        const client = await this.checkClientByUniqueFileds({ phone: clientData.company_phone, email: clientData.company_email });
 
         if (client) {
-            throw new ClientExistsException(`number ${clientData.phone} or ${clientData.email}`);
+            throw new ClientExistsException(`number ${clientData.company_phone} or ${clientData.company_email}`);
         }
 
-        const newClient = await this.clientRepository.create({
-            client_id: this.generateClientId(),
-            ...clientData,
-        });
+        const newClient = await this.clientRepository.create(new CreateClientAdapter(clientData));
+
         await this.clientRepository.save(newClient);
 
         return newClient;
@@ -56,7 +56,7 @@ export class ClientService {
         return client;
     }
 
-    public async updateClient(clientId: number, updateData: Partial<Client>): Promise<Client> {
+    public async updateClient(clientId: number, updateData: UpdateClientDto): Promise<Client> {
         const client = await this.clientRepository.findOne({
             where: {
                 client_id: clientId,
@@ -82,9 +82,5 @@ export class ClientService {
         return await this.clientRepository.findOne({
             where: [{ phone: data.phone }, { email: data.email }],
         });
-    }
-
-    private generateClientId(): number {
-        return getUnixTime(new Date());
     }
 }

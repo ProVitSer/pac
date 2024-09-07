@@ -13,7 +13,7 @@ export class UpdateUserDto implements Partial<Users> {
 
     @IsString()
     @IsOptional()
-    phone_number: string;
+    phoneNumber: string;
 
     @IsString()
     @IsOptional()

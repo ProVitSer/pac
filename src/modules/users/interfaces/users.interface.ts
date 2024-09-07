@@ -19,6 +19,7 @@ export interface UserDataAdapter {
 }
 
 export interface CreateUserData {
+    client_id: number;
     email: string;
     name: string;
     password: string;

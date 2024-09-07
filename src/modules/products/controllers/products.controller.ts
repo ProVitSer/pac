@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { ProductService } from '../services/product.service';
-import { ProductInterface } from '../interfaces/product.interface';
+import { ProductsService } from '../services/products.service';
+import { ProductInterface } from '../interfaces/products.interface';
 import { CreateProductDto } from '../dto/create-product.dto';
-import { ProductType } from '../interfaces/product.enum';
+import { ProductType } from '../interfaces/products.enum';
 import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
@@ -10,8 +10,8 @@ import RoleGuard from '@app/modules/auth/guards/role.guard';
 @UseGuards(RoleGuard([Role.Admin, Role.Manager]))
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
-export class ProductController {
-    constructor(private readonly productService: ProductService) {}
+export class ProductsController {
+    constructor(private readonly productService: ProductsService) {}
 
     @Get()
     async getByType(@Query('type') productType: ProductType): Promise<ProductInterface[]> {
@@ -32,6 +32,7 @@ export class ProductController {
 
     @Delete(':id')
     async deleteProduct(@Param('id') id: number) {
+        console.log(id);
         return this.productService.deleteProduct(id);
     }
 }

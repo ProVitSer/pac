@@ -4,7 +4,6 @@ import RegisterDto from '../dto/register.dto';
 import { LocalAuthenticationGuard } from '../guards/local-authentication.guard';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import { TokenService } from '../services/token.service';
-import JwtAuthenticationGuard from '../guards/jwt-authentication.guard';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '../guards/role.guard';
 
@@ -15,8 +14,6 @@ export class AuthController {
         private readonly tokenService: TokenService,
     ) {}
 
-    @UseGuards(RoleGuard([Role.Admin]))
-    @UseGuards(JwtAuthenticationGuard)
     @Post('register')
     async register(@Body() registrationData: RegisterDto) {
         return await this.authService.register(registrationData);

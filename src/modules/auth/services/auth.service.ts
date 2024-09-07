@@ -7,26 +7,37 @@ import LoginDto from '../dto/login.dto';
 import { LoginResponse } from '../interfaces/auth.interface';
 import { TokenService } from './token.service';
 import { Users } from '../../../modules/users/entities/users.entity';
+import { LicensesService } from '@app/modules/licenses/services/licenses.service';
+import { ClientService } from '@app/modules/client/services/client.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly tokenService: TokenService,
+        private readonly licensesService: LicensesService,
+        private readonly clientService: ClientService,
     ) {}
 
-    public async register(registrationData: RegisterDto): Promise<Users> {
+    public async register(registrationData: RegisterDto): Promise<void> {
+        const client = await this.clientService.createClient(registrationData);
+
         const password = await ArgonUtilService.hashData(registrationData.password);
 
-        return this.usersService.create({
-            ...registrationData,
+        await this.licensesService.createLicense({ client_id: client.client_id, products_id: registrationData.products_id });
+
+        await this.usersService.create({
+            email: registrationData.user_email,
+            name: registrationData.name,
+            phone_number: registrationData.user_phone_number,
+            client_id: client.client_id,
             password: password,
         });
     }
 
     public async getAuthenticatedUser(email: string, plainTextPassword: string): Promise<Users> {
         const user = await this.usersService.getByEmail(email);
-        console.log(user);
+
         await this.verifyPassword(plainTextPassword, user.password);
 
         return user;
@@ -39,7 +50,7 @@ export class AuthService {
 
         const tokens = await this.tokenService.getTokens(user.id);
 
-        await this.addLastLogin(user.id);
+        await this.usersService.updateLatestActivity(user.id);
 
         return tokens;
     }
@@ -56,9 +67,5 @@ export class AuthService {
         }
 
         return passwordMatches;
-    }
-
-    private async addLastLogin(id: number): Promise<void> {
-        await this.usersService.updateById({ id, latest_activity: new Date() });
     }
 }

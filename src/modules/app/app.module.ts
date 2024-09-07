@@ -12,7 +12,7 @@ import { databaseConfig } from '@app/common/config/database.config';
 import { ClientModule } from '../client/client.module';
 import { LicensesModule } from '../licenses/licenses.module';
 import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
-import { ProductModule } from '../product/product.module';
+import { ProductsModule } from '../products/products.module';
 import { PostInterceptor } from '@app/common/interceptors/post.interceptor';
 import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
 import { MailModule } from '../mail/mail.module';
@@ -48,7 +48,7 @@ import { CdrModule } from '../cdr/cdr.module';
         }),
         ClientModule,
         LicensesModule,
-        ProductModule,
+        ProductsModule,
         MailModule,
         AmqpModule,
         NotificationsModule,
@@ -81,8 +81,8 @@ import { CdrModule } from '../cdr/cdr.module';
                 path: 'api',
                 children: [
                     {
-                        path: 'product',
-                        module: ProductModule,
+                        path: 'products',
+                        module: ProductsModule,
                     },
                 ],
             },
@@ -110,6 +110,15 @@ import { CdrModule } from '../cdr/cdr.module';
                     {
                         path: 'cdr',
                         module: CdrModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'voip',
+                        module: VoipModule,
                     },
                 ],
             },

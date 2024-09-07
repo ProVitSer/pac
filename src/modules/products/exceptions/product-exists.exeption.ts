@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { ProductType } from '../interfaces/product.enum';
+import { ProductType } from '../interfaces/products.enum';
 
 class ProductExistsException extends NotFoundException {
     constructor(productType: ProductType) {

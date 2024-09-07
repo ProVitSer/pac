@@ -15,8 +15,8 @@ import { addMonths } from 'date-fns';
 import LicenseNotFoundException from '../exceptions/license-not-found.exeption';
 import { ClientService } from '../../../modules/client/services/client.service';
 import { Client } from '../../../modules/client/entities/client.entity';
-import { Product } from '@app/modules/product/entities/product.entity';
-import { ProductService } from '../../../modules/product/services/product.service';
+import { Products } from '@app/modules/products/entities/products.entity';
+import { ProductsService } from '../../products/services/products.service';
 import { ActiveLicenseResponse } from '../interfaces/licenses.interface';
 import { NotificationsService } from '../../../modules/notifications/services/notifications.service';
 
@@ -27,7 +27,7 @@ export class LicensesService {
         private readonly licensesRepository: Repository<Licenses>,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
         private readonly clientService: ClientService,
-        private readonly productService: ProductService,
+        private readonly productService: ProductsService,
         private readonly notificationsService: NotificationsService,
     ) {}
 
@@ -141,7 +141,7 @@ export class LicensesService {
         });
     }
 
-    private async getProducts(products_id: number[]): Promise<Product[]> {
+    private async getProducts(products_id: number[]): Promise<Products[]> {
         return await Promise.all(
             products_id.map(async (id: number) => {
                 return await this.productService.getProductById(id);
@@ -149,7 +149,7 @@ export class LicensesService {
         );
     }
 
-    private async createLicenseData(data: CreateLicenseDto, client: Client, products: Product[]): Promise<Partial<Licenses>> {
+    private async createLicenseData(data: CreateLicenseDto, client: Client, products: Products[]): Promise<Partial<Licenses>> {
         return {
             license: this.generateLicense(),
             products,

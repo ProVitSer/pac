@@ -3,6 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { ClientInterface } from '../interfaces/client.interface';
 import { Voip } from '../../../modules/voip/entities/voip.entity';
 import { Files } from '../../../modules/files/entities/files.entity';
+import { Users } from '../../../modules/users/entities/users.entity';
 
 @Entity()
 export class Client implements ClientInterface {
@@ -40,6 +41,9 @@ export class Client implements ClientInterface {
 
     @OneToMany(() => Files, (file) => file.client)
     files: Files[];
+
+    @OneToOne(() => Users, (user) => user.client)
+    user: Users;
 
     @Column({ default: false })
     deleted: boolean;

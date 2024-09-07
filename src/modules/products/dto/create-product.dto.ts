@@ -1,8 +1,8 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { Product } from '../entities/product.entity';
-import { ProductType } from '../interfaces/product.enum';
+import { Products } from '../entities/products.entity';
+import { ProductType } from '../interfaces/products.enum';
 
-export class CreateProductDto implements Partial<Product> {
+export class CreateProductDto implements Partial<Products> {
     @IsEnum(ProductType)
     product_type: ProductType;
 

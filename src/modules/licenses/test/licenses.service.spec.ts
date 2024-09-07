@@ -7,10 +7,10 @@ import { LoggerService } from '@nestjs/common';
 import { Licenses } from '../entities/licenses.entity';
 import { LicensesService } from '../services/licenses.service';
 import { ClientService } from '../../../modules/client/services/client.service';
-import { ProductService } from '../../../modules/product/services/product.service';
+import { ProductService } from '../../products/services/products.service';
 import LicenseExistsException from '../exceptions/license-exists.exeption';
 import LicenseNotFoundException from '../exceptions/license-not-found.exeption';
-import { Product } from '../../../modules/product/entities/product.entity';
+import { Product } from '../../products/entities/products.entity';
 import UpdateLicenseDto from '../dto/update-license.dto';
 import { NotificationsService } from '../../../modules/notifications/services/notifications.service';
 

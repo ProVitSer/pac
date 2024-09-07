@@ -1,10 +1,10 @@
 import { Licenses } from '../../licenses/entities/licenses.entity';
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToMany } from 'typeorm';
-import { ProductType } from '../interfaces/product.enum';
-import { ProductInterface } from '../interfaces/product.interface';
+import { ProductType } from '../interfaces/products.enum';
+import { ProductInterface } from '../interfaces/products.interface';
 
 @Entity()
-export class Product implements ProductInterface {
+export class Products implements ProductInterface {
     @PrimaryGeneratedColumn()
     id: number;
 

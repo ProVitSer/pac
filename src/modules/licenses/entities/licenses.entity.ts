@@ -1,4 +1,4 @@
-import { Product } from '../../product/entities/product.entity';
+import { Products } from '../../products/entities/products.entity';
 import { Client } from '../../client/entities/client.entity';
 import {
     Entity,
@@ -25,9 +25,9 @@ export class Licenses implements LicensesInterface {
     @Column({ nullable: false, unique: true })
     license: string;
 
-    @ManyToMany(() => Product, (product) => product.licenses, { cascade: true })
+    @ManyToMany(() => Products, (product) => product.licenses, { cascade: true })
     @JoinTable()
-    products: Product[];
+    products: Products[];
 
     @Column({ nullable: false })
     expiration_date: Date;

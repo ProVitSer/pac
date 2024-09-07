@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { LicensesService } from '../services/licenses.service';
 import CreateLicenseDto from '../dto/create-license.dto';
-import CheckLicenseDto from '../dto/check-license.dto';
 import DeactivateLicenseDto from '../dto/deactivate-license.dto';
 import { Licenses } from '../entities/licenses.entity';
 import LicenseCommercialDto from '../dto/license-commercial.dto';
@@ -11,16 +10,18 @@ import { ActiveLicenseResponse } from '../interfaces/licenses.interface';
 import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { Role } from '@app/common/interfaces/enums';
+import { RequestWithUser } from '@app/common/interfaces/interfaces';
 
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class LicensesController {
     constructor(private readonly licensesService: LicensesService) {}
 
-    @UseGuards(RoleGuard([Role.Admin, Role.Manager]))
-    @Get(':license')
-    async getLicenseInfo(@Param('license') license: string): Promise<Licenses> {
-        return this.licensesService.getLicenseInfo(license);
+    @Get()
+    async getLicenseInfo(@Req() request: RequestWithUser): Promise<Licenses> {
+        const { user } = request;
+
+        return this.licensesService.getLicenseInfo(user.client.licenses.license);
     }
 
     @UseGuards(RoleGuard([Role.Admin]))
@@ -31,8 +32,8 @@ export class LicensesController {
 
     @UseGuards(RoleGuard([Role.Admin]))
     @Post('active')
-    async isLicenseActive(@Body() data: CheckLicenseDto): Promise<ActiveLicenseResponse> {
-        return this.licensesService.isLicenseActive(data);
+    async isLicenseActive(@Req() request: RequestWithUser): Promise<ActiveLicenseResponse> {
+        return this.licensesService.isLicenseActive(request.user.client.licenses);
     }
 
     @UseGuards(RoleGuard([Role.Admin]))

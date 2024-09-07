@@ -1,12 +1,8 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 import { Client } from '../entities/client.entity';
 import { IsPhoneNumber } from '@app/common/validators/Ii-phone-number-constraint';
 
 export class UpdateClientDto implements Partial<Client> {
-    @IsNumber()
-    @IsOptional()
-    id: number;
-
     @IsString()
     @IsOptional()
     company_name: string;
@@ -22,6 +18,7 @@ export class UpdateClientDto implements Partial<Client> {
 
     @IsString()
     @IsOptional()
+    @IsEmail()
     email: string;
 }
 

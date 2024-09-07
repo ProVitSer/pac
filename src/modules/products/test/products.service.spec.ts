@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductService } from '../services/product.service';
+import { ProductService } from '../services/products.service';
 import { Repository } from 'typeorm';
 import { LoggerService } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { instance, mock } from 'ts-mockito';
-import { Product } from '../entities/product.entity';
+import { Product } from '../entities/products.entity';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import ProductExistsException from '../exceptions/product-exists.exeption';
 import { products } from '../mocks/products';

@@ -1,5 +1,5 @@
 import { Licenses } from '@app/modules/licenses/entities/licenses.entity';
-import { ProductType } from './product.enum';
+import { ProductType } from './products.enum';
 
 export interface ProductInterface {
     id: number;
