@@ -1,28 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductService } from '../services/products.service';
+import { ProductsService } from '../services/products.service';
 import { Repository } from 'typeorm';
 import { LoggerService } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { instance, mock } from 'ts-mockito';
-import { Product } from '../entities/products.entity';
+import { Products } from '../entities/products.entity';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import ProductExistsException from '../exceptions/product-exists.exeption';
 import { products } from '../mocks/products';
 import ProductNotFoundException from '../exceptions/product-not-found.exception';
 
 describe('ProductService', () => {
-    let service: ProductService;
-    let repository: Repository<Product>;
+    let service: ProductsService;
+    let repository: Repository<Products>;
     let logger: LoggerService;
 
     beforeEach(async () => {
-        const mockedRepository = mock<Repository<Product>>(Repository);
+        const mockedRepository = mock<Repository<Products>>(Repository);
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                ProductService,
+                ProductsService,
                 {
-                    provide: getRepositoryToken(Product),
+                    provide: getRepositoryToken(Products),
                     useValue: instance(mockedRepository),
                 },
                 {
@@ -35,8 +35,8 @@ describe('ProductService', () => {
             ],
         }).compile();
 
-        service = module.get<ProductService>(ProductService);
-        repository = module.get<Repository<Product>>(getRepositoryToken(Product));
+        service = module.get<ProductsService>(ProductsService);
+        repository = module.get<Repository<Products>>(getRepositoryToken(Products));
         logger = module.get<LoggerService>(WINSTON_MODULE_NEST_PROVIDER);
     });
 

@@ -7,10 +7,10 @@ import { LoggerService } from '@nestjs/common';
 import { Licenses } from '../entities/licenses.entity';
 import { LicensesService } from '../services/licenses.service';
 import { ClientService } from '../../../modules/client/services/client.service';
-import { ProductService } from '../../products/services/products.service';
+import { ProductsService } from '../../products/services/products.service';
 import LicenseExistsException from '../exceptions/license-exists.exeption';
 import LicenseNotFoundException from '../exceptions/license-not-found.exeption';
-import { Product } from '../../products/entities/products.entity';
+import { Products } from '../../products/entities/products.entity';
 import UpdateLicenseDto from '../dto/update-license.dto';
 import { NotificationsService } from '../../../modules/notifications/services/notifications.service';
 
@@ -19,7 +19,7 @@ describe('LicensesService', () => {
     let licensesRepository: Repository<Licenses>;
     let clientService: ClientService;
     let notificationsService: NotificationsService;
-    let productService: ProductService;
+    let productService: ProductsService;
     let logger: LoggerService;
 
     beforeEach(async () => {
@@ -37,7 +37,7 @@ describe('LicensesService', () => {
                     },
                 },
                 {
-                    provide: ProductService,
+                    provide: ProductsService,
                     useValue: {
                         getProductById: jest.fn(),
                     },
@@ -61,7 +61,7 @@ describe('LicensesService', () => {
         service = module.get<LicensesService>(LicensesService);
         licensesRepository = module.get<Repository<Licenses>>(getRepositoryToken(Licenses));
         clientService = module.get<ClientService>(ClientService);
-        productService = module.get<ProductService>(ProductService);
+        productService = module.get<ProductsService>(ProductsService);
         notificationsService = module.get<NotificationsService>(NotificationsService);
         logger = module.get<LoggerService>(WINSTON_MODULE_NEST_PROVIDER);
     });
@@ -176,8 +176,8 @@ describe('LicensesService', () => {
 
     describe('updateLicense', () => {
         it('should update the license and add new products', async () => {
-            const existingProducts: Product[] = [{ id: 1 }, { id: 2 }] as any[];
-            const newProducts: Product[] = [{ id: 3 }] as any[];
+            const existingProducts: Products[] = [{ id: 1 }, { id: 2 }] as any[];
+            const newProducts: Products[] = [{ id: 3 }] as any[];
             const updateLicenseDto: UpdateLicenseDto = { license: 'BFD1-6673-D960-F1D4', products_id: [3], is_active: true };
             const license: Licenses = { id: 1, products: existingProducts, license: 'BFD1-6673-D960-F1D4' } as any;
 

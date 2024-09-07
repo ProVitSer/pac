@@ -10,7 +10,7 @@ import ChangeUserPasswordDto from '../dto/change-user-password.dto';
 import { ArgonUtilService } from '../../../common/utils/argon.service';
 import { UserPasswordNotMatchesException } from '../exceptions/user-password-not-matches.exeption';
 import { CreateUserData } from '../interfaces/users.interface';
-import { ClientService } from '@app/modules/client/services/client.service';
+import { ClientService } from '../../../modules/client/services/client.service';
 import UpdateUserDto from '../dto/update-user.dto';
 import { CreateUserAdapter } from '../adapters/create-user.adapter';
 

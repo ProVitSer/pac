@@ -7,8 +7,8 @@ import LoginDto from '../dto/login.dto';
 import { LoginResponse } from '../interfaces/auth.interface';
 import { TokenService } from './token.service';
 import { Users } from '../../../modules/users/entities/users.entity';
-import { LicensesService } from '@app/modules/licenses/services/licenses.service';
-import { ClientService } from '@app/modules/client/services/client.service';
+import { LicensesService } from '../../../modules/licenses/services/licenses.service';
+import { ClientService } from '../../../modules/client/services/client.service';
 
 @Injectable()
 export class AuthService {
