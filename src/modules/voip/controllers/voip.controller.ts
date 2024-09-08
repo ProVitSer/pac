@@ -31,12 +31,12 @@ export class VoipController {
     }
 
     @Delete('trunk/:trunkId')
-    async deleteProduct(@Req() request: RequestWithUser, @Param('trunkId') trunkId: string) {
+    async deleteTrunk(@Req() request: RequestWithUser, @Param('trunkId') trunkId: string) {
         return this.voipService.deleteTrunk(request.user.client, trunkId);
     }
 
     @Put('trunk')
-    async updateClient(@Req() request: RequestWithUser, @Body() trunkData: UpdateTrunkDto): Promise<TrunkStatusResult> {
+    async updateTrunk(@Req() request: RequestWithUser, @Body() trunkData: UpdateTrunkDto): Promise<TrunkStatusResult> {
         return this.voipService.updateTrunk(request.user.client, trunkData);
     }
 }
