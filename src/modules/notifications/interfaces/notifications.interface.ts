@@ -11,3 +11,10 @@ export interface LicenseExpireNotification extends LicenseCreateNotification {
 }
 
 export interface LicenseDeactivateNotification extends LicenseCreateNotification {}
+
+export interface ChangeTrunkStatusNotification {
+    client: Client;
+    trinkId: string;
+    subject: string;
+    trunkStatusDescription: string;
+}

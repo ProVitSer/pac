@@ -22,12 +22,14 @@ import { VarSetEvent } from './apis/ami/events/var-set.event';
 import { PjsipShowRegistrationsOutboundAction } from './apis/ami/actions/pjsip-show-registrations-outbound.action';
 import { OutboundRegistrationDetailEvent } from './apis/ami/events/outbound-registration-detail.event';
 import { Voip } from '../../entities/voip.entity';
+import { NotificationsModule } from '@app/modules/notifications/notifications.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([PsTransports, PsAors, PsAuths, PsEndpointIdIps, PsRegistrations, Extensions, PsEndpoints, Voip]),
         AmiModule,
         AriModule,
+        NotificationsModule,
     ],
     providers: [
         { provide: 'Asterisk', useClass: AstersikService },

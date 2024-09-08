@@ -1,7 +1,13 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { LicenseCreateNotification, LicenseDeactivateNotification, LicenseExpireNotification } from '../interfaces/notifications.interface';
 import {
+    ChangeTrunkStatusNotification,
+    LicenseCreateNotification,
+    LicenseDeactivateNotification,
+    LicenseExpireNotification,
+} from '../interfaces/notifications.interface';
+import {
+    ChangeTrunkStatusContext,
     LicenseCreateContext,
     LicenseDeactivateContext,
     LicenseExpireContext,
@@ -72,6 +78,25 @@ export class NotificationsService {
                 subject: LICENSE_DEACTIVATE,
             };
 
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
+        } catch (e) {
+            this.logger.error(e);
+        }
+    }
+
+    public async changeTrunkStatusNotification(data: ChangeTrunkStatusNotification) {
+        try {
+            const mailData: SendMailData<ChangeTrunkStatusContext> = {
+                to: data.client.email,
+                context: {
+                    fio: `${data.client.contact_person_name}`,
+                    trinkId: data.trinkId,
+                    trunkStatusDescription: data.trunkStatusDescription,
+                },
+                template: TemplateTypes.ChangeTrunkStatus,
+                subject: data.subject,
+            };
+            console.log(mailData);
             this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
         } catch (e) {
             this.logger.error(e);

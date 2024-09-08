@@ -32,3 +32,9 @@ export interface AttachmentsData {
     path: string;
     filename: string;
 }
+
+export interface ChangeTrunkStatusContext {
+    fio: string;
+    trinkId: string;
+    trunkStatusDescription: string;
+}

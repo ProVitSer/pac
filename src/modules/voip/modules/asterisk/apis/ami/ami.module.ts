@@ -13,12 +13,13 @@ import { OutboundRegistrationDetailEvent } from './events/outbound-registration-
 import { Voip } from '@app/modules/voip/entities/voip.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PsRegistrations } from '../../entities/ps-registrations.entity';
+import { NotificationsModule } from '@app/modules/notifications/notifications.module';
 
 const asteriskAmiProviders = createAsteriskAmi();
 const amiProvidersName = getAsteriskAmiProvidesName();
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Voip, PsRegistrations])],
+    imports: [TypeOrmModule.forFeature([Voip, PsRegistrations]), NotificationsModule],
     providers: [
         asteriskAmiProviders,
         AmiListenter,

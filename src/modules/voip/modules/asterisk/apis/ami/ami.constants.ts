@@ -1,4 +1,5 @@
 import { AsteriskContext } from '../../interfaces/asterisk.enum';
+import { RegisterStatus } from './interfaces/ami.enum';
 
 export const DEFAULT_REOPEN_AMI_CLIENT = 5000;
 export const AMI_RECONECT = 'Reconect to AMI ...';
@@ -12,4 +13,13 @@ export const AMI_ORIGINATE_OUTBOUND_CALL = {
     async: 'yes',
     priority: '1',
     timeout: '60000',
+};
+
+export const TRUNK_STATUS_DESCRIPTRION = 'Изменение статуса транка';
+export const CHANGE_TRUNK_REGISTER_STATUS_DESCRIPTION_BY_STATUS: { [code in RegisterStatus]: string } = {
+    [RegisterStatus.Failed]: 'Ошибка регистрации транка',
+    [RegisterStatus.Registered]: 'Успешная регистрация, Транк в состояние UP',
+    [RegisterStatus.Rejected]:
+        'Проблемы с регистрация по транку, возможно проблема с корректностью авторизационных данных. Транк в состояние DOWN',
+    [RegisterStatus.Unregistered]: 'Проблемы с регистрация по транку, возможно проблема с сетевой доступностью. Транк в состояние DOWN',
 };
