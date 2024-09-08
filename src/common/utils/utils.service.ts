@@ -61,4 +61,14 @@ export class UtilsService {
             };
         });
     }
+
+    static getRandomDelay(delays: number[]): number {
+        const randomIndex = Math.floor(Math.random() * delays.length);
+        return delays[randomIndex];
+    }
+
+    static async randomDelayTimer(delays: number[]): Promise<void> {
+        const delay = this.getRandomDelay(delays);
+        return new Promise((resolve) => setTimeout(resolve, delay));
+    }
 }
