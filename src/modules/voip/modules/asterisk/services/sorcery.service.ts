@@ -8,15 +8,14 @@ import { PsAuths } from '../entities/ps-auths.entity';
 import { PsEndpointIdIps } from '../entities/ps-endpointId-ips.entity';
 import { PsEndpoints } from '../entities/ps-endpoints.entity';
 import { PsRegistrations } from '../entities/ps-registrations.entity';
-import { CreateTrunkDataWithTrunkId } from '../interfaces/asterisk.interface';
+import { CreateTrunkDataWithTrunkId, TrunkData, UpdateTrunkDataWithTrunkId } from '../interfaces/asterisk.interface';
 import { CREATE_TRUNK_ERROR } from '../asterisk.constants';
-import TrunkExistsException from '../exceptions/trunk-exists.exeption';
 import { PsAorsAdapter } from '../adapters/ps-aors.adapter';
 import { PsAuthsAdapter } from '../adapters/ps-auths.adapter';
 import { PsEndpointIdIpsAdapter } from '../adapters/ps-endpointId-ips.adapter';
 import { PsRegistrationsAdapter } from '../adapters/ps-registrations.adapter';
 import { PsEndpointsAdapter } from '../adapters/ps-endpoints.adapter';
-import { CreateTrunkResult } from '@app/modules/voip/interfaces/voip.interface';
+import { CreateTrunkResult, UpdateTrunkResult } from '@app/modules/voip/interfaces/voip.interface';
 
 @Injectable()
 export class SorceryService {
@@ -45,8 +44,6 @@ export class SorceryService {
         await queryRunner.startTransaction();
 
         try {
-            await queryRunner.commitTransaction();
-
             const psAors = this.psAors.create(new PsAorsAdapter(data));
 
             await this.psAors.save(psAors);
@@ -66,6 +63,8 @@ export class SorceryService {
             const psEndpoints = this.psEndpoints.create(new PsEndpointsAdapter(data));
 
             await this.psEndpoints.save(psEndpoints);
+
+            await queryRunner.commitTransaction();
         } catch (err) {
             await queryRunner.rollbackTransaction();
 
@@ -76,17 +75,88 @@ export class SorceryService {
             await queryRunner.release();
         }
 
-        return { trinkId: data.trunkId };
+        return { trunkId: data.trunkId };
     }
 
-    public async findTrunkById(trunkId: string) {
-        const trunk = await this.psEndpointIdIps.findOne({
+    public async deleteTrunk(trunkId: string): Promise<void> {
+        const queryRunner = this.dataSource.createQueryRunner();
+
+        await queryRunner.connect();
+
+        await queryRunner.startTransaction();
+
+        try {
+            await this.psAors.delete({ id: trunkId });
+
+            await this.psAuths.delete({ id: trunkId });
+
+            await this.psEndpointIdIps.delete({ id: trunkId });
+
+            await this.psRegistrations.delete({ id: trunkId });
+
+            await this.psEndpoints.delete({ id: trunkId });
+
+            await queryRunner.commitTransaction();
+        } catch (err) {
+            await queryRunner.rollbackTransaction();
+
+            this.logger.error(err);
+
+            throw new Error(CREATE_TRUNK_ERROR);
+        } finally {
+            await queryRunner.release();
+        }
+    }
+
+    public async updateTrunk(data: UpdateTrunkDataWithTrunkId): Promise<UpdateTrunkResult> {
+        await this.deleteTrunk(data.originalTrunk.psAuths.id);
+
+        await this.createTrunk({
+            trunkId: data.trunkId,
+            client: data.client,
+            trunkType: data.voip.trunk_type,
+            authId: data.authId ? data.authId : data.originalTrunk.psAuths.username,
+            authPassword: data.authPassword ? data.authPassword : data.originalTrunk.psAuths.password,
+            pbxIp: data.pbxIp ? data.pbxIp : data.originalTrunk.psEndpointIdIps.match,
+        });
+
+        return { trunkId: data.trunkId };
+    }
+
+    public async findTrunkById(trunkId: string): Promise<TrunkData> {
+        const psAuths = await this.psAuths.findOne({
             where: {
                 id: trunkId,
             },
         });
-        if (trunk) {
-            throw new TrunkExistsException(trunkId);
-        }
+
+        const psAors = await this.psAors.findOne({
+            where: {
+                id: trunkId,
+            },
+        });
+        const psEndpointIdIps = await this.psEndpointIdIps.findOne({
+            where: {
+                id: trunkId,
+            },
+        });
+
+        const psRegistrations = await this.psRegistrations.findOne({
+            where: {
+                id: trunkId,
+            },
+        });
+        const psEndpoints = await this.psEndpoints.findOne({
+            where: {
+                id: trunkId,
+            },
+        });
+        return {
+            psAors,
+            psAuths,
+            psEndpointIdIps,
+            psRegistrations,
+            psEndpoints,
+        };
     }
 }

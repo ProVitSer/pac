@@ -1,4 +1,5 @@
 import { Client } from '../../../modules/client/entities/client.entity';
+import { Voip } from '../entities/voip.entity';
 import { OriginateCallStatus, TrunkRegistryStatus, TrunkType } from './voip.enum';
 
 export interface VoipInterface {
@@ -39,15 +40,29 @@ export interface SendCallWithAudioData extends SendCallData {
 }
 
 export interface CreateTrunkResult {
-    trinkId: string;
+    trunkId: string;
 }
 export interface VoipPbxService {
     addTrunk(data: CreateTrunkData): Promise<CreateTrunkResult>;
     updateTrunkRegisterStatus(trunkId: string): Promise<void>;
+    sendCall(data: SendCallData): Promise<SendCallResult>;
+    updateTrunk(data: UpdateTrunkData): Promise<UpdateTrunkResult>;
+    deleteTrunk(trunkId: string): Promise<void>;
     sendCall(data: SendCallData): Promise<SendCallResult>;
     sendCallWithAudio(data: SendCallWithAudioData): Promise<SendCallResult>;
 }
 
 export interface VoipCreateTrunkResult {
     trunkStatus: TrunkRegistryStatus;
+}
+
+export interface UpdateTrunkResult extends CreateTrunkResult {}
+
+export interface UpdateTrunkData {
+    client: Client;
+    voip: Voip;
+    trunkId: string;
+    authId?: string;
+    authPassword?: string;
+    pbxIp?: string;
 }

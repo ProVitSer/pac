@@ -5,7 +5,8 @@ import {
     SendCallData,
     SendCallResult,
     SendCallWithAudioData,
-    TrunkStatusResult,
+    UpdateTrunkData,
+    UpdateTrunkResult,
     VoipPbxService,
 } from '@app/modules/voip/interfaces/voip.interface';
 import { Injectable } from '@nestjs/common';
@@ -14,9 +15,10 @@ import { AriService } from '../apis/ari/services/ari.service';
 import { OriginateAction } from '../apis/ami/actions/originate.action';
 import { PjsipShowRegistrationsOutboundAction } from '../apis/ami/actions/pjsip-show-registrations-outbound.action';
 import { SendResiterAction } from '../apis/ami/actions/send-register.action';
-import { CreateTrunkDataWithTrunkId } from '../interfaces/asterisk.interface';
+import { CreateTrunkDataWithTrunkId, UpdateTrunkDataWithTrunkId } from '../interfaces/asterisk.interface';
 import { AsteriskUtils } from '../utils/asterisk.utils';
 import { UtilsService } from '@app/common/utils/utils.service';
+import { TrunkNotFoundException } from '@app/modules/voip/exceptions/trunk-not-found.exeption';
 
 @Injectable()
 export class AstersikService implements VoipPbxService {
@@ -40,7 +42,7 @@ export class AstersikService implements VoipPbxService {
 
         UtilsService.sleep(5000);
 
-        await this.sendResiterAction.sendRegisterToTrunk({ trunkId: trunk.trinkId });
+        await this.sendResiterAction.sendRegisterToTrunk({ trunkId: trunk.trunkId });
 
         return trunk;
     }
@@ -49,6 +51,30 @@ export class AstersikService implements VoipPbxService {
         await this.pjsipShowRegistrationsOutboundAction.sendShowRegistrations();
 
         await UtilsService.sleep(10000);
+    }
+
+    public async deleteTrunk(trunkId: string): Promise<void> {
+        await this.sorceryService.deleteTrunk(trunkId);
+    }
+
+    public async updateTrunk(data: UpdateTrunkData): Promise<UpdateTrunkResult> {
+        const trunk = await this.sorceryService.findTrunkById(data.trunkId);
+
+        if (!trunk) {
+            throw new TrunkNotFoundException();
+        }
+
+        const dataWithTrunkId: UpdateTrunkDataWithTrunkId = {
+            ...data,
+            ...('authId' in data ? { trunkId: AsteriskUtils.getTrunkId(data.client.client_id, data.authId) } : { trunkId: data.trunkId }),
+            originalTrunk: trunk,
+        };
+
+        const updateTrunk = await this.sorceryService.updateTrunk(dataWithTrunkId);
+
+        await this.sendResiterAction.sendRegisterToTrunk({ trunkId: updateTrunk.trunkId });
+
+        return updateTrunk;
     }
 
     public async sendCall(data: SendCallData): Promise<SendCallResult> {

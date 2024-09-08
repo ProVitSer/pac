@@ -6,6 +6,7 @@ import { Voip } from '../entities/voip.entity';
 import { Client } from '@app/modules/client/entities/client.entity';
 import { TrunkType } from '../interfaces/voip.enum';
 import { TrunkNotFoundException } from '../exceptions/trunk-not-found.exeption';
+import UpdateTrunkDto from '../dto/update-trunk.dto';
 
 @Injectable()
 export class VoipService {
@@ -20,16 +21,16 @@ export class VoipService {
 
         const voip = await this.voipRepository.create({
             client: data.client,
-            trunk_id: trunk.trinkId,
+            trunk_id: trunk.trunkId,
             trunk_type: data.trunkType,
             active: true,
         });
 
         await this.voipRepository.save(voip);
 
-        await this.voipPbxService.updateTrunkRegisterStatus(trunk.trinkId);
+        await this.voipPbxService.updateTrunkRegisterStatus(trunk.trunkId);
 
-        return this.getTrunkStatusById(trunk.trinkId);
+        return this.getTrunkStatusById(trunk.trunkId);
     }
 
     public async getTrunkStatusByType(client: Client, trunkType: TrunkType): Promise<TrunkStatusResult> {
@@ -62,7 +63,36 @@ export class VoipService {
         };
     }
 
-    public async deleteTrunk() {}
+    public async getTrunks(client: Client): Promise<Voip[]> {
+        return client.voip;
+    }
+    public async deleteTrunk(client: Client, trunkId: string) {
+        const voip = await this.voipRepository.findOne({
+            where: { trunk_id: trunkId },
+        });
 
-    public async sendCall() {}
+        if (!voip) throw new TrunkNotFoundException();
+
+        if (!client.voip.some((v: Voip) => v.trunk_id == trunkId)) throw new TrunkNotFoundException();
+
+        await this.voipPbxService.deleteTrunk(trunkId);
+
+        await this.voipRepository.delete({ trunk_id: trunkId });
+    }
+
+    public async updateTrunk(client: Client, trunkData: UpdateTrunkDto): Promise<TrunkStatusResult> {
+        const voip = await this.voipRepository.findOne({
+            where: { trunk_id: trunkData.trunkId },
+        });
+
+        if (!voip) throw new TrunkNotFoundException();
+
+        if (!client.voip.some((v: Voip) => v.trunk_id == trunkData.trunkId)) throw new TrunkNotFoundException();
+
+        const updateTrunk = await this.voipPbxService.updateTrunk({ client, voip, ...trunkData });
+
+        await this.voipRepository.update({ trunk_id: trunkData.trunkId }, { trunk_id: updateTrunk.trunkId });
+
+        return this.getTrunkStatusById(updateTrunk.trunkId);
+    }
 }
