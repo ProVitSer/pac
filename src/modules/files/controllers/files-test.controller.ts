@@ -1,25 +1,20 @@
-import { Controller, Post, Req, Res, UseInterceptors } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, Post, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AudioFilesService } from '../services/audio-files.service';
-import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
+import RoleGuard from '@app/modules/auth/guards/role.guard';
+import { Role } from '@app/common/interfaces/enums';
+import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
+import { RequestWithUser } from '@app/common/interfaces/interfaces';
+import { FileInterceptor } from '@nestjs/platform-express';
 
+@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class FilesController {
     constructor(private readonly audioFilesService: AudioFilesService) {}
 
-    @UseInterceptors(ErrorsInterceptor)
+    @UseInterceptors(FileInterceptor('file'))
     @Post('audio/upload')
-    async uploadFile(@Req() req: Request, @Res() res: Response) {
-        try {
-            console.log(req.headers);
-            const fileName = req.headers['filename'] as string;
-            const fileType = (req.headers['file-type'] as string) || 'audio';
-            const clientId = Number(req.headers['clientid']);
-
-            const filePath = await this.audioFilesService.saveAudioFile(req, { stream: req, fileName, fileType, clientId });
-            return res.status(201).json({ filePath });
-        } catch (error) {
-            return res.status(500).json({ message: 'Error saving file', error });
-        }
+    async uploadFile(@Req() req: RequestWithUser, @UploadedFile() file: Express.Multer.File) {
+        return await this.audioFilesService.saveAudioFile(req.user.client, file);
     }
 }

@@ -9,7 +9,8 @@ export interface SaveAudioFileData {
 
 export interface SaveFileData {
     fileName: string;
-    fileType: string;
+    mimetype: string;
     path: string;
     client: Client;
+    size: number;
 }

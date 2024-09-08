@@ -13,7 +13,7 @@ export class CreateFilesService {
     public async createFile(data: SaveFileData): Promise<Partial<Files>> {
         const createFileStruct = this.createFileStruct(data);
 
-        await this.makeDirIfNotExist(this.getFullPath(createFileStruct.path, createFileStruct.generated_file_path));
+        await this.makeDirIfNotExist(this.getFullPath(createFileStruct.path, createFileStruct.generatedFilePath));
 
         return createFileStruct;
     }
@@ -22,12 +22,12 @@ export class CreateFilesService {
         const generateFilename = this.generateFilename();
 
         return {
-            file_name: data.fileName || generateFilename,
-            generated_file_path: this.getFilePath(generateFilename),
+            fileName: data.fileName || generateFilename,
+            generatedFilePath: this.getFilePath(generateFilename),
             path: data.path,
-            generated_file_name: `${generateFilename}.wav`,
-            mimetype: this.getContentType(data.fileName),
-            file_type: data.fileType,
+            generatedFileName: `${generateFilename}.wav`,
+            mimetype: data.mimetype,
+            size: data.size,
         };
     }
 

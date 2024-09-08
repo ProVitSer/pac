@@ -1,66 +1,64 @@
 version: '3'
 
 services:
+    database:
+        container_name: ${DATABASE_CONTAINER_NAME}
+        image: 'postgres'
+        environment:
+            POSTGRES_USER: ${DATABASE_USERNAME}
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+            POSTGRES_DB: ${DATABASE_NAME}
+            PGDATA: /var/lib/postgresql/data/pgdata
+        volumes:
+            - postgres:/var/lib/postgresql/data
+            - pg_socket:/var/run/postgresql
+        ports:
+            - '5432:5432'
+        networks:
+            - pac
+        restart: unless-stopped
 
-  database:
-    container_name: ${DATABASE_CONTAINER_NAME}
-    image: "postgres"
-    environment:
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
-      PGDATA: /var/lib/postgresql/data/pgdata
-    volumes:
-      - postgres:/var/lib/postgresql/data
-      - pg_socket:/var/run/postgresql
-    ports:
-      - "5432:5432"
-    networks:
-      - pac
-    restart: unless-stopped
+    rabbitmq:
+        container_name: ${RABBITMQ_CONTAINER_NAME}
+        build:
+            context: ./docker/rabbitmq
+        hostname: 'rabbitmq1'
+        volumes:
+            - ./docker/rabbitmq/rabbitmq.conf:/rabbitmq.conf
+        environment:
+            RABBITMQ_DEFAULT_USER: 'rabbitmq'
+            RABBITMQ_DEFAULT_PASS: 'rabbitmq'
+        ports:
+            - '15672:15672'
+            - '5672:5672'
+        networks:
+            - pac
+        restart: unless-stopped
 
-
-  rabbitmq:
-    container_name: ${RABBITMQ_CONTAINER_NAME}
-    build:
-      context: ./docker/rabbitmq
-    hostname: "rabbitmq1"
-    volumes:
-     - ./docker/rabbitmq/rabbitmq.conf:/rabbitmq.conf
-    environment:
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    networks:
-      - pac
-    restart: unless-stopped
-
-
-  asterisk:
-    container_name: ${ASTERISK_CONTAINER_NAME}
-    build:
-      context: ./docker/asterisk
-    env_file:
-      - .env
-    volumes:
-      - /etc/asterisk/:/etc/asterisk:rw
-      - pg_socket:/var/run/postgresql 
-    ports:
-      - "6066:6066/tcp"
-      - "6066:6066/udp"
-      - "5038:5038"
-      - "8088:8088"
-      - "20000-20500:20000-20500/udp"
-    networks:
-      - pac
-    restart: unless-stopped
+    asterisk:
+        container_name: ${ASTERISK_CONTAINER_NAME}
+        build:
+            context: ./docker/asterisk
+        env_file:
+            - .env
+        volumes:
+            - /etc/asterisk/:/etc/asterisk:rw
+            - pg_socket:/var/run/postgresql
+            - /var/lib/asterisk/sounds/ru/:/var/lib/asterisk/sounds/ru:rw
+        ports:
+            - '6066:6066/tcp'
+            - '6066:6066/udp'
+            - '5038:5038'
+            - '8088:8088'
+            - '20000-20500:20000-20500/udp'
+        networks:
+            - pac
+        restart: unless-stopped
 
 networks:
-  pac:
-    driver: bridge
+    pac:
+        driver: bridge
 
 volumes:
-  postgres:
-  pg_socket:
+    postgres:
+    pg_socket:
