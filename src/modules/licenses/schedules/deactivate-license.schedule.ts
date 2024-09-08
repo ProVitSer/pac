@@ -16,7 +16,7 @@ export class DeactivateLicenseSchedule {
         const licenses = await this.licensesService.getLicenses();
 
         for (const license of licenses) {
-            if (getUnixTime(license.expiration_date) < getUnixTime(new Date())) {
+            if (getUnixTime(license.expirationDate) < getUnixTime(new Date())) {
                 await this.licensesService.deactivateLicense({ license: license.license });
                 await this.notificationsService.licenseDeactivateNotification({ client: license.client, license });
             }

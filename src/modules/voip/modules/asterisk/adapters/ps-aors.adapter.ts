@@ -3,12 +3,12 @@ import { CreateTrunkDataWithTrunkId } from '../interfaces/asterisk.interface';
 
 export class PsAorsAdapter {
     id: string;
-    max_contacts: number;
-    qualify_frequency: number;
+    maxContacts: number;
+    qualifyFrequency: number;
 
     constructor(data: CreateTrunkDataWithTrunkId) {
         this.id = data.trunkId;
-        this.max_contacts = DEFAULT_MAX_CONTACTS;
-        this.qualify_frequency = DEFAULT_QUALIFY_FREQUENCY;
+        this.maxContacts = DEFAULT_MAX_CONTACTS;
+        this.qualifyFrequency = DEFAULT_QUALIFY_FREQUENCY;
     }
 }

@@ -3,9 +3,9 @@ import { ProductType } from './products.enum';
 
 export interface ProductInterface {
     id: number;
-    product_type: ProductType;
+    productType: ProductType;
     description?: string;
     licenses: Licenses[];
-    created_at: Date;
-    updated_at: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }

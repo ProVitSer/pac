@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { DefaultYesNoAsterisk, SecurityNegotiation } from '../interfaces/asterisk.enum';
 
 @Entity('ps_registrations')
@@ -10,35 +10,36 @@ export class PsRegistrations {
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'auth_rejection_permanent',
     })
-    auth_rejection_permanent: DefaultYesNoAsterisk | null;
+    authRejectionPermanent: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    client_uri: string | null;
+    @Column({ nullable: true, name: 'client_uri' })
+    clientUri: string | null;
 
-    @Column({ nullable: true })
-    contact_user: string | null;
+    @Column({ nullable: true, name: 'contact_user' })
+    contactUser: string | null;
 
     @Column({ nullable: true })
     expiration: number | null;
 
-    @Column({ nullable: true })
-    max_retries: number | null;
+    @Column({ nullable: true, name: 'max_retries' })
+    maxRetries: number | null;
 
-    @Column({ nullable: true })
-    outbound_auth: string | null;
+    @Column({ nullable: true, name: 'outbound_auth' })
+    outboundAuth: string | null;
 
-    @Column({ nullable: true })
-    outbound_proxy: string | null;
+    @Column({ nullable: true, name: 'outbound_proxy' })
+    outboundProxy: string | null;
 
-    @Column({ nullable: true })
-    retry_interval: number | null;
+    @Column({ nullable: true, name: 'retry_interval' })
+    retryInterval: number | null;
 
-    @Column({ nullable: true })
-    forbidden_retry_interval: number | null;
+    @Column({ nullable: true, name: 'forbidden_retry_interval' })
+    forbiddenRetryInterval: number | null;
 
-    @Column({ nullable: true })
-    server_uri: string | null;
+    @Column({ nullable: true, name: 'server_uri' })
+    serverUri: string | null;
 
     @Column({ nullable: true })
     transport: string | null;
@@ -47,11 +48,12 @@ export class PsRegistrations {
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'support_path',
     })
-    support_path: DefaultYesNoAsterisk | null;
+    supportPath: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    fatal_retry_interval: number | null;
+    @Column({ nullable: true, name: 'fatal_retry_interval' })
+    fatalRetryInterval: number | null;
 
     @Column({
         type: 'enum',
@@ -67,11 +69,12 @@ export class PsRegistrations {
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'support_outbound',
     })
-    support_outbound: DefaultYesNoAsterisk | null;
+    supportOutbound: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    contact_header_params: string | null;
+    @Column({ nullable: true, name: 'contact_header_params' })
+    contactHeaderParams: string | null;
 
     @Column({ nullable: true })
     maxRandomInitialDelay: number | null;
@@ -80,9 +83,16 @@ export class PsRegistrations {
         type: 'enum',
         enum: SecurityNegotiation,
         nullable: true,
+        name: 'security_negotiation',
     })
-    security_negotiation: SecurityNegotiation | null;
+    securityNegotiation: SecurityNegotiation | null;
 
-    @Column({ nullable: true })
-    security_mechanisms: string | null;
+    @Column({ nullable: true, name: 'security_mechanisms' })
+    securityMechanisms: string | null;
+
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 }

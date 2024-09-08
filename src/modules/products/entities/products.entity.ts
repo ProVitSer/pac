@@ -14,8 +14,9 @@ export class Products implements ProductInterface {
         nullable: false,
         default: ProductType.api,
         unique: true,
+        name: 'product_type',
     })
-    product_type: ProductType;
+    productType: ProductType;
 
     @Column({ nullable: true })
     description?: string;
@@ -23,9 +24,9 @@ export class Products implements ProductInterface {
     @ManyToMany(() => Licenses, (license) => license.products)
     licenses: Licenses[];
 
-    @CreateDateColumn()
-    created_at: Date;
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
 
-    @UpdateDateColumn()
-    updated_at: Date;
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 }

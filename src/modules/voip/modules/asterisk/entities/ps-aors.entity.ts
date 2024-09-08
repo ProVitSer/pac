@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { DefaultYesNoAsterisk } from '../interfaces/asterisk.enum';
 
 @Entity('ps_aors')
@@ -9,58 +9,68 @@ export class PsAors {
     @Column({ nullable: true })
     contact: string | null;
 
-    @Column({ nullable: true })
-    default_expiration: number | null;
+    @Column({ nullable: true, name: 'default_expiration' })
+    defaultExpiration: number | null;
 
     @Column({ nullable: true })
     mailboxes: string | null;
 
-    @Column({ nullable: true })
-    max_contacts: number | null;
+    @Column({ nullable: true, name: 'max_contacts' })
+    maxContacts: number | null;
 
-    @Column({ nullable: true })
-    minimum_expiration: number | null;
-
-    @Column({
-        type: 'enum',
-        enum: DefaultYesNoAsterisk,
-        nullable: true,
-    })
-    remove_existing: DefaultYesNoAsterisk | null;
-
-    @Column({ nullable: true })
-    qualify_frequency: number | null;
+    @Column({ nullable: true, name: 'minimum_expiration' })
+    minimumExpiration: number | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'remove_existing',
     })
-    authenticate_qualify: DefaultYesNoAsterisk | null;
+    removeExisting: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    maximum_expiration: number | null;
-
-    @Column({ nullable: true })
-    outbound_proxy: string | null;
+    @Column({ nullable: true, name: 'qualify_frequency' })
+    qualifyFrequency: number | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'authenticate_qualify',
     })
-    support_path: DefaultYesNoAsterisk | null;
+    authenticateQualify: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    qualify_timeout: number | null;
+    @Column({ nullable: true, name: 'maximum_expiration' })
+    maximumExpiration: number | null;
 
-    @Column({ nullable: true })
-    voicemail_extension: string | null;
+    @Column({ nullable: true, name: 'outbound_proxy' })
+    outboundProxy: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'support_path',
     })
-    remove_unavailable: DefaultYesNoAsterisk | null;
+    supportPath: DefaultYesNoAsterisk | null;
+
+    @Column({ nullable: true, name: 'qualify_timeout' })
+    qualifyTimeout: number | null;
+
+    @Column({ nullable: true, name: 'voicemail_extension' })
+    voicemailExtension: string | null;
+
+    @Column({
+        type: 'enum',
+        enum: DefaultYesNoAsterisk,
+        nullable: true,
+        name: 'remove_unavailable',
+    })
+    removeUnavailable: DefaultYesNoAsterisk | null;
+
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 }

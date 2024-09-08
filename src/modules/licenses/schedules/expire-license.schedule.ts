@@ -17,7 +17,7 @@ export class ExpireLicenseSchedule {
         const licenses = await this.licensesService.getLicenses();
 
         for (const license of licenses) {
-            const difference = differenceInDays(license.expiration_date, new Date());
+            const difference = differenceInDays(license.expirationDate, new Date());
             if (difference == EXPIRE_DAY) {
                 await this.notificationsService.licenseExpireNotification({ client: license.client, license, day: String(difference) });
             }

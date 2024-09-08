@@ -69,7 +69,7 @@ describe('ProductService', () => {
     it('should get a Product by type', async () => {
         jest.spyOn(repository, 'findOne').mockResolvedValue(products[0]);
 
-        const result = await service.getProductByType(products[0].product_type);
+        const result = await service.getProductByType(products[0].productType);
 
         expect(result).toEqual(products);
     });
@@ -77,7 +77,7 @@ describe('ProductService', () => {
     it('should throw an error if trying get not exists product type', async () => {
         jest.spyOn(repository, 'findOne').mockResolvedValue(null);
 
-        await expect(service.getProductByType(products[0].product_type)).rejects.toThrow(ProductNotFoundException);
+        await expect(service.getProductByType(products[0].productType)).rejects.toThrow(ProductNotFoundException);
     });
 
     it('should get all Products', async () => {

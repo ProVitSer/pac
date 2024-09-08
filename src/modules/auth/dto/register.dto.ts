@@ -4,21 +4,21 @@ import { IsPhoneNumber } from '@app/common/validators/Ii-phone-number-constraint
 export class RegisterDto {
     @IsString()
     @IsNotEmpty()
-    company_name: string;
+    companyName: string;
 
     @IsString()
     @IsEmail()
     @IsNotEmpty()
-    company_email: string;
+    companyEmail: string;
 
     @IsString()
     @IsNotEmpty()
-    contact_person_name: string;
+    contactPersonName: string;
 
     @IsString()
     @IsPhoneNumber({ message: 'Phone number must be in the format 79134567891' })
     @IsNotEmpty()
-    company_phone: string;
+    companyPhone: string;
 
     @IsString()
     @IsNotEmpty()
@@ -35,15 +35,15 @@ export class RegisterDto {
     @IsString()
     @IsEmail()
     @IsNotEmpty()
-    user_email: string;
+    userEmail: string;
 
     @IsString()
     @IsNotEmpty()
-    user_phone_number: string;
+    userPhoneNumber: string;
 
     @IsNumber({}, { each: true })
     @IsNotEmpty()
-    products_id: number[];
+    productsId: number[];
 }
 
 export default RegisterDto;

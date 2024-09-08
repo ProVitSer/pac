@@ -19,10 +19,10 @@ export class ClientService {
     ) {}
 
     public async createClient(clientData: CreateClientDto): Promise<Client> {
-        const client = await this.checkClientByUniqueFileds({ phone: clientData.company_phone, email: clientData.company_email });
+        const client = await this.checkClientByUniqueFileds({ phone: clientData.companyPhone, email: clientData.companyEmail });
 
         if (client) {
-            throw new ClientExistsException(`number ${clientData.company_phone} or ${clientData.company_email}`);
+            throw new ClientExistsException(`number ${clientData.companyPhone} or ${clientData.companyEmail}`);
         }
 
         const newClient = await this.clientRepository.create(new CreateClientAdapter(clientData));
@@ -43,7 +43,7 @@ export class ClientService {
 
     public async getClientByClientId(clientId: number): Promise<Client> {
         const client = await this.clientRepository.findOne({
-            where: { client_id: clientId, deleted: false },
+            where: { clientId: clientId, deleted: false },
             relations: {
                 licenses: true,
             },
@@ -59,7 +59,7 @@ export class ClientService {
     public async updateClient(clientId: number, updateData: UpdateClientDto): Promise<Client> {
         const client = await this.clientRepository.findOne({
             where: {
-                client_id: clientId,
+                clientId: clientId,
                 deleted: false,
             },
         });

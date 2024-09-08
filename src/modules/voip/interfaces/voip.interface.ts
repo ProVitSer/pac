@@ -1,19 +1,20 @@
+import { ApplicationServiceType } from '@app/common/interfaces/enums';
 import { Client } from '../../../modules/client/entities/client.entity';
 import { Voip } from '../entities/voip.entity';
-import { OriginateCallStatus, TrunkRegistryStatus, TrunkType } from './voip.enum';
+import { OriginateCallStatus, TrunkRegistryStatus } from './voip.enum';
 
 export interface VoipInterface {
     id: number;
     client: Client;
-    trunk_id: string;
-    trunk_type: TrunkType;
-    created_at: Date;
-    updated_at: Date;
+    trunkId: string;
+    applicationServiceType: ApplicationServiceType;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface CreateTrunkData {
     client: Client;
-    trunkType: TrunkType;
+    applicationServiceType: ApplicationServiceType;
     authId: string;
     authPassword: string;
     pbxIp: string;

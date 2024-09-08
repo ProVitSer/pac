@@ -50,7 +50,6 @@ export interface NewchannelEventData {
 
 export interface HangupEventData {
     event: AsteriskEventType.Hangup;
-
     cause: string;
     'cause-txt': string;
 }

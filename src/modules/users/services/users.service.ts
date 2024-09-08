@@ -24,7 +24,7 @@ export class UsersService {
     ) {}
 
     public async create(userData: CreateUserData): Promise<Users> {
-        const client = await this.clientService.getClientByClientId(userData.client_id);
+        const client = await this.clientService.getClientByClientId(userData.clientId);
 
         const user = await this.usersRepository.findOne({
             where: {
@@ -83,7 +83,7 @@ export class UsersService {
     }
 
     public async updateLatestActivity(id: number): Promise<void> {
-        await this.usersRepository.update({ id }, { latest_activity: new Date() });
+        await this.usersRepository.update({ id }, { latestActivity: new Date() });
     }
 
     public async changePassword(data: ChangeUserPasswordDto) {

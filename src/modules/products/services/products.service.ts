@@ -18,11 +18,11 @@ export class ProductsService {
 
     public async createProduct(productData: CreateProductDto): Promise<Products> {
         const product = await this.productRepository.findOne({
-            where: [{ product_type: productData.product_type }],
+            where: [{ productType: productData.productType }],
         });
 
         if (product) {
-            throw new ProductExistsException(productData.product_type);
+            throw new ProductExistsException(productData.productType);
         }
 
         const newProduct = await this.productRepository.create({
@@ -35,7 +35,7 @@ export class ProductsService {
     public async getProductByType(productType: ProductType): Promise<Products[]> {
         const product = await this.productRepository.findOne({
             where: {
-                product_type: productType,
+                productType: productType,
             },
         });
 

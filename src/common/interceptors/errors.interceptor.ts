@@ -9,7 +9,7 @@ export class ErrorsInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler) {
         return next.handle().pipe(
             catchError((err: any) => {
-                const error = every(['table'], partial(has, err))
+                const error = every(['table', 'query'], partial(has, err))
                     ? new DatabaseException(err)
                     : err instanceof HttpException
                       ? err

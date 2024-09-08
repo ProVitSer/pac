@@ -5,14 +5,14 @@ export interface LicensesInterface {
     id: number;
     client: Client;
     products: Products[];
-    expiration_date: Date;
-    is_active: boolean;
-    is_test: boolean;
+    expirationDate: Date;
+    isActive: boolean;
+    isTest: boolean;
     order?: Date;
-    created_at: Date;
-    updated_at: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface ActiveLicenseResponse {
-    is_active: boolean;
+    isActive: boolean;
 }

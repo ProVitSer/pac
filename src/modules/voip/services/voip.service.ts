@@ -4,9 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Voip } from '../entities/voip.entity';
 import { Client } from '@app/modules/client/entities/client.entity';
-import { TrunkType } from '../interfaces/voip.enum';
 import { TrunkNotFoundException } from '../exceptions/trunk-not-found.exeption';
 import UpdateTrunkDto from '../dto/update-trunk.dto';
+import { ApplicationServiceType } from '@app/common/interfaces/enums';
 
 @Injectable()
 export class VoipService {
@@ -21,8 +21,8 @@ export class VoipService {
 
         const voip = await this.voipRepository.create({
             client: data.client,
-            trunk_id: trunk.trunkId,
-            trunk_type: data.trunkType,
+            trunkId: trunk.trunkId,
+            applicationServiceType: data.applicationServiceType,
             active: true,
         });
 
@@ -33,17 +33,17 @@ export class VoipService {
         return this.getTrunkStatusById(trunk.trunkId);
     }
 
-    public async getTrunkStatusByType(client: Client, trunkType: TrunkType): Promise<TrunkStatusResult> {
-        const trunk = client.voip.filter((v: Voip) => v.trunk_type == trunkType);
+    public async getTrunkStatusByType(client: Client, applicationServiceType: ApplicationServiceType): Promise<TrunkStatusResult> {
+        const trunk = client.voip.filter((v: Voip) => v.applicationServiceType == applicationServiceType);
 
         if (trunk.length) {
             const voip = await this.voipRepository.findOne({
-                where: { trunk_id: trunk[0].trunk_id },
+                where: { trunkId: trunk[0].trunkId },
             });
 
             return {
-                trunkId: trunk[0].trunk_id,
-                trunkStatus: voip.trunk_status,
+                trunkId: trunk[0].trunkId,
+                trunkStatus: voip.trunkStatus,
             };
         }
 
@@ -52,14 +52,14 @@ export class VoipService {
 
     public async getTrunkStatusById(trunkId: string): Promise<TrunkStatusResult> {
         const voip = await this.voipRepository.findOne({
-            where: { trunk_id: trunkId },
+            where: { trunkId: trunkId },
         });
 
         if (!voip) throw new TrunkNotFoundException();
 
         return {
-            trunkId: voip.trunk_id,
-            trunkStatus: voip.trunk_status,
+            trunkId: voip.trunkId,
+            trunkStatus: voip.trunkStatus,
         };
     }
 
@@ -68,30 +68,30 @@ export class VoipService {
     }
     public async deleteTrunk(client: Client, trunkId: string) {
         const voip = await this.voipRepository.findOne({
-            where: { trunk_id: trunkId },
+            where: { trunkId: trunkId },
         });
 
         if (!voip) throw new TrunkNotFoundException();
 
-        if (!client.voip.some((v: Voip) => v.trunk_id == trunkId)) throw new TrunkNotFoundException();
+        if (!client.voip.some((v: Voip) => v.trunkId == trunkId)) throw new TrunkNotFoundException();
 
         await this.voipPbxService.deleteTrunk(trunkId);
 
-        await this.voipRepository.delete({ trunk_id: trunkId });
+        await this.voipRepository.delete({ trunkId: trunkId });
     }
 
     public async updateTrunk(client: Client, trunkData: UpdateTrunkDto): Promise<TrunkStatusResult> {
         const voip = await this.voipRepository.findOne({
-            where: { trunk_id: trunkData.trunkId },
+            where: { trunkId: trunkData.trunkId },
         });
 
         if (!voip) throw new TrunkNotFoundException();
 
-        if (!client.voip.some((v: Voip) => v.trunk_id == trunkData.trunkId)) throw new TrunkNotFoundException();
+        if (!client.voip.some((v: Voip) => v.trunkId == trunkData.trunkId)) throw new TrunkNotFoundException();
 
         const updateTrunk = await this.voipPbxService.updateTrunk({ client, voip, ...trunkData });
 
-        await this.voipRepository.update({ trunk_id: trunkData.trunkId }, { trunk_id: updateTrunk.trunkId });
+        await this.voipRepository.update({ trunkId: trunkData.trunkId }, { trunkId: updateTrunk.trunkId });
 
         return this.getTrunkStatusById(updateTrunk.trunkId);
     }

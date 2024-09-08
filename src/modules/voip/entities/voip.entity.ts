@@ -1,7 +1,8 @@
 import { Client } from '../../client/entities/client.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinTable, ManyToOne } from 'typeorm';
 import { VoipInterface } from '../interfaces/voip.interface';
-import { TrunkRegistryStatus, TrunkType } from '../interfaces/voip.enum';
+import { TrunkRegistryStatus } from '../interfaces/voip.enum';
+import { ApplicationServiceType } from '@app/common/interfaces/enums';
 
 @Entity()
 export class Voip implements VoipInterface {
@@ -12,30 +13,32 @@ export class Voip implements VoipInterface {
     @JoinTable()
     client: Client;
 
-    @Column({ nullable: false, unique: true })
-    trunk_id: string;
+    @Column({ nullable: false, unique: true, name: 'trunk_id' })
+    trunkId: string;
 
     @Column({
         type: 'enum',
-        enum: TrunkType,
+        enum: ApplicationServiceType,
         nullable: false,
+        name: 'application_service_type',
     })
-    trunk_type: TrunkType;
+    applicationServiceType: ApplicationServiceType;
 
     @Column({
         type: 'enum',
         enum: TrunkRegistryStatus,
         nullable: false,
         default: TrunkRegistryStatus.Unregistered,
+        name: 'trunk_status',
     })
-    trunk_status: TrunkRegistryStatus;
+    trunkStatus: TrunkRegistryStatus;
 
     @Column()
     active: boolean;
 
-    @CreateDateColumn()
-    created_at: Date;
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
 
-    @UpdateDateColumn()
-    updated_at: Date;
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 }

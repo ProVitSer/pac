@@ -32,8 +32,8 @@ export class NotificationsService {
                 to: data.client.email,
                 context: {
                     license: data.license.license,
-                    fio: `${data.client.contact_person_name}`,
-                    expiration_date: format(data.license.expiration_date, 'dd.MM.yyyy'),
+                    fio: `${data.client.contactPersonName}`,
+                    expiration_date: format(data.license.expirationDate, 'dd.MM.yyyy'),
                 },
                 template: TemplateTypes.LicenseCreate,
                 subject: LICENSE_CREATE,
@@ -51,8 +51,8 @@ export class NotificationsService {
                 to: data.client.email,
                 context: {
                     license: data.license.license,
-                    fio: `${data.client.contact_person_name}`,
-                    expiration_date: format(data.license.expiration_date, 'dd.MM.yyyy'),
+                    fio: `${data.client.contactPersonName}`,
+                    expiration_date: format(data.license.expirationDate, 'dd.MM.yyyy'),
                     expiration_day: data.day,
                 },
                 template: TemplateTypes.LicenseExpire,
@@ -71,8 +71,8 @@ export class NotificationsService {
                 to: data.client.email,
                 context: {
                     license: data.license.license,
-                    fio: `${data.client.contact_person_name}`,
-                    expiration_date: format(data.license.expiration_date, 'dd.MM.yyyy'),
+                    fio: `${data.client.contactPersonName}`,
+                    expiration_date: format(data.license.expirationDate, 'dd.MM.yyyy'),
                 },
                 template: TemplateTypes.LicenseDeactivate,
                 subject: LICENSE_DEACTIVATE,
@@ -89,7 +89,7 @@ export class NotificationsService {
             const mailData: SendMailData<ChangeTrunkStatusContext> = {
                 to: data.client.email,
                 context: {
-                    fio: `${data.client.contact_person_name}`,
+                    fio: `${data.client.contactPersonName}`,
                     trinkId: data.trinkId,
                     trunkStatusDescription: data.trunkStatusDescription,
                 },

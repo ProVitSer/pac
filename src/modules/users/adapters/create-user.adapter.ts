@@ -4,19 +4,19 @@ import { CreateUserData } from '../interfaces/users.interface';
 
 export class CreateUserAdapter implements Partial<Users> {
     email: string;
-    phone_number: string;
+    phoneNumber: string;
     name: string;
     password: string;
-    is_active: boolean;
-    registered_date: Date;
+    isActive: boolean;
+    registeredDate: Date;
     client: Client;
     constructor(userData: CreateUserData, client: Client) {
         this.email = userData.email;
-        this.phone_number = userData.phone_number;
+        this.phoneNumber = userData.phoneNumber;
         this.name = userData.name;
         this.password = userData.password;
-        this.is_active = true;
-        this.registered_date = new Date();
+        this.isActive = true;
+        this.registeredDate = new Date();
         this.client = client;
     }
 }

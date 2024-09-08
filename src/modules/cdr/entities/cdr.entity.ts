@@ -1,4 +1,4 @@
-import { TrunkType } from '../../../modules/voip/interfaces/voip.enum';
+import { ApplicationServiceType } from '@app/common/interfaces/enums';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -57,9 +57,9 @@ export class Cdr {
     @Column({ nullable: true })
     userfield?: string;
 
-    @Column({ nullable: false })
-    client_id: string;
+    @Column({ nullable: false, name: 'client_id' })
+    clientId: string;
 
-    @Column({ nullable: false })
-    trunk_type: TrunkType;
+    @Column({ nullable: false, name: 'application_service_type' })
+    applicationServiceType: ApplicationServiceType;
 }

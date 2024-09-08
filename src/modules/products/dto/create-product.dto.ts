@@ -4,7 +4,7 @@ import { ProductType } from '../interfaces/products.enum';
 
 export class CreateProductDto implements Partial<Products> {
     @IsEnum(ProductType)
-    product_type: ProductType;
+    productType: ProductType;
 
     @IsOptional()
     @IsString()

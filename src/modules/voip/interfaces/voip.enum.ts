@@ -1,9 +1,3 @@
-export enum TrunkType {
-    call = 'call',
-    tts = 'tts',
-    telegram = 'telegram',
-}
-
 export enum OriginateCallStatus {
     successful = 'successful',
     error = 'erro',

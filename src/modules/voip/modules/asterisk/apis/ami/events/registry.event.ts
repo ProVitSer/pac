@@ -29,11 +29,11 @@ export class RegistryEvent implements AsteriskAmiEventProviderInterface {
             if (event?.username) {
                 await UtilsService.randomDelayTimer(this.delays);
 
-                const psRegistrations = await this.psRegistrations.findOne({ where: { client_uri: event?.username } });
+                const psRegistrations = await this.psRegistrations.findOne({ where: { clientUri: event?.username } });
 
                 if (!psRegistrations) return;
 
-                const voip = await this.voipRepository.findOne({ where: { trunk_id: psRegistrations.id }, relations: { client: true } });
+                const voip = await this.voipRepository.findOne({ where: { trunkId: psRegistrations.id }, relations: { client: true } });
 
                 await this.updateStatus(event, psRegistrations);
 
@@ -45,7 +45,7 @@ export class RegistryEvent implements AsteriskAmiEventProviderInterface {
     }
 
     private async sendNotification(event: RegistryEventData, voip: Voip): Promise<void> {
-        if (voip.trunk_status !== (event.status as unknown as TrunkRegistryStatus)) {
+        if (voip.trunkStatus !== (event.status as unknown as TrunkRegistryStatus)) {
             await this.notificationsService.changeTrunkStatusNotification({
                 client: voip.client,
                 trinkId: event?.username,
@@ -62,10 +62,7 @@ export class RegistryEvent implements AsteriskAmiEventProviderInterface {
 
         await queryRunner.startTransaction();
 
-        await this.voipRepository.update(
-            { trunk_id: psRegistrations.id },
-            { trunk_status: event.status as unknown as TrunkRegistryStatus },
-        );
+        await this.voipRepository.update({ trunkId: psRegistrations.id }, { trunkStatus: event.status as unknown as TrunkRegistryStatus });
 
         await queryRunner.commitTransaction();
 

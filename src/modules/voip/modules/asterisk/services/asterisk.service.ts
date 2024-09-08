@@ -33,7 +33,7 @@ export class AstersikService implements VoipPbxService {
     public async addTrunk(data: CreateTrunkData): Promise<CreateTrunkResult> {
         const dataWithTrunkId: CreateTrunkDataWithTrunkId = {
             ...data,
-            trunkId: AsteriskUtils.getTrunkId(data.client.client_id, data.authId),
+            trunkId: AsteriskUtils.getTrunkId(data.client.clientId, data.authId),
         };
 
         await this.sorceryService.findTrunkById(dataWithTrunkId.trunkId);
@@ -66,7 +66,7 @@ export class AstersikService implements VoipPbxService {
 
         const dataWithTrunkId: UpdateTrunkDataWithTrunkId = {
             ...data,
-            ...('authId' in data ? { trunkId: AsteriskUtils.getTrunkId(data.client.client_id, data.authId) } : { trunkId: data.trunkId }),
+            ...('authId' in data ? { trunkId: AsteriskUtils.getTrunkId(data.client.clientId, data.authId) } : { trunkId: data.trunkId }),
             originalTrunk: trunk,
         };
 

@@ -15,7 +15,7 @@ export class OutboundRegistrationDetailEvent implements AsteriskAmiEventProvider
 
     async parseEvent(event: OutboundRegistrationDetailEventData): Promise<void> {
         try {
-            await this.voipRepository.update({ trunk_id: event.outboundauth }, { trunk_status: event.status });
+            await this.voipRepository.update({ trunkId: event.outboundauth }, { trunkStatus: event.status });
         } catch (e) {
             this.logger.error(event);
         }

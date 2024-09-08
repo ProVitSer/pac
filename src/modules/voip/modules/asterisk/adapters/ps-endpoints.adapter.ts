@@ -10,15 +10,15 @@ export class PsEndpointsAdapter {
     context: string;
     disallow: string;
     allow: string;
-    direct_media: DefaultYesNoAsterisk;
+    directMedia: DefaultYesNoAsterisk;
     deny: string;
     permit: string;
-    outbound_auth: string;
-    from_user: string;
-    from_domain: string;
-    send_pai: DefaultYesNoAsterisk;
-    send_rpid: DefaultYesNoAsterisk;
-    set_var: string;
+    outboundAuth: string;
+    fromUser: string;
+    fromDomain: string;
+    sendPai: DefaultYesNoAsterisk;
+    sendRpid: DefaultYesNoAsterisk;
+    setVar: string;
     accountcode: string;
 
     constructor(data: CreateTrunkDataWithTrunkId) {
@@ -26,18 +26,18 @@ export class PsEndpointsAdapter {
         this.transport = PjsipTransport.udp;
         this.aors = data.trunkId;
         this.auth = data.trunkId;
-        this.context = CONTEXT_BY_TRUNK_TYPE[data.trunkType];
+        this.context = CONTEXT_BY_TRUNK_TYPE[data.applicationServiceType];
         this.disallow = 'all';
         this.allow = 'ulaw,alaw,gsm';
-        this.direct_media = DefaultYesNoAsterisk.no;
+        this.directMedia = DefaultYesNoAsterisk.no;
         this.deny = '0.0.0.0/0';
         this.permit = '0.0.0.0/0';
-        this.outbound_auth = data.trunkId;
-        this.from_user = data.authId;
-        this.from_domain = data.authId;
-        this.send_pai = DefaultYesNoAsterisk.yes;
-        this.send_rpid = DefaultYesNoAsterisk.yes;
-        this.set_var = `CLIENT_ID=${data.client.client_id};TRUNK_TYPE=${data.trunkType}`;
-        this.accountcode = `${data.client.client_id}`;
+        this.outboundAuth = data.trunkId;
+        this.fromUser = data.authId;
+        this.fromDomain = data.authId;
+        this.sendPai = DefaultYesNoAsterisk.yes;
+        this.sendRpid = DefaultYesNoAsterisk.yes;
+        this.setVar = `CLIENT_ID=${data.client.clientId};APPLICATION_SERVICE_TYPE=${data.applicationServiceType}`;
+        this.accountcode = `${data.client.clientId}`;
     }
 }

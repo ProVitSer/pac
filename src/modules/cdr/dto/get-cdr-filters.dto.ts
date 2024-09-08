@@ -27,9 +27,9 @@ export class GetCdrFiltersDto {
 
     @IsOptional()
     @IsNumber()
-    client_id?: number;
+    clientId?: number;
 
     @IsOptional()
     @IsString()
-    call_type?: string;
+    callType?: string;
 }

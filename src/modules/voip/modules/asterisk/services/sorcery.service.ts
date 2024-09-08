@@ -114,7 +114,7 @@ export class SorceryService {
         await this.createTrunk({
             trunkId: data.trunkId,
             client: data.client,
-            trunkType: data.voip.trunk_type,
+            applicationServiceType: data.voip.applicationServiceType,
             authId: data.authId ? data.authId : data.originalTrunk.psAuths.username,
             authPassword: data.authPassword ? data.authPassword : data.originalTrunk.psAuths.password,
             pbxIp: data.pbxIp ? data.pbxIp : data.originalTrunk.psEndpointIdIps.match,

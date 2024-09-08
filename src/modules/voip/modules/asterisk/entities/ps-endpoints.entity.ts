@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import {
     CalleridPrivacy,
     ConnectedLineMethod,
@@ -44,120 +44,134 @@ export class PsEndpoints {
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'direct_media',
     })
-    direct_media: DefaultYesNoAsterisk | null;
+    directMedia: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: ConnectedLineMethod,
         nullable: true,
+        name: 'connected_line_method',
     })
-    connected_line_method: ConnectedLineMethod | null;
+    connectedLineMethod: ConnectedLineMethod | null;
 
     @Column({
         type: 'enum',
         enum: DirectMediaMethod,
         nullable: true,
+        name: 'direct_media_method',
     })
-    direct_media_method: DirectMediaMethod | null;
+    directMediaMethod: DirectMediaMethod | null;
 
     @Column({
         type: 'enum',
         enum: DirectMediaGlareMitigation,
         nullable: true,
+        name: 'direct_media_glare_mitigation',
     })
-    direct_media_glare_mitigation: DirectMediaGlareMitigation | null;
+    directMediaGlareMitigation: DirectMediaGlareMitigation | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'disable_direct_media_on_nat',
     })
-    disable_direct_media_on_nat: DefaultYesNoAsterisk | null;
+    disableDirectMediaOnNat: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DtmfMode,
         nullable: true,
+        name: 'dtmf_mode',
     })
-    dtmf_mode: DtmfMode | null;
+    dtmfMode: DtmfMode | null;
 
-    @Column({ nullable: true })
-    external_media_address: string | null;
+    @Column({ nullable: true, name: 'external_media_address' })
+    externalMediaAddress: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'force_rport',
     })
-    force_rport: DefaultYesNoAsterisk | null;
+    forceRport: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'ice_support',
     })
-    ice_support: DefaultYesNoAsterisk | null;
+    iceSupport: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    identify_by: string | null;
+    @Column({ nullable: true, name: 'identify_by' })
+    identifyBy: string | null;
 
     @Column({ nullable: true })
     mailboxes: string | null;
 
-    @Column({ nullable: true })
-    moh_suggest: string | null;
+    @Column({ nullable: true, name: 'moh_suggest' })
+    mohSuggest: string | null;
 
-    @Column({ nullable: true })
-    outbound_auth: string | null;
+    @Column({ nullable: true, name: 'outbound_auth' })
+    outboundAuth: string | null;
 
-    @Column({ nullable: true })
-    outbound_proxy: string | null;
-
-    @Column({
-        type: 'enum',
-        enum: DefaultYesNoAsterisk,
-        nullable: true,
-    })
-    rewrite_contact: DefaultYesNoAsterisk | null;
+    @Column({ nullable: true, name: 'outbound_proxy' })
+    outboundProxy: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'rewrite_contact',
     })
-    rtp_ipv6: DefaultYesNoAsterisk | null;
+    rewriteContact: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'rtp_ipv6',
     })
-    rtp_symmetric: DefaultYesNoAsterisk | null;
+    rtpIpv6: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'rtp_symmetric',
     })
-    send_diversion: DefaultYesNoAsterisk | null;
+    rtpSymmetric: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'send_diversion',
     })
-    send_pai: DefaultYesNoAsterisk | null;
+    sendDiversion: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'send_pai',
     })
-    send_rpid: DefaultYesNoAsterisk | null;
+    sendPai: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    timers_min_se: number | null;
+    @Column({
+        type: 'enum',
+        enum: DefaultYesNoAsterisk,
+        nullable: true,
+        name: 'send_rpid',
+    })
+    sendRpid: DefaultYesNoAsterisk | null;
+
+    @Column({ nullable: true, name: 'timers_min_se' })
+    timersMinSe: number | null;
 
     @Column({
         type: 'enum',
@@ -166,8 +180,8 @@ export class PsEndpoints {
     })
     timers: Timers | null;
 
-    @Column({ nullable: true })
-    timers_sess_expires: number | null;
+    @Column({ nullable: true, name: 'timers_sess_expires' })
+    timersSessExpires: number | null;
 
     @Column({ nullable: true })
     callerid: string | null;
@@ -176,116 +190,129 @@ export class PsEndpoints {
         type: 'enum',
         enum: CalleridPrivacy,
         nullable: true,
+        name: 'callerid_privacy',
     })
-    callerid_privacy: CalleridPrivacy | null;
+    calleridPrivacy: CalleridPrivacy | null;
 
-    @Column({ nullable: true })
-    callerid_tag: string | null;
-
-    @Column({
-        type: 'enum',
-        enum: DefaultYesNoAsterisk,
-        nullable: true,
-    })
-    aggregate_mwi: DefaultYesNoAsterisk | null;
+    @Column({ nullable: true, name: 'callerid_tag' })
+    calleridTag: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'aggregate_mwi',
     })
-    trust_id_inbound: DefaultYesNoAsterisk | null;
+    aggregateMwi: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'trust_id_inbound',
     })
-    trust_id_outbound: DefaultYesNoAsterisk | null;
+    trustIdInbound: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'trust_id_outbound',
     })
-    use_ptime: DefaultYesNoAsterisk | null;
+    trustIdOutbound: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'use_ptime',
     })
-    use_avpf: DefaultYesNoAsterisk | null;
+    usePtime: DefaultYesNoAsterisk | null;
+
+    @Column({
+        type: 'enum',
+        enum: DefaultYesNoAsterisk,
+        nullable: true,
+        name: 'use_avpf',
+    })
+    useAvpf: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: MediaEncryption,
         nullable: true,
+        name: 'media_encryption',
     })
-    media_encryption: MediaEncryption | null;
+    mediaEncryption: MediaEncryption | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'inband_progress',
     })
-    inband_progress: DefaultYesNoAsterisk | null;
+    inbandProgress: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    call_group: string | null;
+    @Column({ nullable: true, name: 'call_group' })
+    callGroup: string | null;
 
-    @Column({ nullable: true })
-    pickup_group: string | null;
+    @Column({ nullable: true, name: 'pickup_group' })
+    pickupGroup: string | null;
 
-    @Column({ nullable: true })
-    named_call_group: string | null;
+    @Column({ nullable: true, name: 'named_call_group' })
+    namedCallGroup: string | null;
 
-    @Column({ nullable: true })
-    named_pickup_group: string | null;
+    @Column({ nullable: true, name: 'named_pickup_group' })
+    namedPickupGroup: string | null;
 
-    @Column({ nullable: true })
-    device_state_busy_at: number | null;
+    @Column({ nullable: true, name: 'device_state_busy_at' })
+    deviceStateBusyAt: number | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'fax_detect',
     })
-    fax_detect: DefaultYesNoAsterisk | null;
+    faxDetect: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 't38_udptl',
     })
-    t38_udptl: DefaultYesNoAsterisk | null;
+    t38Udptl: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: T38UdptlEc,
         nullable: true,
+        name: 't38_udptl_ec',
     })
-    t38_udptl_ec: T38UdptlEc | null;
+    t38UdptlEc: T38UdptlEc | null;
 
-    @Column({ nullable: true })
-    t38_udptl_maxdatagram: number | null;
+    @Column({ nullable: true, name: 't38_udptl_maxdatagram' })
+    t38UdptlMaxdatagram: number | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 't38_udptl_nat',
     })
-    t38_udptl_nat: DefaultYesNoAsterisk | null;
+    t38UdptlNat: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 't38_udptl_ipv6',
     })
-    t38_udptl_ipv6: DefaultYesNoAsterisk | null;
+    t38UdptlIpv6: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    tone_zone: string | null;
+    @Column({ nullable: true, name: 'tone_zone' })
+    toneZone: string | null;
 
     @Column({ nullable: true })
     language: string | null;
@@ -294,126 +321,134 @@ export class PsEndpoints {
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'one_touch_recording',
     })
-    one_touch_recording: DefaultYesNoAsterisk | null;
+    oneTouchRecording: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    record_on_feature: string | null;
+    @Column({ nullable: true, name: 'record_on_feature' })
+    recordOnFeature: string | null;
 
-    @Column({ nullable: true })
-    record_off_feature: string | null;
+    @Column({ nullable: true, name: 'record_off_feature' })
+    recordOffFeature: string | null;
 
-    @Column({ nullable: true })
-    rtp_engine: string | null;
+    @Column({ nullable: true, name: 'rtp_engine' })
+    rtpEngine: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'allow_transfer',
     })
-    allow_transfer: DefaultYesNoAsterisk | null;
+    allowTransfer: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'allow_subscribe',
     })
-    allow_subscribe: DefaultYesNoAsterisk | null;
+    allowSubscribe: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    sdp_owner: string | null;
+    @Column({ nullable: true, name: 'sdp_owner' })
+    sdpOwner: string | null;
 
-    @Column({ nullable: true })
-    sdp_session: string | null;
+    @Column({ nullable: true, name: 'sdp_session' })
+    sdpSession: string | null;
 
-    @Column({ nullable: true })
-    tos_audio: string | null;
+    @Column({ nullable: true, name: 'tos_audio' })
+    tosAudio: string | null;
 
-    @Column({ nullable: true })
-    tos_video: string | null;
+    @Column({ nullable: true, name: 'tos_video' })
+    tosVideo: string | null;
 
-    @Column({ nullable: true })
-    sub_min_expiry: number | null;
+    @Column({ nullable: true, name: 'sub_min_expiry' })
+    subMinExpiry: number | null;
 
-    @Column({ nullable: true })
-    from_domain: string | null;
+    @Column({ nullable: true, name: 'from_domain' })
+    fromDomain: string | null;
 
-    @Column({ nullable: true })
-    from_user: string | null;
+    @Column({ nullable: true, name: 'from_user' })
+    fromUser: string | null;
 
-    @Column({ nullable: true })
-    mwi_from_user: string | null;
+    @Column({ nullable: true, name: 'mwi_from_user' })
+    mwiFromUser: string | null;
 
-    @Column({ nullable: true })
-    dtls_verify: string | null;
+    @Column({ nullable: true, name: 'dtls_verify' })
+    dtlsVerify: string | null;
 
-    @Column({ nullable: true })
-    dtls_rekey: string | null;
+    @Column({ nullable: true, name: 'dtls_rekey' })
+    dtlsRekey: string | null;
 
-    @Column({ nullable: true })
-    dtls_cert_file: string | null;
+    @Column({ nullable: true, name: 'dtls_cert_file' })
+    dtlsCertFile: string | null;
 
-    @Column({ nullable: true })
-    dtls_private_key: string | null;
+    @Column({ nullable: true, name: 'dtls_private_key' })
+    dtlsPrivateKey: string | null;
 
-    @Column({ nullable: true })
-    dtls_cipher: string | null;
+    @Column({ nullable: true, name: 'dtls_cipher' })
+    dtlsCipher: string | null;
 
-    @Column({ nullable: true })
-    dtls_ca_file: string | null;
+    @Column({ nullable: true, name: 'dtls_ca_file' })
+    dtlsCaFile: string | null;
 
-    @Column({ nullable: true })
-    dtls_ca_path: string | null;
+    @Column({ nullable: true, name: 'dtls_ca_path' })
+    dtlsCaPath: string | null;
 
     @Column({
         type: 'enum',
         enum: DtlsSetup,
         nullable: true,
+        name: 'dtls_setup',
     })
-    dtls_setup: DtlsSetup | null;
+    dtlsSetup: DtlsSetup | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'srtp_tag_32',
     })
-    srtp_tag_32: DefaultYesNoAsterisk | null;
+    srtpTag32: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    media_address: string | null;
+    @Column({ nullable: true, name: 'media_address' })
+    mediaAddress: string | null;
 
     @Column({
         type: 'enum',
         enum: RedirectMethod,
         nullable: true,
+        name: 'redirect_method',
     })
-    redirect_method: RedirectMethod | null;
+    redirectMethod: RedirectMethod | null;
 
-    @Column({ nullable: true })
-    set_var: string | null;
+    @Column({ nullable: true, name: 'set_var' })
+    setVar: string | null;
 
-    @Column({ nullable: true })
-    cos_audio: number | null;
+    @Column({ nullable: true, name: 'cos_audio' })
+    cosAudio: number | null;
 
-    @Column({ nullable: true })
-    cos_video: number | null;
+    @Column({ nullable: true, name: 'cos_video' })
+    cosVideo: number | null;
 
-    @Column({ nullable: true })
-    message_context: string | null;
+    @Column({ nullable: true, name: 'message_context' })
+    messageContext: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'force_avp',
     })
-    force_avp: DefaultYesNoAsterisk | null;
+    forceAvp: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'media_use_received_transport',
     })
-    media_use_received_transport: DefaultYesNoAsterisk | null;
+    mediaUseReceivedTransport: DefaultYesNoAsterisk | null;
 
     @Column({ nullable: true })
     accountcode: string | null;
@@ -422,62 +457,69 @@ export class PsEndpoints {
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'user_eq_phone',
     })
-    user_eq_phone: DefaultYesNoAsterisk | null;
+    userEqPhone: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'moh_passthrough',
     })
-    moh_passthrough: DefaultYesNoAsterisk | null;
+    mohPassthrough: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'media_encryption_optimistic',
     })
-    media_encryption_optimistic: DefaultYesNoAsterisk | null;
+    mediaEncryptionOptimistic: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'rpid_immediate',
     })
-    rpid_immediate: DefaultYesNoAsterisk | null;
+    rpidImmediate: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'g726_non_standard',
     })
-    g726_non_standard: DefaultYesNoAsterisk | null;
+    g726NonStandard: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    rtp_keepalive: number | null;
+    @Column({ nullable: true, name: 'rtp_keepalive' })
+    rtpKeepalive: number | null;
 
-    @Column({ nullable: true })
-    rtp_timeout: number | null;
+    @Column({ nullable: true, name: 'rtp_timeout' })
+    rtpTimeout: number | null;
 
-    @Column({ nullable: true })
-    rtp_timeout_hold: number | null;
+    @Column({ nullable: true, name: 'rtp_timeout_hold' })
+    rtpTimeoutHold: number | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'bind_rtp_to_media_address',
     })
-    bind_rtp_to_media_address: DefaultYesNoAsterisk | null;
+    bindRtpToMediaAddress: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    voicemail_extension: string | null;
+    @Column({ nullable: true, name: 'voicemail_extension' })
+    voicemailExtension: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'mwi_subscribe_replaces_unsolicited',
     })
-    mwi_subscribe_replaces_unsolicited: DefaultYesNoAsterisk | null;
+    mwiSubscribeReplacesUnsolicited: DefaultYesNoAsterisk | null;
 
     @Column({ nullable: true })
     deny: string | null;
@@ -488,71 +530,77 @@ export class PsEndpoints {
     @Column({ nullable: true })
     acl: string | null;
 
-    @Column({ nullable: true })
-    contact_deny: string | null;
+    @Column({ nullable: true, name: 'contact_deny' })
+    contactDeny: string | null;
 
-    @Column({ nullable: true })
-    contact_permit: string | null;
+    @Column({ nullable: true, name: 'contact_permit' })
+    contactPermit: string | null;
 
-    @Column({ nullable: true })
-    contact_acl: string | null;
+    @Column({ nullable: true, name: 'contact_acl' })
+    contactAcl: string | null;
 
-    @Column({ nullable: true })
-    subscribe_context: string | null;
+    @Column({ nullable: true, name: 'subscribe_context' })
+    subscribeContext: string | null;
 
-    @Column({ nullable: true })
-    fax_detect_timeout: number | null;
+    @Column({ nullable: true, name: 'fax_detect_timeout' })
+    faxDetectTimeout: number | null;
 
-    @Column({ nullable: true })
-    contact_user: string | null;
-
-    @Column({
-        type: 'enum',
-        enum: DefaultYesNoAsterisk,
-        nullable: true,
-    })
-    preferred_codec_only: DefaultYesNoAsterisk | null;
+    @Column({ nullable: true, name: 'contact_user' })
+    contactUser: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'preferred_codec_only',
     })
-    asymmetric_rtp_codec: DefaultYesNoAsterisk | null;
+    preferredCodecOnly: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'asymmetric_rtp_codec',
     })
-    rtcp_mux: DefaultYesNoAsterisk | null;
+    asymmetricRtpCodec: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'rtcp_mux',
     })
-    allow_overlap: DefaultYesNoAsterisk | null;
+    rtcpMux: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'allow_overlap',
     })
-    refer_blind_progress: DefaultYesNoAsterisk | null;
+    allowOverlap: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'refer_blind_progress',
     })
-    notify_early_inuse_ringing: DefaultYesNoAsterisk | null;
+    referBlindProgress: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    max_audio_streams: number | null;
+    @Column({
+        type: 'enum',
+        enum: DefaultYesNoAsterisk,
+        nullable: true,
+        name: 'notify_early_inuse_ringing',
+    })
+    notifyEarlyInuseRinging: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    max_video_streams: number | null;
+    @Column({ nullable: true, name: 'max_audio_streams' })
+    maxAudioStreams: number | null;
+
+    @Column({ nullable: true, name: 'max_video_streams' })
+    maxVideoStreams: number | null;
 
     @Column({
         type: 'enum',
@@ -565,11 +613,12 @@ export class PsEndpoints {
         type: 'enum',
         enum: DtlsFingerprint,
         nullable: true,
+        name: 'dtls_fingerprint',
     })
-    dtls_fingerprint: DtlsFingerprint | null;
+    dtlsFingerprint: DtlsFingerprint | null;
 
-    @Column({ nullable: true })
-    incoming_mwi_mailbox: string | null;
+    @Column({ nullable: true, name: 'incoming_mwi_mailbox' })
+    incomingMwiMailbox: string | null;
 
     @Column({
         type: 'enum',
@@ -582,131 +631,152 @@ export class PsEndpoints {
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'dtls_auto_generate_cert',
     })
-    dtls_auto_generate_cert: DefaultYesNoAsterisk | null;
+    dtlsAutoGenerateCert: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'follow_early_media_fork',
     })
-    follow_early_media_fork: DefaultYesNoAsterisk | null;
+    followEarlyMediaFork: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'accept_multiple_sdp_answers',
     })
-    accept_multiple_sdp_answers: DefaultYesNoAsterisk | null;
+    acceptMultipleSdpAnswers: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'suppress_q850_reason_headers',
     })
-    suppress_q850_reason_headers: DefaultYesNoAsterisk | null;
+    suppressQ850ReasonHeaders: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'trust_connected_line',
     })
-    trust_connected_line: DefaultYesNoAsterisk | null;
+    trustConnectedLine: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'send_connected_line',
     })
-    send_connected_line: DefaultYesNoAsterisk | null;
+    sendConnectedLine: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'ignore_183_without_sdp',
     })
-    ignore_183_without_sdp: DefaultYesNoAsterisk | null;
+    ignore183WithoutSdp: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    codec_prefs_incoming_offer: string | null;
+    @Column({ nullable: true, name: 'codec_prefs_incoming_offer' })
+    codecPrefsIncomingOffer: string | null;
 
-    @Column({ nullable: true })
-    codec_prefs_outgoing_offer: string | null;
+    @Column({ nullable: true, name: 'codec_prefs_outgoing_offer' })
+    codecPrefsOutgoingOffer: string | null;
 
-    @Column({ nullable: true })
-    codec_prefs_incoming_answer: string | null;
+    @Column({ nullable: true, name: 'codec_prefs_incoming_answer' })
+    codecPrefsIncomingAnswer: string | null;
 
-    @Column({ nullable: true })
-    codec_prefs_outgoing_answer: string | null;
+    @Column({ nullable: true, name: 'codec_prefs_outgoing_answer' })
+    codecPrefsOutgoingAnswer: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'stir_shaken',
     })
-    stir_shaken: DefaultYesNoAsterisk | null;
+    stirShaken: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'send_history_info',
     })
-    send_history_info: DefaultYesNoAsterisk | null;
+    sendHistoryInfo: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'allow_unauthenticated_options',
     })
-    allow_unauthenticated_options: DefaultYesNoAsterisk | null;
+    allowUnauthenticatedOptions: DefaultYesNoAsterisk | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 't38_bind_udptl_to_media_address',
     })
-    t38_bind_udptl_to_media_address: DefaultYesNoAsterisk | null;
+    t38BindUdptlToMediaAddress: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    geoloc_incoming_call_profile: string | null;
+    @Column({ nullable: true, name: 'geoloc_incoming_call_profile' })
+    geolocIncomingCallProfile: string | null;
 
-    @Column({ nullable: true })
-    geoloc_outgoing_call_profile: string | null;
+    @Column({ nullable: true, name: 'geoloc_outgoing_call_profile' })
+    geolocOutgoingCallProfile: string | null;
 
     @Column({
         type: 'enum',
         enum: IncomingCallOfferPref,
         nullable: true,
+        name: 'incoming_call_offer_pref',
     })
-    incoming_call_offer_pref: IncomingCallOfferPref | null;
+    incomingCallOfferPref: IncomingCallOfferPref | null;
 
     @Column({
         type: 'enum',
         enum: OutgoingCallOfferPref,
         nullable: true,
+        name: 'outgoing_call_offer_pref',
     })
-    outgoing_call_offer_pref: OutgoingCallOfferPref | null;
+    outgoingCallOfferPref: OutgoingCallOfferPref | null;
 
-    @Column({ nullable: true })
-    stir_shaken_profile: string | null;
+    @Column({ nullable: true, name: 'stir_shaken_profile' })
+    stirShakenProfile: string | null;
 
     @Column({
         type: 'enum',
         enum: SecurityNegotiation,
         nullable: true,
+        name: 'security_negotiation',
     })
-    security_negotiation: SecurityNegotiation | null;
+    securityNegotiation: SecurityNegotiation | null;
 
-    @Column({ nullable: true })
-    security_mechanisms: string | null;
+    @Column({ nullable: true, name: 'security_mechanisms' })
+    securityMechanisms: string | null;
 
     @Column({
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'send_aoc',
     })
-    send_aoc: DefaultYesNoAsterisk | null;
+    sendAoc: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    overlap_context: string | null;
+    @Column({ nullable: true, name: 'overlap_context' })
+    overlapContext: string | null;
+
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 }

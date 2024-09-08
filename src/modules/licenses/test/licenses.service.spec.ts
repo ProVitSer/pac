@@ -68,8 +68,8 @@ describe('LicensesService', () => {
 
     describe('createLicense', () => {
         it('should create and return a new license', async () => {
-            const createLicenseDto = { client_id: 1, products_id: [1, 2] };
-            const client = { id: 1, client_id: 1 } as any;
+            const createLicenseDto = { clientId: 1, productsId: [1, 2] };
+            const client = { id: 1, clientId: 1 } as any;
             const products = [{ id: 1 }, { id: 2 }] as any[];
 
             jest.spyOn(licensesRepository, 'findOne').mockResolvedValueOnce(null);
@@ -88,9 +88,9 @@ describe('LicensesService', () => {
 
             expect(result).toBeDefined();
 
-            expect(licensesRepository.findOne).toHaveBeenCalledWith({ where: { client: { client_id: createLicenseDto.client_id } } });
+            expect(licensesRepository.findOne).toHaveBeenCalledWith({ where: { client: { client_id: createLicenseDto.clientId } } });
 
-            expect(clientService.getClientByClientId).toHaveBeenCalledWith(createLicenseDto.client_id);
+            expect(clientService.getClientByClientId).toHaveBeenCalledWith(createLicenseDto.clientId);
 
             expect(licensesRepository.create).toHaveBeenCalled();
 
@@ -98,7 +98,7 @@ describe('LicensesService', () => {
         });
 
         it('should throw LicenseExistsException if license already exists', async () => {
-            const createLicenseDto = { client_id: 1, products_id: [1, 2] };
+            const createLicenseDto = { clientId: 1, productsId: [1, 2] };
 
             const license: Licenses = { license: 'BFD1-6673-D960-F1D4', is_active: false } as any;
 
@@ -110,13 +110,13 @@ describe('LicensesService', () => {
 
     describe('active', () => {
         it('should return active status of the license', async () => {
-            const license = { license: 'BFD1-6673-D960-F1D4', is_active: true } as any;
+            const license = { license: 'BFD1-6673-D960-F1D4', isActive: true } as any;
 
             jest.spyOn(licensesRepository, 'findOne').mockResolvedValueOnce(license);
 
             const result = await service.isLicenseActive({ license: 'BFD1-6673-D960-F1D4' });
 
-            expect(result).toEqual({ is_active: true });
+            expect(result).toEqual({ isActive: true });
 
             expect(licensesRepository.findOne).toHaveBeenCalledWith({ where: { license: 'BFD1-6673-D960-F1D4' } });
         });
@@ -124,7 +124,7 @@ describe('LicensesService', () => {
 
     describe('activateLicense', () => {
         it('should activate the license', async () => {
-            const license: Licenses = { license: 'BFD1-6673-D960-F1D4', is_active: false } as any;
+            const license: Licenses = { license: 'BFD1-6673-D960-F1D4', isActive: false } as any;
 
             jest.spyOn(service, 'getLicenseInfo').mockResolvedValueOnce(license);
 
@@ -135,7 +135,7 @@ describe('LicensesService', () => {
             expect(updateSpy).toHaveBeenCalledWith(
                 { license: 'BFD1-6673-D960-F1D4' },
                 {
-                    is_active: true,
+                    isActive: true,
                     activate: expect.any(Date),
                 },
             );
@@ -150,7 +150,7 @@ describe('LicensesService', () => {
 
     describe('deactivateLicense', () => {
         it('should deactivate the license', async () => {
-            const license: Licenses = { id: 1, license: 'BFD1-6673-D960-F1D4', is_active: true } as any;
+            const license: Licenses = { id: 1, license: 'BFD1-6673-D960-F1D4', isActive: true } as any;
 
             jest.spyOn(service, 'getLicenseInfo').mockResolvedValueOnce(license);
             const updateSpy = jest.spyOn(licensesRepository, 'update').mockResolvedValueOnce({} as any);
@@ -163,14 +163,14 @@ describe('LicensesService', () => {
 
     describe('setLicenseCommercial', () => {
         it('should set the license to commercial', async () => {
-            const license: Licenses = { id: 1, license: 'BFD1-6673-D960-F1D4', is_test: true } as any;
+            const license: Licenses = { id: 1, license: 'BFD1-6673-D960-F1D4', isTest: true } as any;
 
             jest.spyOn(service, 'getLicenseInfo').mockResolvedValueOnce(license);
             const updateSpy = jest.spyOn(licensesRepository, 'update').mockResolvedValueOnce({} as any);
 
             await service.setLicenseCommercial({ license: 'BFD1-6673-D960-F1D4' });
 
-            expect(updateSpy).toHaveBeenCalledWith({ id: license.id }, { is_test: false, is_active: true });
+            expect(updateSpy).toHaveBeenCalledWith({ id: license.id }, { isTest: false, isActive: true });
         });
     });
 
@@ -178,7 +178,7 @@ describe('LicensesService', () => {
         it('should update the license and add new products', async () => {
             const existingProducts: Products[] = [{ id: 1 }, { id: 2 }] as any[];
             const newProducts: Products[] = [{ id: 3 }] as any[];
-            const updateLicenseDto: UpdateLicenseDto = { license: 'BFD1-6673-D960-F1D4', products_id: [3], is_active: true };
+            const updateLicenseDto: UpdateLicenseDto = { license: 'BFD1-6673-D960-F1D4', productsId: [3], isActive: true };
             const license: Licenses = { id: 1, products: existingProducts, license: 'BFD1-6673-D960-F1D4' } as any;
 
             jest.spyOn(service, 'getLicenseInfo').mockResolvedValueOnce(license);

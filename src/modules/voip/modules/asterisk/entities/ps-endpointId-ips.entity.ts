@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { DefaultYesNoAsterisk } from '../interfaces/asterisk.enum';
 
 @Entity('ps_endpoint_id_ips')
@@ -16,12 +16,19 @@ export class PsEndpointIdIps {
         type: 'enum',
         enum: DefaultYesNoAsterisk,
         nullable: true,
+        name: 'srv_lookups',
     })
-    srv_lookups: DefaultYesNoAsterisk | null;
+    srvLookups: DefaultYesNoAsterisk | null;
 
-    @Column({ nullable: true })
-    match_header: string | null;
+    @Column({ nullable: true, name: 'match_header' })
+    matchHeader: string | null;
 
-    @Column({ nullable: true })
-    match_request_uri: string | null;
+    @Column({ nullable: true, name: 'match_request_uri' })
+    matchRequestUri: string | null;
+
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 }

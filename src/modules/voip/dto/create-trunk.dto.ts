@@ -1,9 +1,9 @@
 import { IsEnum, IsString } from 'class-validator';
-import { TrunkType } from '../interfaces/voip.enum';
+import { ApplicationServiceType } from '@app/common/interfaces/enums';
 
 export class CreateTrunkDto {
-    @IsEnum(TrunkType)
-    trunkType: TrunkType;
+    @IsEnum(ApplicationServiceType)
+    applicationServiceType: ApplicationServiceType;
 
     @IsString()
     authId: string;

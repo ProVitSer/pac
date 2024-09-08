@@ -5,27 +5,27 @@ import { CreateTrunkDataWithTrunkId } from '../interfaces/asterisk.interface';
 export class PsRegistrationsAdapter {
     id: string;
     transport: PjsipTransport;
-    outbound_auth: string;
-    retry_interval: number;
+    outboundAuth: string;
+    retryInterval: number;
     expiration: number;
-    auth_rejection_permanent: DefaultYesNoAsterisk;
-    contact_user: string;
-    server_uri: string;
-    client_uri: string;
-    forbidden_retry_interval: number;
-    max_retries: number;
+    authRejectionPermanent: DefaultYesNoAsterisk;
+    contactUser: string;
+    serverUri: string;
+    clientUri: string;
+    forbiddenRetryInterval: number;
+    maxRetries: number;
 
     constructor(data: CreateTrunkDataWithTrunkId) {
         this.id = data.trunkId;
         this.transport = PjsipTransport.udp;
-        this.outbound_auth = data.trunkId;
-        this.retry_interval = DEFAULT_RETRY_INTERVAL;
+        this.outboundAuth = data.trunkId;
+        this.retryInterval = DEFAULT_RETRY_INTERVAL;
         this.expiration = DEFAULT_EXPIRATION;
-        this.auth_rejection_permanent = DefaultYesNoAsterisk.yes;
-        this.contact_user = data.authId;
-        this.server_uri = `sip:${data.pbxIp}`;
-        this.client_uri = `sip:${data.authId}@${data.pbxIp}`;
-        this.forbidden_retry_interval = DEFAULT_FORBIDDEN_RETRY_INTERVAL;
-        this.max_retries = DEFAULT_MAX_RETRY;
+        this.authRejectionPermanent = DefaultYesNoAsterisk.yes;
+        this.contactUser = data.authId;
+        this.serverUri = `sip:${data.pbxIp}`;
+        this.clientUri = `sip:${data.authId}@${data.pbxIp}`;
+        this.forbiddenRetryInterval = DEFAULT_FORBIDDEN_RETRY_INTERVAL;
+        this.maxRetries = DEFAULT_MAX_RETRY;
     }
 }

@@ -122,6 +122,15 @@ import { CdrModule } from '../cdr/cdr.module';
                     },
                 ],
             },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'files',
+                        module: FilesModule,
+                    },
+                ],
+            },
         ]),
     ],
     controllers: [AppController],

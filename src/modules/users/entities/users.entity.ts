@@ -12,8 +12,8 @@ export class Users implements UsersInterface {
     @Column({ unique: true })
     email: string;
 
-    @Column({ nullable: true })
-    phone_number?: string;
+    @Column({ nullable: true, name: 'phone_number' })
+    phoneNumber?: string;
 
     @Column()
     name: string;
@@ -22,14 +22,14 @@ export class Users implements UsersInterface {
     @Exclude()
     password: string;
 
-    @Column({ default: true })
-    is_active: boolean;
+    @Column({ default: true, name: 'is_active' })
+    isActive: boolean;
 
-    @Column({ nullable: true })
-    latest_activity: Date;
+    @Column({ nullable: true, name: 'latest_activity' })
+    latestActivity: Date;
 
-    @Column({ nullable: false })
-    registered_date: Date;
+    @Column({ nullable: false, name: 'registered_date' })
+    registeredDate: Date;
 
     @Column({
         type: 'enum',
@@ -51,9 +51,9 @@ export class Users implements UsersInterface {
     @JoinColumn()
     client: Client;
 
-    @CreateDateColumn()
-    created_at: Date;
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
 
-    @UpdateDateColumn()
-    updated_at: Date;
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 }

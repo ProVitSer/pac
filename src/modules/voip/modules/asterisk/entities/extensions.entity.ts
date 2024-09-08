@@ -1,4 +1,4 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Index('extensions_context_exten_priority_key', ['context', 'exten', 'priority'], { unique: true })
 @Index('extensions_pkey', ['id'], { unique: true })
@@ -7,18 +7,24 @@ export class Extensions {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id: string;
 
-    @Column()
+    @Column({ nullable: false })
     context: string;
 
-    @Column()
+    @Column({ nullable: false })
     exten: string;
 
-    @Column()
+    @Column({ nullable: false })
     priority: number;
 
-    @Column()
+    @Column({ nullable: false })
     app: string;
 
-    @Column()
+    @Column({ nullable: false })
     appdata: string;
+
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 }

@@ -7,20 +7,20 @@ export class UpdateLicenseDto implements Partial<Licenses> {
 
     @IsNumber({}, { each: true })
     @IsOptional()
-    products_id?: number[];
+    productsId?: number[];
 
     @IsString()
     @IsDate()
     @IsOptional()
-    expiration_date?: Date;
+    expirationDate?: Date;
 
     @IsBoolean()
     @IsOptional()
-    is_active?: boolean;
+    isActive?: boolean;
 
     @IsBoolean()
     @IsOptional()
-    is_test?: boolean;
+    isTest?: boolean;
 
     @IsString()
     @IsDate()

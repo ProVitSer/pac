@@ -24,21 +24,21 @@ export class AuthService {
 
         const password = await ArgonUtilService.hashData(registrationData.password);
 
-        await this.licensesService.createLicense({ client_id: client.client_id, products_id: registrationData.products_id });
+        await this.licensesService.createLicense({ clientId: client.clientId, productsId: registrationData.productsId });
 
         await this.usersService.create({
-            email: registrationData.user_email,
+            email: registrationData.userEmail,
             name: registrationData.name,
-            phone_number: registrationData.user_phone_number,
-            client_id: client.client_id,
+            phoneNumber: registrationData.userPhoneNumber,
+            clientId: client.clientId,
             password: password,
         });
     }
 
     public async getAuthenticatedUser(email: string, plainTextPassword: string): Promise<Users> {
         const user = await this.usersService.getByEmail(email);
-
         await this.verifyPassword(plainTextPassword, user.password);
+        console.log(user);
 
         return user;
     }
