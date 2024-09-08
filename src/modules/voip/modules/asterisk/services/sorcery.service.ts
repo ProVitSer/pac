@@ -124,33 +124,14 @@ export class SorceryService {
     }
 
     public async findTrunkById(trunkId: string): Promise<TrunkData> {
-        const psAuths = await this.psAuths.findOne({
-            where: {
-                id: trunkId,
-            },
-        });
+        const [psAuths, psAors, psEndpointIdIps, psRegistrations, psEndpoints] = await Promise.all([
+            this.psAuths.findOne({ where: { id: trunkId } }),
+            this.psAors.findOne({ where: { id: trunkId } }),
+            this.psEndpointIdIps.findOne({ where: { id: trunkId } }),
+            this.psRegistrations.findOne({ where: { id: trunkId } }),
+            this.psEndpoints.findOne({ where: { id: trunkId } }),
+        ]);
 
-        const psAors = await this.psAors.findOne({
-            where: {
-                id: trunkId,
-            },
-        });
-        const psEndpointIdIps = await this.psEndpointIdIps.findOne({
-            where: {
-                id: trunkId,
-            },
-        });
-
-        const psRegistrations = await this.psRegistrations.findOne({
-            where: {
-                id: trunkId,
-            },
-        });
-        const psEndpoints = await this.psEndpoints.findOne({
-            where: {
-                id: trunkId,
-            },
-        });
         return {
             psAors,
             psAuths,

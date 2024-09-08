@@ -12,12 +12,13 @@ import { SendResiterAction } from './actions/send-register.action';
 import { OutboundRegistrationDetailEvent } from './events/outbound-registration-detail.event';
 import { Voip } from '@app/modules/voip/entities/voip.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PsRegistrations } from '../../entities/ps-registrations.entity';
 
 const asteriskAmiProviders = createAsteriskAmi();
 const amiProvidersName = getAsteriskAmiProvidesName();
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Voip])],
+    imports: [TypeOrmModule.forFeature([Voip, PsRegistrations])],
     providers: [
         asteriskAmiProviders,
         AmiListenter,
