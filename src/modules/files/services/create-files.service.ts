@@ -25,7 +25,7 @@ export class CreateFilesService {
             fileName: data.fileName || generateFilename,
             generatedFilePath: this.getFilePath(generateFilename),
             path: data.path,
-            generatedFileName: `${generateFilename}.wav`,
+            generatedFileName: `${generateFilename}.${data.fileType}`,
             mimetype: data.mimetype,
             size: data.size,
         };

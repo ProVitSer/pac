@@ -13,4 +13,5 @@ export interface SaveFileData {
     path: string;
     client: Client;
     size: number;
+    fileType: string;
 }
