@@ -16,3 +16,9 @@ type=user
 password=${ASTERISK_ARI_INFO_PASSWORD}
 password_format=plain
 read_only=no
+
+[${ASTERISK_ARI_CQA}]
+type=user
+password=${ASTERISK_ARI_CQA_PASSWORD}
+password_format=plain
+read_only=no
