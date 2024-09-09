@@ -97,7 +97,7 @@ describe('ClientsService', () => {
         expect(result).toEqual(clients[1]);
 
         expect(repository.findOne).toHaveBeenCalledWith({
-            where: { client_id: clients[1].clientId, deleted: false },
+            where: { clientId: clients[1].clientId, deleted: false },
             relations: { licenses: true },
         });
     });
@@ -110,7 +110,7 @@ describe('ClientsService', () => {
 
     it('should update a client', async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const updatedClient = { ...clients[0], company_name: clients[1].companyName };
+        const updatedClient = { ...clients[0], companyName: clients[1].companyName };
 
         jest.spyOn(repository, 'findOne').mockResolvedValue(clients[0]);
         jest.spyOn(repository, 'update').mockResolvedValue({ affected: 1 } as any);
@@ -119,7 +119,7 @@ describe('ClientsService', () => {
         const result = await service.updateClient(clients[0].clientId, { companyName: clients[1].companyName });
 
         expect(result).toEqual(updatedClient);
-        expect(repository.update).toHaveBeenCalledWith({ id: clients[0].id }, { company_name: clients[1].companyName });
+        expect(repository.update).toHaveBeenCalledWith({ id: clients[0].id }, { companyName: clients[1].companyName });
     });
 
     it('should throw an error if trying to update a non-existent client', async () => {

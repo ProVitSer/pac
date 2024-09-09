@@ -2,7 +2,7 @@ import { Client } from '../../client/entities/client.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinTable, ManyToOne } from 'typeorm';
 import { VoipInterface } from '../interfaces/voip.interface';
 import { TrunkRegistryStatus } from '../interfaces/voip.enum';
-import { ApplicationServiceType } from '@app/common/interfaces/enums';
+import { ApplicationServiceType } from '../../../common/interfaces/enums';
 
 @Entity()
 export class Voip implements VoipInterface {

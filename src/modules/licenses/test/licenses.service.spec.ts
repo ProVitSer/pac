@@ -88,7 +88,7 @@ describe('LicensesService', () => {
 
             expect(result).toBeDefined();
 
-            expect(licensesRepository.findOne).toHaveBeenCalledWith({ where: { client: { client_id: createLicenseDto.clientId } } });
+            expect(licensesRepository.findOne).toHaveBeenCalledWith({ where: { client: { clientId: createLicenseDto.clientId } } });
 
             expect(clientService.getClientByClientId).toHaveBeenCalledWith(createLicenseDto.clientId);
 
@@ -100,7 +100,7 @@ describe('LicensesService', () => {
         it('should throw LicenseExistsException if license already exists', async () => {
             const createLicenseDto = { clientId: 1, productsId: [1, 2] };
 
-            const license: Licenses = { license: 'BFD1-6673-D960-F1D4', is_active: false } as any;
+            const license: Licenses = { license: 'BFD1-6673-D960-F1D4', isActive: false } as any;
 
             jest.spyOn(licensesRepository, 'findOne').mockResolvedValueOnce(license);
 
@@ -157,7 +157,7 @@ describe('LicensesService', () => {
 
             await service.deactivateLicense({ license: 'BFD1-6673-D960-F1D4' });
 
-            expect(updateSpy).toHaveBeenCalledWith({ id: license.id }, { is_active: false });
+            expect(updateSpy).toHaveBeenCalledWith({ id: license.id }, { isActive: false });
         });
     });
 

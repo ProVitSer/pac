@@ -1,4 +1,4 @@
-import { ApplicationServiceType } from '@app/common/interfaces/enums';
+import { ApplicationServiceType } from '../../../common/interfaces/enums';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

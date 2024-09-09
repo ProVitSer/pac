@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Client } from '../../../modules/client/entities/client.entity';
-import { ApplicationServiceType } from '@app/common/interfaces/enums';
+import { ApplicationServiceType } from '../../../common/interfaces/enums';
 
 @Entity()
 export class Files {
