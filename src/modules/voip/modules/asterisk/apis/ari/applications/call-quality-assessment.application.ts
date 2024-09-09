@@ -13,7 +13,7 @@ import { ApplicationServiceType } from '@app/common/interfaces/enums';
 @Injectable()
 export class CallQualityAssessmentApplication implements OnApplicationBootstrap {
     constructor(
-        @Inject(AriProvider.call)
+        @Inject(AriProvider.cqa)
         private readonly ariCall: {
             ariClient: Ari.Client;
         },
@@ -48,31 +48,30 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
         if (!trunk) return;
 
-        const soundFile = await this.filesService.getFilesByClientId(trunk.client.id);
+        const callQualitySound = await this.getCallQualitySound(trunk.client.id);
+
+        await incomingChannel.answer();
+
+        const rating = await this.playCallQualitySound(incomingChannel, callQualitySound);
+
+        await this.playGoodbye(incomingChannel);
+
+        return incomingChannel.hangup();
+    }
+
+    private async getCallQualitySound(clientId: number): Promise<string> {
+        const soundFile = await this.filesService.getFilesByClientId(clientId);
 
         const cqaFile = soundFile.filter((s: Files) => s.applicationServiceType == ApplicationServiceType.cqa);
 
         if (!cqaFile && !cqaFile[0]) return;
 
-        const soundPathFile = `sound:${cqaFile[0].path}/${cqaFile[0].generatedFilePath}/${cqaFile[0].generatedFileName}`;
-
-        await incomingChannel.answer();
-
-        await this.playSound(incomingChannel, soundPathFile);
-
-        return await new Promise(async (resolve: any) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            incomingChannel.on('ChannelDtmfReceived', async (event: ChannelDtmfReceived, _channel: Channel) => {
-                const digit = event.digit;
-                console.log('ChannelDtmfReceived', digit);
-                resolve();
-            });
-        });
+        return `sound:${cqaFile[0].path}/${cqaFile[0].generatedFilePath}/${cqaFile[0].generatedFileName}`.replace('.wav', '');
     }
 
-    private async playSound(incomingChannel: Channel, sound: string): Promise<void> {
+    private async playCallQualitySound(incomingChannel: Channel, sound: string): Promise<string> {
         try {
-            await new Promise(async (resolve: any) => {
+            return await new Promise(async (resolve) => {
                 const playback = this.ariCall.ariClient.Playback();
 
                 const play = await incomingChannel.play(
@@ -84,12 +83,44 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
                 );
 
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                incomingChannel.on('ChannelDtmfReceived', async (event: ChannelDtmfReceived, _channel: Channel) => {
+                    await play.stop();
+                    resolve(event.digit);
+                });
+
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                play.once('PlaybackFinished', async (event: PlaybackStarted, _: Playback) => {
+                    resolve('0');
+                });
+            });
+        } catch (e) {
+            this.logger.error(e);
+
+            return;
+        }
+    }
+
+    private async playGoodbye(incomingChannel: Channel): Promise<string> {
+        try {
+            await new Promise(async (resolve) => {
+                const playback = this.ariCall.ariClient.Playback();
+
+                const play = await incomingChannel.play(
+                    {
+                        media: `sound:goodbye`,
+                        lang: 'en',
+                    },
+                    playback,
+                );
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 play.once('PlaybackFinished', async (event: PlaybackStarted, _: Playback) => {
                     resolve(event);
                 });
             });
         } catch (e) {
-            throw e;
+            this.logger.error(e);
+
+            return;
         }
     }
 }
