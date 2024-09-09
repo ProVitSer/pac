@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CallQualityAssessmentService } from './call-quality-assessment.service';
+import { CallQualityAssessmentService } from '../services/call-quality-assessment.service';
 
 describe('CallQualityAssessmentService', () => {
     let service: CallQualityAssessmentService;
