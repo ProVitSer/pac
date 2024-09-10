@@ -9,3 +9,7 @@ export interface Health {
 export interface RequestWithUser extends Request {
     user: Users;
 }
+
+export interface PlainObject {
+    [key: string]: any;
+}
