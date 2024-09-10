@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as fs from 'fs';
+// import * as fs from 'fs';
 import { Files } from '../entities/files.entity';
 import { Repository } from 'typeorm';
 
@@ -24,7 +24,7 @@ export class FilesService {
     public async deleteFile(fileId: number): Promise<void> {
         const file = await this.getFile(fileId);
         if (file) {
-            fs.unlinkSync(file.path);
+            //fs.unlinkSync(file.path);
             await this.fileRepository.remove(file);
         }
     }
