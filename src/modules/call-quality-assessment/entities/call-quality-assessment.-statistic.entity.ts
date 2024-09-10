@@ -23,6 +23,9 @@ export class CallQualityAssessmentStatistic {
     @Column({ nullable: true, name: 'manager_number' })
     managerNumber: string;
 
+    @Column({ nullable: false, unique: true })
+    uniqueid: string;
+
     @Column({ nullable: false, type: 'enum', enum: CallResult, name: 'call_result', default: CallResult.unknown })
     callResult: CallResult;
 
