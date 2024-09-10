@@ -10,7 +10,7 @@ import { ClientModule } from '../client/client.module';
 @Module({
     imports: [TypeOrmModule.forFeature([Files]), ClientModule],
     providers: [FilesService, AudioFilesService, CreateFilesService],
-    exports: [FilesService],
+    exports: [FilesService, AudioFilesService, CreateFilesService],
     controllers: [FilesController],
 })
 export class FilesModule {}
