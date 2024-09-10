@@ -1,8 +1,8 @@
 import { Inject, Injectable, LoggerService, OnApplicationBootstrap } from '@nestjs/common';
-import { AriProvider } from '../interfaces/ari.enum';
-import Ari, { Channel, ChannelDtmfReceived, Playback, PlaybackStarted, StasisStart } from 'ari-client';
+import { AriProvider } from '../../voip/modules/asterisk/apis/ari/interfaces/ari.enum';
+import Ari, { Channel, ChannelDtmfReceived, ChannelHangupRequest, Playback, PlaybackStarted, StasisStart } from 'ari-client';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { CHANNEL_NAME_REGEXP } from '../ari.constants';
+import { CHANNEL_NAME_REGEXP } from '../../voip/modules/asterisk/apis/ari/ari.constants';
 import { FilesService } from '@app/modules/files/services/files.service';
 import { Voip } from '@app/modules/voip/entities/voip.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,6 +40,8 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
     }
 
     private async handleCall(event: StasisStart, incomingChannel: Channel): Promise<void> {
+        console.log('event', event);
+
         const match = event.channel.name.match(CHANNEL_NAME_REGEXP);
 
         if (!match && !match[1]) return;
@@ -51,6 +53,11 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
         const callQualitySound = await this.getCallQualitySound(trunk.client.id);
 
         await incomingChannel.answer();
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        incomingChannel.on('ChannelHangupRequest', (_event: ChannelHangupRequest, _channel: Channel) => {
+            console.log('ChannelHangupRequest', event);
+        });
 
         const rating = await this.playCallQualitySound(incomingChannel, callQualitySound);
 
@@ -112,6 +119,7 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
                     },
                     playback,
                 );
+
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 play.once('PlaybackFinished', async (event: PlaybackStarted, _: Playback) => {
                     resolve(event);

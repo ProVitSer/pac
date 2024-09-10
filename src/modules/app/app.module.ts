@@ -25,6 +25,7 @@ import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
 import { VoipModule } from '../voip/voip.module';
 import { FilesModule } from '../files/files.module';
 import { CdrModule } from '../cdr/cdr.module';
+import { CallQualityAssessmentModule } from '../call-quality-assessment/call-quality-assessment.module';
 
 @Module({
     imports: [
@@ -58,6 +59,7 @@ import { CdrModule } from '../cdr/cdr.module';
         VoipModule,
         FilesModule,
         CdrModule,
+        CallQualityAssessmentModule,
         RouterModule.register([
             {
                 path: 'api',
