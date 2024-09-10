@@ -15,7 +15,7 @@ export class AudioFilesService {
         private readonly filesService: FilesService,
     ) {}
 
-    async saveAudioFile(client: Client, file: Express.Multer.File): Promise<Files> {
+    async saveAudioFile(client: Client, file: Express.Multer.File, appServiceType: ApplicationServiceType): Promise<Files> {
         const audioDir = this.configService.get<string>('files.audioDir');
 
         const fileStruct = await this.createFilesService.createFile({
@@ -31,6 +31,6 @@ export class AudioFilesService {
 
         await AudioConverterService.convertToWav(file, faliPath);
 
-        return await this.filesService.createFile({ ...fileStruct, client, applicationServiceType: ApplicationServiceType.cqa });
+        return await this.filesService.createFile({ ...fileStruct, client, applicationServiceType: appServiceType });
     }
 }
