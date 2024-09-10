@@ -47,9 +47,6 @@ export class Client implements ClientInterface {
     @OneToMany(() => CallQualityAssessmentStatistic, (cqas) => cqas.client)
     callQualityAssessmentStatistic: CallQualityAssessmentStatistic[];
 
-    @OneToOne(() => CallQualityAssessmentConfig, (cqac) => cqac.client)
-    callQualityAssessmentConfig: CallQualityAssessmentConfig;
-
     @OneToOne(() => Users, (user) => user.client)
     user: Users;
 

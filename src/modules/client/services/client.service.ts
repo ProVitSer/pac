@@ -56,6 +56,21 @@ export class ClientService {
         return client;
     }
 
+    public async getClientById(id: number): Promise<Client> {
+        const client = await this.clientRepository.findOne({
+            where: { id: id, deleted: false },
+            relations: {
+                licenses: true,
+            },
+        });
+
+        if (!client) {
+            throw new ClientNotFoundException(id);
+        }
+
+        return client;
+    }
+
     public async updateClient(clientId: number, updateData: UpdateClientDto): Promise<Client> {
         const client = await this.clientRepository.findOne({
             where: {

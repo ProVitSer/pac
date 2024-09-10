@@ -1,20 +1,20 @@
-import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Client } from '../../client/entities/client.entity';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { CallQualityAssessmentStatistic } from './call-quality-assessment.-statistic.entity';
+import { CqaFileType } from '../interfaces/call-quality-assessment.-statistic.enum';
 
 @Entity()
 export class CallQualityAssessmentConfig {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'simple-array', nullable: true, name: 'audio_files' })
-    audioFiles: number[];
+    @Column({ type: 'json', nullable: true, name: 'audio_files' })
+    audioFiles: { fileId: number; cqaFileType: CqaFileType }[];
 
-    @Column({ nullable: true, name: 'voi_trunk_id' })
-    voipTrunkId: number;
+    @Column({ nullable: true, name: 'voip_trunk_id' })
+    voipTrunkId: string;
 
-    @OneToOne(() => Client, (client) => client.callQualityAssessmentConfig, { onDelete: 'CASCADE' })
-    client: Client;
+    @Column({ nullable: true, name: 'client_id' })
+    clientId: number;
 
     @OneToMany(() => CallQualityAssessmentStatistic, (cqas) => cqas.callQualityAssessmentConfig)
     callQualityAssessmentStatistic: CallQualityAssessmentStatistic[];

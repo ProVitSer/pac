@@ -133,6 +133,15 @@ import { CallQualityAssessmentModule } from '../call-quality-assessment/call-qua
                     },
                 ],
             },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'cqa',
+                        module: CallQualityAssessmentModule,
+                    },
+                ],
+            },
         ]),
     ],
     controllers: [AppController],

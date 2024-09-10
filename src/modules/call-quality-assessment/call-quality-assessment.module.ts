@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CallQualityAssessmentService } from './services/call-quality-assessment.service';
+import { CallQualityAssessmentConfigService } from './services/call-quality-assessment-config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientModule } from '../client/client.module';
 import { CallQualityAssessmentStatistic } from './entities/call-quality-assessment.-statistic.entity';
@@ -11,6 +11,9 @@ import { VoipModule } from '../voip/voip.module';
 import { CallQualityAssessmentApplication } from './application/call-quality-assessment.application';
 import { AriModule } from '../voip/modules/asterisk/apis/ari/ari.module';
 import { FilesModule } from '../files/files.module';
+import { CallQualityAssessmentStatisticService } from './services/call-quality-assessment-statistic.service';
+import { CallQualityAssessmentConfigController } from './controllers/call-quality-assessment-config.controller';
+import { CallQualityAssessmentStatisticController } from './controllers/call-quality-assessment-statistic.controller';
 
 @Module({
     imports: [
@@ -22,7 +25,7 @@ import { FilesModule } from '../files/files.module';
         AriModule,
         FilesModule,
     ],
-    providers: [CallQualityAssessmentService, CallQualityAssessmentApplication],
-    exports: [CallQualityAssessmentService],
+    providers: [CallQualityAssessmentStatisticService, CallQualityAssessmentConfigService, CallQualityAssessmentApplication],
+    controllers: [CallQualityAssessmentConfigController, CallQualityAssessmentStatisticController],
 })
 export class CallQualityAssessmentModule {}
