@@ -1,5 +1,5 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
-import { AudioFilesData, CreateCqacConfigData, UpdateCqacAudioFiles } from '../interfaces/call-quality-assessment.-statistic.interface';
+import { AudioFilesData, CreateCqacConfigData, UpdateCqacAudioFiles } from '../interfaces/call-quality-assessment..interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Repository } from 'typeorm';
@@ -16,7 +16,7 @@ import UpdateCqaConfigkDto from '../dto/update-cqa-trunk.dto';
 import { Voip } from '@app/modules/voip/entities/voip.entity';
 import { CqacTrunkNotFoundException } from '../exceptions/cqac-trunk-not-found';
 import { Files } from '@app/modules/files/entities/files.entity';
-import { CqaFileType } from '../interfaces/call-quality-assessment.-statistic.enum';
+import { CqaFileType } from '../interfaces/call-quality-assessment..enum';
 
 @Injectable()
 export class CallQualityAssessmentConfigService {

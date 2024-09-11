@@ -1,5 +1,5 @@
 import { Client } from '@app/modules/client/entities/client.entity';
-import { CqaFileType } from './call-quality-assessment.-statistic.enum';
+import { CallResult, CqaFileType } from './call-quality-assessment..enum';
 import { CreateTrunkResult } from '@app/modules/voip/interfaces/voip.interface';
 import { Files } from '@app/modules/files/entities/files.entity';
 
@@ -33,4 +33,23 @@ export interface UpdateCqacAudioFiles {
 export interface AudioFilesData {
     fileId: number;
     cqaFileType: CqaFileType;
+}
+
+export interface CallQualitySound {
+    sound?: string;
+    cqaFileType?: CqaFileType;
+}
+
+export interface AddInitStaticInfo {
+    trunkId: string;
+    uniqueid: string;
+    clientNumber: string;
+}
+
+export interface UpdateStatisticInfoData {
+    uniqueid: string;
+    rating?: number;
+    callResult?: CallResult;
+    managerData?: string;
+    managerNumber?: string;
 }

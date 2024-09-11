@@ -1,5 +1,5 @@
-import { CqacAudioFiles, CqacDataAdapter } from '../interfaces/call-quality-assessment.-statistic.interface';
-import { CqaFileType } from '../interfaces/call-quality-assessment.-statistic.enum';
+import { CqacAudioFiles, CqacDataAdapter } from '../interfaces/call-quality-assessment..interface';
+import { CqaFileType } from '../interfaces/call-quality-assessment..enum';
 
 export class CreateCallQualityAssessmentConfigAdapter {
     audioFiles: CqacAudioFiles[];

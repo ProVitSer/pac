@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 // import * as fs from 'fs';
 import { Files } from '../entities/files.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class FilesService {
@@ -33,6 +33,12 @@ export class FilesService {
         return this.fileRepository.find({
             where: { client: { id: clientId } },
             relations: ['client'],
+        });
+    }
+
+    public async getFiles(filesId: number[]): Promise<Files[]> {
+        return this.fileRepository.find({
+            where: { id: In([...filesId]) },
         });
     }
 }

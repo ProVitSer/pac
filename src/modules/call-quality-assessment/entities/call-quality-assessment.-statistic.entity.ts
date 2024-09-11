@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Client } from '../../client/entities/client.entity';
-import { CallResult } from '../interfaces/call-quality-assessment.-statistic.enum';
+import { CallResult } from '../interfaces/call-quality-assessment..enum';
 import { CallQualityAssessmentConfig } from './call-quality-assessment.-config.entity';
 
 @Entity()
@@ -29,10 +29,12 @@ export class CallQualityAssessmentStatistic {
     @Column({ nullable: false, type: 'enum', enum: CallResult, name: 'call_result', default: CallResult.unknown })
     callResult: CallResult;
 
-    @ManyToOne(() => CallQualityAssessmentConfig, (cqac) => cqac.callQualityAssessmentStatistic, { onDelete: 'CASCADE' })
+    @ManyToOne(() => CallQualityAssessmentConfig, (cqac) => cqac.callQualityAssessmentStatistic)
+    @JoinColumn({ name: 'cqac_id' })
     callQualityAssessmentConfig: CallQualityAssessmentConfig;
 
-    @ManyToOne(() => Client, (client) => client.callQualityAssessmentStatistic, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Client, (client) => client.callQualityAssessmentStatistic)
+    @JoinColumn({ name: 'client_id' })
     client: Client;
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { CallQualityAssessmentStatistic } from './call-quality-assessment.-statistic.entity';
-import { CqaFileType } from '../interfaces/call-quality-assessment.-statistic.enum';
+import { CqaFileType } from '../interfaces/call-quality-assessment..enum';
 
 @Entity()
 export class CallQualityAssessmentConfig {
