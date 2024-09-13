@@ -26,6 +26,7 @@ import { VoipModule } from '../voip/voip.module';
 import { FilesModule } from '../files/files.module';
 import { CdrModule } from '../cdr/cdr.module';
 import { CallQualityAssessmentModule } from '../call-quality-assessment/call-quality-assessment.module';
+import { PacConnectorModule } from '../pac-connector/pac-connector.module';
 
 @Module({
     imports: [
@@ -60,6 +61,7 @@ import { CallQualityAssessmentModule } from '../call-quality-assessment/call-qua
         FilesModule,
         CdrModule,
         CallQualityAssessmentModule,
+        PacConnectorModule,
         RouterModule.register([
             {
                 path: 'api',
@@ -139,6 +141,15 @@ import { CallQualityAssessmentModule } from '../call-quality-assessment/call-qua
                     {
                         path: 'cqa',
                         module: CallQualityAssessmentModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'pac',
+                        module: PacConnectorModule,
                     },
                 ],
             },

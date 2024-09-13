@@ -104,6 +104,11 @@ const DEV_CONF: ConfigEnvironment = {
         tmpDir: process.env.FILES_TMP_DIR,
         audioDir: process.env.FILES_AUDIO_DIR,
     },
+    pacConnectorJwt: {
+        key: process.env.PAC_JWT_KEY,
+        audience: process.env.PAC_JWT_AUDIENCE,
+        issuer: process.env.PAC_JWT_ISSUER,
+    },
 };
 
 const PROD_CONF: ConfigEnvironment = {
@@ -200,5 +205,10 @@ const PROD_CONF: ConfigEnvironment = {
     files: {
         tmpDir: process.env.FILES_TMP_DIR,
         audioDir: process.env.FILES_AUDIO_DIR,
+    },
+    pacConnectorJwt: {
+        key: process.env.PAC_JWT_KEY,
+        audience: process.env.PAC_JWT_AUDIENCE,
+        issuer: process.env.PAC_JWT_ISSUER,
     },
 };

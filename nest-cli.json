@@ -12,7 +12,11 @@
         {
           "include": "../src/modules/mail/templates/*",
           "outDir": "./dist/src"
-        }
+        },
+        {
+            "include": "../src/modules/pac-connector/modules/**/**/*.proto",
+            "outDir": "./dist/src"
+          }
       ]
   
   }

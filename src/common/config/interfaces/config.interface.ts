@@ -12,8 +12,14 @@ export interface ConfigEnvironment {
     jwt: JwtEnvironmentVariables;
     voip: VoipEnvironmentVariables;
     files: FileEnvironmentVariables;
+    pacConnectorJwt: PacConnectorJwtEnvironmentVariables;
 }
 
+export interface PacConnectorJwtEnvironmentVariables {
+    key: string;
+    issuer: string;
+    audience: string;
+}
 export interface FileEnvironmentVariables {
     tmpDir: string;
     audioDir: string;
