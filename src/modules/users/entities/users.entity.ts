@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { UsersInterface } from '../interfaces/users.interface';
 import { Permission, Role } from '../../../common/interfaces/enums';
 import { Client } from '../../../modules/client/entities/client.entity';
@@ -47,8 +47,8 @@ export class Users implements UsersInterface {
     })
     roles: Role[];
 
-    @OneToOne(() => Client)
-    @JoinColumn()
+    @ManyToOne(() => Client)
+    @JoinColumn({ name: 'client_id' })
     client: Client;
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

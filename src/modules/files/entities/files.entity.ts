@@ -31,7 +31,7 @@ export class Files {
     @Column({ nullable: false, type: 'enum', enum: ApplicationServiceType, name: 'application_service_type' })
     applicationServiceType: ApplicationServiceType;
 
-    @ManyToOne(() => Client, (client) => client.files, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Client, (client) => client.files, { cascade: true })
     client: Client;
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

@@ -19,7 +19,7 @@ export class Licenses implements LicensesInterface {
     id: number;
 
     @OneToOne(() => Client, (client) => client.licenses, { cascade: true })
-    @JoinColumn()
+    @JoinColumn({ name: 'client_id' })
     client: Client;
 
     @Column({ nullable: false, unique: true })
