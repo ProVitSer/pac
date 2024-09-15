@@ -13,8 +13,15 @@ export interface ConfigEnvironment {
     voip: VoipEnvironmentVariables;
     files: FileEnvironmentVariables;
     pacConnectorJwt: PacConnectorJwtEnvironmentVariables;
+    redis: RedisEnvironmentVariables;
 }
 
+export interface RedisEnvironmentVariables {
+    host: string;
+    port: string;
+    username: string;
+    password: string;
+}
 export interface PacConnectorJwtEnvironmentVariables {
     key: string;
     issuer: string;

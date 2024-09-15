@@ -27,6 +27,7 @@ import { FilesModule } from '../files/files.module';
 import { CdrModule } from '../cdr/cdr.module';
 import { CallQualityAssessmentModule } from '../call-quality-assessment/call-quality-assessment.module';
 import { PacConnectorModule } from '../pac-connector/pac-connector.module';
+import { RedisModule } from '../redis/redis.module';
 
 @Module({
     imports: [
@@ -62,6 +63,7 @@ import { PacConnectorModule } from '../pac-connector/pac-connector.module';
         CdrModule,
         CallQualityAssessmentModule,
         PacConnectorModule,
+        RedisModule,
         RouterModule.register([
             {
                 path: 'api',

@@ -55,6 +55,32 @@ services:
             - pac
         restart: unless-stopped
 
+    redis:
+        container_name: ${REDIS_CONTAINER_NAME}
+        build:
+            context: ./docker/redis
+        env_file:
+            - .env
+        ports:
+            - '6379:6379'
+        volumes:
+            - /usr/local/redisdata:/data
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.50'
+                    memory: 512M
+                reservations:
+                    cpus: '0.25'
+                    memory: 256M
+        healthcheck:
+            test: ['CMD', 'redis-cli', '-a', '$REDIS_PASSWORD', 'ping']
+            interval: 30s
+            timeout: 10s
+            retries: 5
+        restart: unless-stopped
+        networks:
+            - pac
 networks:
     pac:
         driver: bridge

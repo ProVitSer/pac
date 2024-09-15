@@ -109,6 +109,12 @@ const DEV_CONF: ConfigEnvironment = {
         audience: process.env.PAC_JWT_AUDIENCE,
         issuer: process.env.PAC_JWT_ISSUER,
     },
+    redis: {
+        host: process.env.REDIS_HOST,
+        port: '6379',
+        username: process.env.REDIS_USER,
+        password: process.env.REDIS_USER_PASSWORD,
+    },
 };
 
 const PROD_CONF: ConfigEnvironment = {
@@ -210,5 +216,11 @@ const PROD_CONF: ConfigEnvironment = {
         key: process.env.PAC_JWT_KEY,
         audience: process.env.PAC_JWT_AUDIENCE,
         issuer: process.env.PAC_JWT_ISSUER,
+    },
+    redis: {
+        host: process.env.REDIS_HOST,
+        port: '6379',
+        username: process.env.REDIS_USER,
+        password: process.env.REDIS_USER_PASSWORD,
     },
 };

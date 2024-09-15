@@ -17,7 +17,7 @@ export class PacGrpcConnectorService {
 
         const grpcClient = await this.getGrpcClient(pcgs);
 
-        return grpcClient.getService<T>('SqlServicePbxService')[methodName](data, { metadata });
+        return grpcClient.getService<T>('SqlServicePbxService')[methodName](data, metadata);
     }
 
     private async getGrpcClient(pcgs: PacConnectorGrpcServer): Promise<ClientGrpc> {
