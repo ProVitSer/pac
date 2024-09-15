@@ -5,50 +5,56 @@ import { ClientGrpc, ClientProxyFactory, Transport } from '@nestjs/microservices
 import { join } from 'path';
 import { PacConnectorTokenService } from './pac-connector-token.service';
 import { Observable } from 'rxjs';
+import { RedisService } from '@app/modules/redis/services/redis.service';
+import { PacGrpcConnectorData } from '../interfaces/pac-connector.interface';
+import { PacConnectorService } from './pac-connector.service';
 
 @Injectable()
 export class PacGrpcConnectorService {
-    private activeConnections: Map<number, ClientGrpc> = new Map();
+    constructor(
+        private readonly pacConnectorTokenService: PacConnectorTokenService,
+        private readonly redisService: RedisService,
+        private readonly pcs: PacConnectorService,
+    ) {}
 
-    constructor(private readonly pacConnectorTokenService: PacConnectorTokenService) {}
+    public async callGrpcMethod<T, D>(data: PacGrpcConnectorData<D>): Promise<Observable<T>> {
+        const pcgs = await this.pcs.getPacConnector(data.client);
 
-    public async callGrpcMethod<T>(pcgs: PacConnectorGrpcServer, methodName: string, data: any): Promise<Observable<T>> {
-        const metadata = this.getGrpcTokenMetadata(pcgs);
+        const metadata = await this.getGrpcTokenMetadata(pcgs);
 
-        const grpcClient = await this.getGrpcClient(pcgs);
+        const grpcClient = await this.getGrpcClient(data, pcgs);
 
-        return grpcClient.getService<T>('SqlServicePbxService')[methodName](data, metadata);
+        return grpcClient.getService<T>(data.serviceName)[data.methodName](data.data, metadata);
     }
 
-    private async getGrpcClient(pcgs: PacConnectorGrpcServer): Promise<ClientGrpc> {
-        if (this.activeConnections.has(pcgs.clientId)) {
-            return this.activeConnections.get(pcgs.clientId);
-        }
-
+    private async getGrpcClient<D>(data: PacGrpcConnectorData<D>, pcgs: PacConnectorGrpcServer): Promise<ClientGrpc> {
         const client = ClientProxyFactory.create({
             transport: Transport.GRPC,
             options: {
-                package: 'sql',
-                protoPath: join(__dirname, '../modules/pac-sql/proto/sql.proto'),
+                package: data.package,
+                protoPath: join(__dirname, data.protoPath),
                 url: `${pcgs.ip}:${pcgs.port}`,
             },
         }) as ClientGrpc;
 
-        this.activeConnections.set(pcgs.clientId, client);
-
         return client;
     }
 
-    private closeConnection(clientId: number) {
-        if (this.activeConnections.has(clientId)) {
-            this.activeConnections.delete(clientId);
-        }
-    }
-
-    private getGrpcTokenMetadata(pcgs: PacConnectorGrpcServer): Metadata {
-        const token = this.pacConnectorTokenService.generateToken(pcgs.clientId);
+    private async getGrpcTokenMetadata(pcgs: PacConnectorGrpcServer): Promise<Metadata> {
+        const clientToken = await this.redisService.hget(`client:${pcgs.clientId}`, 'token');
 
         const metadata = new Metadata();
+
+        if (clientToken) {
+            metadata.add('Authorization', `Bearer ${clientToken}`);
+            return metadata;
+        }
+
+        const token = this.pacConnectorTokenService.generateToken(pcgs.clientId);
+
+        await this.redisService.hset(`client:${pcgs.clientId}`, 'token', token);
+
+        await this.redisService.expire(`client:${pcgs.clientId}`, 3600);
 
         metadata.add('Authorization', `Bearer ${token}`);
 
