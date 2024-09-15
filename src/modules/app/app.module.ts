@@ -28,6 +28,8 @@ import { CdrModule } from '../cdr/cdr.module';
 import { CallQualityAssessmentModule } from '../call-quality-assessment/call-quality-assessment.module';
 import { PacConnectorModule } from '../pac-connector/pac-connector.module';
 import { RedisModule } from '../redis/redis.module';
+import { PacSqlModule } from '../pac-connector/modules/pac-sql/pac-sql.module';
+import { PacCallModule } from '../pac-connector/modules/pac-call/pac-call.module';
 
 @Module({
     imports: [
@@ -64,6 +66,8 @@ import { RedisModule } from '../redis/redis.module';
         CallQualityAssessmentModule,
         PacConnectorModule,
         RedisModule,
+        PacSqlModule,
+        PacCallModule,
         RouterModule.register([
             {
                 path: 'api',
@@ -152,6 +156,24 @@ import { RedisModule } from '../redis/redis.module';
                     {
                         path: 'pac',
                         module: PacConnectorModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'pac',
+                        module: PacSqlModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'pac',
+                        module: PacCallModule,
                     },
                 ],
             },
