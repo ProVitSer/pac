@@ -1,7 +1,7 @@
 import { CallDirection, ActiveCallsStatus } from './pac-call.enum';
 
 export interface CallServicePbxService {
-    getActiveCallsInfo(data: GetActiveCallsInfoRequest): Promise<GetActiveCallsInfoReply>;
+    getActiveCallsInfo(): Promise<GetActiveCallsInfoReply>;
     getCountCalls(): Promise<GetCountCallsReply>;
     makeCall(data: MakeCallRequest): Promise<BaseCallReply>;
     hangupCall(data: HangupCallRequest): Promise<BaseCallReply>;
@@ -9,35 +9,31 @@ export interface CallServicePbxService {
     getActiveConnectionsInfo(): Promise<GetActiveConnectionsInfoReply>;
 }
 
-export interface GetActiveCallsInfoRequest {
-    get: string;
-}
-
 export interface GetActiveCallsInfoReply {
-    active_calls_info_data?: GetActiveCallsInfoData[];
+    activeCallsInfoData?: GetActiveCallsInfoData[];
 }
 
 export interface ActiveConnectionsInfo {
-    call_id: number;
-    connections_data: ConnectionsData;
+    callId: number;
+    connectionsData: ConnectionsData;
 }
 
 export interface ConnectionsData {
     id: number;
-    call_connection_id: number;
-    external_party: string;
-    recording_state: string;
-    party_connection_id: number;
-    referred_by: number;
-    is_outbound: boolean;
-    is_inbound: boolean;
-    dialed_number: string;
-    internal_party: string;
-    internal_party_number: string;
+    callConnectionId: number;
+    externalParty: string;
+    recordingState: string;
+    partyConnectionId: number;
+    referredBy: number;
+    isOutbound: boolean;
+    isInbound: boolean;
+    dialedNumber: string;
+    internalParty: string;
+    internalPartyNumber: string;
 }
 
 export interface GetCountCallsReply {
-    current_count_calls: number;
+    currentCountCalls: number;
 }
 
 export interface MakeCallRequest {
@@ -55,21 +51,21 @@ export interface HangupCallRequest {
 }
 
 export interface TrasferCallRequest {
-    call_id: number;
-    party_connection_id: number;
-    destination_number: string;
+    callId: number;
+    partyConnectionId: number;
+    destinationNumber: string;
 }
 
 export interface GetActiveConnectionsInfoReply {
-    active_connections_info: ActiveConnectionsInfo;
+    activeConnectionsInfo: ActiveConnectionsInfo[];
 }
 
 export interface GetActiveCallsInfoData {
-    call_id: number;
-    call_direction: CallDirection;
+    callId: number;
+    callDirection: CallDirection;
     status: ActiveCallsStatus;
-    local_number: string;
-    remote_number: string;
+    localNumber: string;
+    remoteNumber: string;
     direction?: string;
-    call_status?: string;
+    callStatus?: string;
 }

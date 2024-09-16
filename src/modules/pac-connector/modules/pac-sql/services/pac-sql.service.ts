@@ -12,11 +12,11 @@ export class PacSqlService {
     constructor(private readonly pgcs: PacGrpcConnectorService) {}
 
     public async sqlRequest(client: Client, data: SqlRequest) {
-        return await this.grpcSend<SqlResponse, SqlRequest>(client, data);
+        return await this.grpcSend<SqlRequest, SqlResponse>(client, data);
     }
 
-    private async grpcSend<T, D>(client: Client, data: D): Promise<T> {
-        const pacGrpcConnectorData: PacGrpcConnectorData<D> = {
+    private async grpcSend<T, D>(client: Client, data: T): Promise<D> {
+        const pacGrpcConnectorData: PacGrpcConnectorData<T> = {
             client,
             serviceName: SqlServiceName.SqlServicePbxService,
             methodName: SqlServiceMethods.ExecuteSql,

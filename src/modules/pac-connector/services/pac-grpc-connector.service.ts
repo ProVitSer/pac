@@ -17,17 +17,17 @@ export class PacGrpcConnectorService {
         private readonly pcs: PacConnectorService,
     ) {}
 
-    public async callGrpcMethod<T, D>(data: PacGrpcConnectorData<D>): Promise<Observable<T>> {
+    public async callGrpcMethod<T, D>(data: PacGrpcConnectorData<T>): Promise<Observable<D>> {
         const pcgs = await this.pcs.getPacConnector(data.client);
 
         const metadata = await this.getGrpcTokenMetadata(pcgs);
 
-        const grpcClient = await this.getGrpcClient(data, pcgs);
+        const grpcClient = await this.getGrpcClient<T>(data, pcgs);
 
-        return grpcClient.getService<T>(data.serviceName)[data.methodName](data.data, metadata);
+        return grpcClient.getService<D>(data.serviceName)[data.methodName](data.data, metadata);
     }
 
-    private async getGrpcClient<D>(data: PacGrpcConnectorData<D>, pcgs: PacConnectorGrpcServer): Promise<ClientGrpc> {
+    private async getGrpcClient<T>(data: PacGrpcConnectorData<T>, pcgs: PacConnectorGrpcServer): Promise<ClientGrpc> {
         const client = ClientProxyFactory.create({
             transport: Transport.GRPC,
             options: {
