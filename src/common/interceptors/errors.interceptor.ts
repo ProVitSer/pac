@@ -2,7 +2,8 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpExcepti
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { DatabaseException } from '../exceptions/database.exception';
-import { every, partial, has } from 'lodash';
+import { every, partial, has, includes } from 'lodash';
+import { RpcException } from '../exceptions/rpc.exeption';
 
 @Injectable()
 export class ErrorsInterceptor implements NestInterceptor {
@@ -11,9 +12,11 @@ export class ErrorsInterceptor implements NestInterceptor {
             catchError((err: any) => {
                 const error = every(['table', 'query'], partial(has, err))
                     ? new DatabaseException(err)
-                    : err instanceof HttpException
-                      ? err
-                      : new HttpException((err?.message as Error) || 'Unknown error', HttpStatus.BAD_REQUEST, { cause: <Error>err });
+                    : includes(err?.details, 'RpcException')
+                      ? new RpcException(err)
+                      : err instanceof HttpException
+                        ? err
+                        : new HttpException((err?.message as Error) || 'Unknown error', HttpStatus.BAD_REQUEST, { cause: <Error>err });
 
                 return throwError(() => error);
             }),
