@@ -1,3 +1,4 @@
+import { PlainObject } from '@app/common/interfaces/interfaces';
 import {
     EmailOptionsType,
     ExtensionForwardStatus,
@@ -38,17 +39,17 @@ export interface ExtensionInfoReply {
     sipId: string;
     outboundCallerId: string;
     recordingType: RecordingType;
-    isExtensionEnabled: boolean;
-    disableExternalCalls: string;
+    isExtensionEnabled?: boolean;
+    disableExternalCalls: boolean;
     deliverAudio: string;
     supportReinvite: string;
     supportReplaces: string;
     emailOptions: EmailOptionsType;
-    voiceMailEnable: boolean;
+    voiceMailEnable?: boolean;
     voiceMailPin: string;
-    voiceMailPlayCallerId: boolean;
-    internal: boolean;
-    noAnswerTimeout: number;
+    voiceMailPlayCallerId?: boolean;
+    internal?: boolean;
+    noAnswerTimeout?: number;
 }
 
 export interface GetExtensionStatusRequest {
@@ -83,7 +84,7 @@ export interface GetRegisteredExtensionsReply {
 }
 
 export interface GetExtensionDeviceInfoRequest {
-    extensions: string;
+    extension: string;
 }
 
 export interface GetExtensionDeviceInfoReply {
@@ -121,19 +122,19 @@ export interface DeleteExtensionReply {
 
 export interface UpdateExtensionInfoRequest {
     extension: string;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    authId?: string;
-    authPassword?: string;
-    mobileNumber?: string;
-    outboundCallerId?: string;
-    recordingType?: RecordingType;
-    isExtensionEnabled?: boolean;
-    disableExternalCalls?: boolean;
-    deliverAudio?: boolean;
-    supportReinvite?: boolean;
-    supportReplaces?: boolean;
+    firstName: PlainObject;
+    lastName: PlainObject;
+    email: PlainObject;
+    authId: PlainObject;
+    authPassword: PlainObject;
+    mobileNumber: PlainObject;
+    outboundCallerId: PlainObject;
+    recordingType: PlainObject;
+    isExtensionEnabled: PlainObject;
+    disableExternalCalls: PlainObject;
+    deliverAudio: PlainObject;
+    supportReinvite: PlainObject;
+    supportReplaces: PlainObject;
 }
 
 export interface SetExtensionForwardStatusRequest {

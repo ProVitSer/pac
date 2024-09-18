@@ -10,7 +10,7 @@ export enum ExtensionServiceMethods {
     GetExtensionDeviceInfo = 'GetExtensionDeviceInfo',
     CreateExtension = 'CreateExtension',
     DeleteExtension = 'DeleteExtension',
-    UpdateExtensionInfo = 'CreUpdateExtensionInfoateExtension',
+    UpdateExtensionInfo = 'UpdateExtensionInfo',
     SetExtensionForwardStatus = 'SetExtensionForwardStatus',
     SetExtensionGlobalQueuesStatus = 'SetExtensionGlobalQueuesStatus',
     SetExtensionStatusInQueue = 'SetExtensionStatusInQueue',

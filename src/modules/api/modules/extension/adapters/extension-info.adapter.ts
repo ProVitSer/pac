@@ -17,7 +17,7 @@ export class ExtensionInfoAdapter {
     public outboundCallerId: string;
     public recordingType: ApiExtensionRecordingType;
     public isExtensionEnabled: boolean;
-    public disableExternalCalls: string;
+    public disableExternalCalls: boolean;
     public deliverAudio: string;
     public supportReinvite: string;
     public supportReplaces: string;
@@ -28,6 +28,7 @@ export class ExtensionInfoAdapter {
     public internal: boolean;
     public noAnswerTimeout: number;
     constructor(private readonly data: ExtensionInfoReply) {
+        console.log(data);
         this.extension = data.extension;
         this.firstName = data.firstName;
         this.lastName = data.lastName;
@@ -37,17 +38,19 @@ export class ExtensionInfoAdapter {
         this.mobileNumber = data.mobileNumber;
         this.sipId = data.sipId;
         this.outboundCallerId = data.outboundCallerId;
-        this.recordingType = EXTENSION_RECORDING_TO_API_EXTENSION_RECORDING[data.recordingType];
-        this.isExtensionEnabled = data.isExtensionEnabled;
-        this.disableExternalCalls = data.disableExternalCalls;
+        this.recordingType = data.recordingType
+            ? EXTENSION_RECORDING_TO_API_EXTENSION_RECORDING[data.recordingType]
+            : ApiExtensionRecordingType.RecordingOff;
+        this.isExtensionEnabled = data.isExtensionEnabled || false;
+        this.disableExternalCalls = data.disableExternalCalls || false;
         this.deliverAudio = data.deliverAudio;
         this.supportReinvite = data.supportReinvite;
         this.supportReplaces = data.supportReplaces;
         this.emailOptions = EXTENSION_EMAIL_OPTIONS_TO_API_EXTENSION_OPTIONS[data.emailOptions];
-        this.voiceMailEnable = data.voiceMailEnable;
+        this.voiceMailEnable = data.voiceMailEnable || false;
         this.voiceMailPin = data.voiceMailPin;
-        this.voiceMailPlayCallerId = data.voiceMailPlayCallerId;
-        this.internal = data.internal;
+        this.voiceMailPlayCallerId = data.voiceMailPlayCallerId || false;
+        this.internal = data.internal || false;
         this.noAnswerTimeout = data.noAnswerTimeout;
     }
 

@@ -59,6 +59,7 @@ export class PacExtensionService {
     }
 
     public async createExtension(client: Client, data: CreateExtensionRequest): Promise<ExtensionInfoReply> {
+        console.log(data);
         return await this.grpcSend<CreateExtensionRequest, ExtensionInfoReply>(client, data, ExtensionServiceMethods.CreateExtension);
     }
 
@@ -66,8 +67,8 @@ export class PacExtensionService {
         return await this.grpcSend<DeleteExtensionRequest, DeleteExtensionReply>(client, data, ExtensionServiceMethods.DeleteExtension);
     }
 
-    public async updateExtensionInfo(client: Client, data: UpdateExtensionInfoRequest): Promise<DeleteExtensionReply> {
-        return await this.grpcSend<UpdateExtensionInfoRequest, DeleteExtensionReply>(
+    public async updateExtensionInfo(client: Client, data: UpdateExtensionInfoRequest): Promise<ExtensionInfoReply> {
+        return await this.grpcSend<UpdateExtensionInfoRequest, ExtensionInfoReply>(
             client,
             data,
             ExtensionServiceMethods.UpdateExtensionInfo,

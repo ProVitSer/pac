@@ -1,4 +1,10 @@
-import { ApiExtensionRecordingType, ApiExtensionEmailOptionsType } from './api-extension.enum';
+import { Device } from '@app/modules/pac-connector/modules/pac-extension/interfaces/pac-extension.interface';
+import {
+    ApiExtensionRecordingType,
+    ApiExtensionEmailOptionsType,
+    ApiExtensionForwardStatus,
+    ApiExtensionQueueStatus,
+} from './api-extension.enum';
 
 export interface ExtensionInfo {
     extension: string;
@@ -12,7 +18,7 @@ export interface ExtensionInfo {
     outboundCallerId: string;
     recordingType: ApiExtensionRecordingType;
     isExtensionEnabled: boolean;
-    disableExternalCalls: string;
+    disableExternalCalls: boolean;
     deliverAudio: string;
     supportReinvite: string;
     supportReplaces: string;
@@ -22,4 +28,28 @@ export interface ExtensionInfo {
     voiceMailPlayCallerId: boolean;
     internal: boolean;
     noAnswerTimeout: number;
+}
+
+export interface ExtensionStatus {
+    firstName: string;
+    lastName: string;
+    email: string;
+    extension: string;
+    registered: string;
+    forwardingRulesStatus: ApiExtensionForwardStatus;
+    queuesStatus: ApiExtensionQueueStatus;
+    groups: string[];
+    inRingGroups: string[];
+    loggedInQueues: string[];
+    devices: Device[];
+}
+
+export interface ExtensionsList {
+    extensions: string[];
+}
+
+export interface RegisteredExtensions extends ExtensionsList {}
+
+export interface BaseExtensionResult {
+    result: boolean;
 }
