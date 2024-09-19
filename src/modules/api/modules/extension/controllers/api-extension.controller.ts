@@ -17,6 +17,7 @@ import UpdateExtensionDto from '../dto/update-extension.dto';
 import ExtensionForwardStatusDto from '../dto/extension-forward-status.dto';
 import ExtensionGlobalQueueStatusDto from '../dto/extension-global-queue-status.dto';
 import ExtensionQueueStatusDto from '../dto/extension-queue-status.dto';
+import ExtensionCallForwardStatusDto from '../dto/extension-call-forward-status.dto';
 
 @UseGuards(RoleGuard([Role.Admin, Role.Manager]))
 @UseGuards(JwtAuthenticationGuard)
@@ -85,5 +86,11 @@ export class ApiExtensionController {
         return await this.apiExtensionService.setExtensionStatusInQueue(request.user.client, data);
     }
 
-    //SetExtensionCallForwardStatus
+    @Post('call-forward')
+    async setExtensionCallForwardStatus(
+        @Req() request: RequestWithUser,
+        @Body() data: ExtensionCallForwardStatusDto,
+    ): Promise<ExtensionStatus> {
+        return await this.apiExtensionService.setExtensionCallForwardStatus(request.user.client, data);
+    }
 }

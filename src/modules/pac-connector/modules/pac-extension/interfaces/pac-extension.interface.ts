@@ -159,5 +159,5 @@ export interface SetExtensionCallForwardStatusRequest {
     fwTo: FwToType;
     fwCall: FwCallType;
     extensionState?: ExtensionStateType;
-    number: string;
+    number?: string;
 }

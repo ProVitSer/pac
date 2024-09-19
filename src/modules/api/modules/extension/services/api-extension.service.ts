@@ -21,6 +21,8 @@ import {
 } from '@app/modules/pac-connector/modules/pac-extension/interfaces/pac-extension.enum';
 import ExtensionGlobalQueueStatusDto from '../dto/extension-global-queue-status.dto';
 import ExtensionQueueStatusDto from '../dto/extension-queue-status.dto';
+import ExtensionCallForwardStatusDto from '../dto/extension-call-forward-status.dto';
+import { ExtensionCallForwardStatusAdapter } from '../adapters/extension-call-forward-status.adapter';
 
 @Injectable()
 export class ApiExtensionService {
@@ -94,6 +96,13 @@ export class ApiExtensionService {
             queueNumber: data.queueNumber,
             status: data.status as unknown as ExtensionQueueStatus,
         });
+
+        return this.getExtensionStatus(client, data.extension);
+    }
+
+    public async setExtensionCallForwardStatus(client: Client, data: ExtensionCallForwardStatusDto): Promise<ExtensionStatus> {
+        const updateData = new ExtensionCallForwardStatusAdapter(data).toPublicObject();
+        await this.pacExtensionService.setExtensionCallForwardStatus(client, updateData);
 
         return this.getExtensionStatus(client, data.extension);
     }

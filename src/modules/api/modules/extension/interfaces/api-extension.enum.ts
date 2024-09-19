@@ -41,7 +41,7 @@ export enum ApiExtensionFwCallType {
     BothCall = 'BothCall',
 }
 
-export enum ApiExtensionExtensionStateType {
+export enum ApiExtensionStateType {
     NoAnswer = 'NoAnswer',
     BusyNotRegistered = 'BusyNotRegistered',
 }
