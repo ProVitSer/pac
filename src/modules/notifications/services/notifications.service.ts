@@ -96,7 +96,6 @@ export class NotificationsService {
                 template: TemplateTypes.ChangeTrunkStatus,
                 subject: data.subject,
             };
-            console.log(mailData);
             this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
         } catch (e) {
             this.logger.error(e);
