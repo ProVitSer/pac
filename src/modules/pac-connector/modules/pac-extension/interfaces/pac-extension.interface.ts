@@ -38,13 +38,13 @@ export interface ExtensionInfoReply {
     mobileNumber: string;
     sipId: string;
     outboundCallerId: string;
-    recordingType: RecordingType;
+    recordingType?: RecordingType;
     isExtensionEnabled?: boolean;
-    disableExternalCalls: boolean;
+    disableExternalCalls?: boolean;
     deliverAudio: string;
     supportReinvite: string;
     supportReplaces: string;
-    emailOptions: EmailOptionsType;
+    emailOptions?: EmailOptionsType;
     voiceMailEnable?: boolean;
     voiceMailPin: string;
     voiceMailPlayCallerId?: boolean;
@@ -62,12 +62,12 @@ export interface ExtensionStatusReply {
     email: string;
     extension: string;
     registered: string;
-    forwardingRulesStatus: ExtensionForwardStatus;
-    queuesStatus: ExtensionQueueStatus;
-    groups: string[];
-    inRingGroups: string[];
-    loggedInQueues: string[];
-    devices: Device[];
+    forwardingRulesStatus?: ExtensionForwardStatus;
+    queuesStatus?: ExtensionQueueStatus;
+    groups?: string[];
+    inRingGroups?: string[];
+    loggedInQueues?: string[];
+    devices?: Device[];
 }
 
 export interface Device {
@@ -92,7 +92,7 @@ export interface GetExtensionDeviceInfoReply {
     lastName: string;
     email: string;
     extension: string;
-    devices: Device[];
+    devices?: Device[];
 }
 
 export interface CreateExtensionRequest {
@@ -144,7 +144,7 @@ export interface SetExtensionForwardStatusRequest {
 
 export interface SetExtensionGlobalQueuesStatusRequest {
     extension: string;
-    status: ExtensionQueueStatus;
+    status?: ExtensionQueueStatus;
 }
 
 export interface SetExtensionStatusInQueueRequest {

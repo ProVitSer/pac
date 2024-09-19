@@ -20,12 +20,16 @@ export class ExtensionStatusReplyAdapter {
         this.email = data.email;
         this.extension = data.extension;
         this.registered = data.registered;
-        this.forwardingRulesStatus = EXTENSION_FW_TO_API_FW[data.forwardingRulesStatus];
-        this.queuesStatus = EXTENSION_QUEUE_STATUS_TO_API_QUEUE_STATUS[data.queuesStatus];
-        this.groups = data.groups;
-        this.inRingGroups = data.inRingGroups;
-        this.loggedInQueues = data.loggedInQueues;
-        this.devices = data.devices;
+        this.forwardingRulesStatus = data.forwardingRulesStatus
+            ? EXTENSION_FW_TO_API_FW[data.forwardingRulesStatus]
+            : ApiExtensionForwardStatus.Available;
+        this.queuesStatus = data?.queuesStatus
+            ? EXTENSION_QUEUE_STATUS_TO_API_QUEUE_STATUS[data.queuesStatus]
+            : ApiExtensionQueueStatus.LoggedIn;
+        this.groups = data?.groups || [];
+        this.inRingGroups = data.inRingGroups || [];
+        this.loggedInQueues = data.loggedInQueues || [];
+        this.devices = data.devices || [];
     }
 
     public toPublicObject() {

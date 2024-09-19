@@ -28,7 +28,6 @@ export class ExtensionInfoAdapter {
     public internal: boolean;
     public noAnswerTimeout: number;
     constructor(private readonly data: ExtensionInfoReply) {
-        console.log(data);
         this.extension = data.extension;
         this.firstName = data.firstName;
         this.lastName = data.lastName;
@@ -46,7 +45,9 @@ export class ExtensionInfoAdapter {
         this.deliverAudio = data.deliverAudio;
         this.supportReinvite = data.supportReinvite;
         this.supportReplaces = data.supportReplaces;
-        this.emailOptions = EXTENSION_EMAIL_OPTIONS_TO_API_EXTENSION_OPTIONS[data.emailOptions];
+        this.emailOptions = data.emailOptions
+            ? EXTENSION_EMAIL_OPTIONS_TO_API_EXTENSION_OPTIONS[data.emailOptions]
+            : ApiExtensionEmailOptionsType.AttachmentAndDeletee;
         this.voiceMailEnable = data.voiceMailEnable || false;
         this.voiceMailPin = data.voiceMailPin;
         this.voiceMailPlayCallerId = data.voiceMailPlayCallerId || false;

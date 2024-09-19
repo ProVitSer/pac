@@ -68,7 +68,7 @@ export class ApiExtensionController {
     }
 
     @Post('forward-status')
-    async setExtensionForwardStatus(@Req() request: RequestWithUser, @Body() data: ExtensionForwardStatusDto): Promise<ExtensionInfo> {
+    async setExtensionForwardStatus(@Req() request: RequestWithUser, @Body() data: ExtensionForwardStatusDto): Promise<ExtensionStatus> {
         return await this.apiExtensionService.setExtensionForwardStatus(request.user.client, data);
     }
 
@@ -76,12 +76,14 @@ export class ApiExtensionController {
     async setExtensionGlobalQueuesStatus(
         @Req() request: RequestWithUser,
         @Body() data: ExtensionGlobalQueueStatusDto,
-    ): Promise<ExtensionInfo> {
+    ): Promise<ExtensionStatus> {
         return await this.apiExtensionService.setExtensionGlobalQueuesStatus(request.user.client, data);
     }
 
     @Post('queue-status')
-    async setExtensionStatusInQueue(@Req() request: RequestWithUser, @Body() data: ExtensionQueueStatusDto): Promise<ExtensionInfo> {
+    async setExtensionStatusInQueue(@Req() request: RequestWithUser, @Body() data: ExtensionQueueStatusDto): Promise<ExtensionStatus> {
         return await this.apiExtensionService.setExtensionStatusInQueue(request.user.client, data);
     }
+
+    //SetExtensionCallForwardStatus
 }

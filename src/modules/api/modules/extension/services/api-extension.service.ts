@@ -70,31 +70,31 @@ export class ApiExtensionService {
         return this.getExtensionInfo(client, extension.extension);
     }
 
-    public async setExtensionForwardStatus(client: Client, data: ExtensionForwardStatusDto): Promise<ExtensionInfo> {
+    public async setExtensionForwardStatus(client: Client, data: ExtensionForwardStatusDto): Promise<ExtensionStatus> {
         await this.pacExtensionService.setExtensionForwardStatus(client, {
             extension: data.extension,
             fwStatus: data.fwStatus as unknown as ExtensionForwardStatus,
         });
 
-        return this.getExtensionInfo(client, data.extension);
+        return this.getExtensionStatus(client, data.extension);
     }
 
-    public async setExtensionGlobalQueuesStatus(client: Client, data: ExtensionGlobalQueueStatusDto): Promise<ExtensionInfo> {
+    public async setExtensionGlobalQueuesStatus(client: Client, data: ExtensionGlobalQueueStatusDto): Promise<ExtensionStatus> {
         await this.pacExtensionService.setExtensionGlobalQueuesStatus(client, {
             extension: data.extension,
             status: data.status as unknown as ExtensionQueueStatus,
         });
 
-        return this.getExtensionInfo(client, data.extension);
+        return this.getExtensionStatus(client, data.extension);
     }
 
-    public async setExtensionStatusInQueue(client: Client, data: ExtensionQueueStatusDto): Promise<ExtensionInfo> {
+    public async setExtensionStatusInQueue(client: Client, data: ExtensionQueueStatusDto): Promise<ExtensionStatus> {
         await this.pacExtensionService.setExtensionStatusInQueue(client, {
             extension: data.extension,
             queueNumber: data.queueNumber,
             status: data.status as unknown as ExtensionQueueStatus,
         });
 
-        return this.getExtensionInfo(client, data.extension);
+        return this.getExtensionStatus(client, data.extension);
     }
 }
