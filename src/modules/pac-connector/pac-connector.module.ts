@@ -7,11 +7,12 @@ import { PacConnectorService } from './services/pac-connector.service';
 import { PacConnectorTokenService } from './services/pac-connector-token.service';
 import { PacGrpcConnectorService } from './services/pac-grpc-connector.service';
 import { RedisModule } from '../redis/redis.module';
+import { PacPbxSubscribeEventController } from './modules/pac-pbx-subscribe-event/controllers/pac-pbx-subscribe-event.controller';
 
 @Module({
     imports: [TypeOrmModule.forFeature([PacConnectorGrpcServer]), ClientModule, RedisModule],
     providers: [PacConnectorService, PacConnectorTokenService, PacGrpcConnectorService],
-    controllers: [PacConnectorController],
+    controllers: [PacConnectorController, PacPbxSubscribeEventController],
     exports: [PacGrpcConnectorService, PacConnectorService],
 })
 export class PacConnectorModule {}
