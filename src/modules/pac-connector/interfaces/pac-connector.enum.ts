@@ -1,6 +1,10 @@
 import { CallServiceName, CallServiceMethods } from '../modules/pac-call/interfaces/pac-call.enum';
 import { ContactServiceName, ContactServiceMethods } from '../modules/pac-contact/interfaces/pac-contact.enum';
 import { ExtensionServiceName, ExtensionServiceMethods } from '../modules/pac-extension/interfaces/pac-extension.enum';
+import {
+    PbxSubscribeEventServiceName,
+    PbxSubscribeEventServiceMethods,
+} from '../modules/pac-pbx-subscribe-event/interfaces/pac-pbx-subscribe-event.enum';
 import { QueueServiceMethods, QueueServiceName } from '../modules/pac-queue/interfaces/pac-queue.enum';
 import { RingGroupServiceMethods, RingGroupServiceName } from '../modules/pac-ring-group/interfaces/pac-ring-group.enum';
 import { SqlServiceMethods, SqlServiceName } from '../modules/pac-sql/interfaces/pac-sql.enum';
@@ -11,7 +15,8 @@ export type GrpcServiceName =
     | ExtensionServiceName
     | QueueServiceName
     | RingGroupServiceName
-    | ContactServiceName;
+    | ContactServiceName
+    | PbxSubscribeEventServiceName;
 
 export type GrpcServiceMethods =
     | SqlServiceMethods
@@ -19,4 +24,5 @@ export type GrpcServiceMethods =
     | ExtensionServiceMethods
     | QueueServiceMethods
     | RingGroupServiceMethods
-    | ContactServiceMethods;
+    | ContactServiceMethods
+    | PbxSubscribeEventServiceMethods;
