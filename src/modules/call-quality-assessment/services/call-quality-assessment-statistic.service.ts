@@ -1,11 +1,11 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CallQualityAssessmentStatistic } from '../entities/call-quality-assessment.-statistic.entity';
+import { CallQualityAssessmentStatistic } from '../entities/call-quality-assessment-statistic.entity';
 import { Voip } from '@app/modules/voip/entities/voip.entity';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { CallQualityAssessmentConfigService } from './call-quality-assessment-config.service';
-import { AddInitStaticInfo, UpdateStatisticInfoData } from '../interfaces/call-quality-assessment..interface';
+import { AddInitStaticInfo, UpdateStatisticInfoData } from '../interfaces/call-quality-assessment.interface';
 import { CallQualityAssessmentConfig } from '../entities/call-quality-assessment.-config.entity';
 
 @Injectable()

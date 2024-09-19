@@ -1,17 +1,19 @@
 import { Inject, Injectable, LoggerService, OnApplicationBootstrap } from '@nestjs/common';
 import { AriProvider } from '../../voip/modules/asterisk/apis/ari/interfaces/ari.enum';
-import Ari, { Channel, ChannelDtmfReceived, Playback, PlaybackStarted, StasisStart } from 'ari-client';
+import Ari, { Channel, ChannelDtmfReceived, ChannelHangupRequest, Playback, PlaybackStarted, StasisStart } from 'ari-client';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { CHANNEL_NAME_REGEXP } from '../../voip/modules/asterisk/apis/ari/ari.constants';
 import { FilesService } from '@app/modules/files/services/files.service';
 import { Voip } from '@app/modules/voip/entities/voip.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CallQualitySound } from '../interfaces/call-quality-assessment..interface';
+import { CallQualitySound } from '../interfaces/call-quality-assessment.interface';
 import { CallQualityAssessmentConfigService } from '../services/call-quality-assessment-config.service';
 import { CallQualityAssessmentConfig } from '../entities/call-quality-assessment.-config.entity';
-import { CallResult, CqaFileType } from '../interfaces/call-quality-assessment..enum';
+import { CallResult, CqaFileType } from '../interfaces/call-quality-assessment.enum';
 import { CallQualityAssessmentStatisticService } from '../services/call-quality-assessment-statistic.service';
+import { AmqpService } from '@app/modules/amqp/services/amqp.service';
+import { Exchange, RoutingKey } from '@app/common/constants/amqp';
 
 @Injectable()
 export class CallQualityAssessmentApplication implements OnApplicationBootstrap {
@@ -27,6 +29,7 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
         private readonly filesService: FilesService,
         private readonly cqac: CallQualityAssessmentConfigService,
         private readonly cqas: CallQualityAssessmentStatisticService,
+        private readonly amqpService: AmqpService,
     ) {}
 
     public async onApplicationBootstrap() {
@@ -64,7 +67,7 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
         await incomingChannel.answer();
 
-        // await this.onCallEvent(incomingChannel, cqac);
+        await this.onCallEvent(incomingChannel, cqac);
 
         const rating = await this.playCallQualitySound(incomingChannel, callQualitySound);
 
@@ -73,12 +76,12 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
         await this.playGoodbye(incomingChannel, callQualitySound);
     }
 
-    // private async onCallEvent(incomingChannel: Channel, cqac: CallQualityAssessmentConfig) {
-    //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    //     incomingChannel.on('ChannelHangupRequest', (_event: ChannelHangupRequest, _channel: Channel) => {
-    //         // TODO отправка в очередь информацию о завершение вызова с последующей выгрузки из PBX
-    //     });
-    // }
+    private async onCallEvent(incomingChannel: Channel, cqac: CallQualityAssessmentConfig) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        incomingChannel.on('ChannelHangupRequest', (event: ChannelHangupRequest, _channel: Channel) => {
+            this.amqpService.sendMessageWithDelay(Exchange.events, RoutingKey.pbxCqa, { event, cqac }, 25000);
+        });
+    }
 
     private async playCallQualitySound(incomingChannel: Channel, callQualitySounds: CallQualitySound[]): Promise<string> {
         const cqaMainSound = callQualitySounds.find((c) => c.cqaFileType === CqaFileType.cqaMain);

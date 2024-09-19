@@ -7,7 +7,7 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { CallQualityAssessmentConfigService } from '../services/call-quality-assessment-config.service';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import UpdateCqaConfigkDto from '../dto/update-cqa-trunk.dto';
-import { CqaFileType } from '../interfaces/call-quality-assessment..enum';
+import { CqaFileType } from '../interfaces/call-quality-assessment.enum';
 
 @UseGuards(RoleGuard([Role.Admin, Role.Manager]))
 @UseGuards(JwtAuthenticationGuard)

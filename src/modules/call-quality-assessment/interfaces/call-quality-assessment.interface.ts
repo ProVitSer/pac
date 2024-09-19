@@ -1,7 +1,9 @@
 import { Client } from '@app/modules/client/entities/client.entity';
-import { CallResult, CqaFileType } from './call-quality-assessment..enum';
+import { CallResult, CqaFileType } from './call-quality-assessment.enum';
 import { CreateTrunkResult } from '@app/modules/voip/interfaces/voip.interface';
 import { Files } from '@app/modules/files/entities/files.entity';
+import { CallQualityAssessmentConfig } from '../entities/call-quality-assessment.-config.entity';
+import { ChannelHangupRequest } from 'ari-client';
 
 export interface CreateCqacConfigData {
     client: Client;
@@ -50,6 +52,12 @@ export interface UpdateStatisticInfoData {
     uniqueid: string;
     rating?: number;
     callResult?: CallResult;
+    externalCallId?: string;
     managerData?: string;
     managerNumber?: string;
+}
+
+export interface EndCallSubHandlerData {
+    cqac: CallQualityAssessmentConfig;
+    event: ChannelHangupRequest;
 }

@@ -26,6 +26,14 @@ export class CdrService {
         });
     }
 
+    public async getCdrByUniq(uniqueid: string): Promise<Cdr> {
+        return this.cdrRepository.findOne({
+            where: {
+                uniqueid,
+            },
+        });
+    }
+
     public async getCdrByTrunkType(applicationServiceType: ApplicationServiceType): Promise<Cdr[]> {
         return this.cdrRepository.find({
             where: {

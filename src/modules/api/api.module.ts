@@ -28,5 +28,6 @@ import { AuthController } from './controller/api-controller';
         AuthController,
     ],
     providers: [ApiCallService, ApiExtensionService, ApiQueueService, ApiRingGroupService, ApiContactService],
+    exports: [ApiExtensionService],
 })
 export class ApiModule {}
