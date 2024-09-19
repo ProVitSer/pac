@@ -7,4 +7,9 @@ export abstract class QueueSenderBaseService {
     public async sendMessage(_exchange: Exchange, _routingKey: RoutingKey, _message: { [key: string]: any }) {
         await Promise.resolve([]);
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public async sendMessageWithDelay(_exchange: Exchange, _routingKey: RoutingKey, _message: { [key: string]: any }, delay: number) {
+        await Promise.resolve([]);
+    }
 }

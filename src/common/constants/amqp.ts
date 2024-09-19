@@ -1,5 +1,6 @@
 export enum RoutingKey {
     mail = 'mail.sendMail',
+    pbxCqa = 'pbx.cqa',
 }
 
 export enum Exchange {
@@ -8,4 +9,5 @@ export enum Exchange {
 
 export enum Queues {
     events = 'events',
+    pbxCqaQueue = 'pbxCqaQueue',
 }
