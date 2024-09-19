@@ -4,7 +4,7 @@ import { ClientInterface } from '../interfaces/client.interface';
 import { Voip } from '../../../modules/voip/entities/voip.entity';
 import { Files } from '../../../modules/files/entities/files.entity';
 import { Users } from '../../../modules/users/entities/users.entity';
-import { CallQualityAssessmentStatistic } from '../../../modules/call-quality-assessment/entities/call-quality-assessment.-statistic.entity';
+import { CallQualityAssessmentStatistic } from '../../call-quality-assessment/entities/call-quality-assessment-statistic.entity';
 @Entity()
 export class Client implements ClientInterface {
     @PrimaryGeneratedColumn()
