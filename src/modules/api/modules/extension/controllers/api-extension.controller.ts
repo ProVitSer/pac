@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
-import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
@@ -18,9 +17,10 @@ import ExtensionForwardStatusDto from '../dto/extension-forward-status.dto';
 import ExtensionGlobalQueueStatusDto from '../dto/extension-global-queue-status.dto';
 import ExtensionQueueStatusDto from '../dto/extension-queue-status.dto';
 import ExtensionCallForwardStatusDto from '../dto/extension-call-forward-status.dto';
+import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
-@UseGuards(JwtAuthenticationGuard)
+@UseGuards(RoleGuard([Role.API]))
+@UseGuards(ApiJwtAuthenticationGuard)
 @Controller('extension')
 export class ApiExtensionController {
     constructor(private readonly apiExtensionService: ApiExtensionService) {}

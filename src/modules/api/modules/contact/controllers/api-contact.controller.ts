@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
-import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { ApiContactService } from '../services/api-contact.service';
@@ -7,9 +6,10 @@ import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import GetContactListDto from '../dto/get-contact-list.dto';
 import { ContactInfoDataReply, ContactListReply } from '@app/modules/pac-connector/modules/pac-contact/interfaces/pac-contact.interface';
 import UpdateContactDto from '../dto/update-contact.dto';
+import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
-@UseGuards(JwtAuthenticationGuard)
+@UseGuards(RoleGuard([Role.API]))
+@UseGuards(ApiJwtAuthenticationGuard)
 @Controller('contact')
 export class ApiContactController {
     constructor(private readonly apiContactService: ApiContactService) {}

@@ -115,6 +115,11 @@ const DEV_CONF: ConfigEnvironment = {
         username: process.env.REDIS_USER,
         password: process.env.REDIS_USER_PASSWORD,
     },
+    api: {
+        secret: process.env.API_TOKEN_SECRET,
+        exp: parseInt(process.env.API_TOKEN_EXPIRATION_TIME),
+        algorithm: 'HS256',
+    },
 };
 
 const PROD_CONF: ConfigEnvironment = {
@@ -222,5 +227,10 @@ const PROD_CONF: ConfigEnvironment = {
         port: '6379',
         username: process.env.REDIS_USER,
         password: process.env.REDIS_USER_PASSWORD,
+    },
+    api: {
+        secret: process.env.API_TOKEN_SECRET,
+        exp: parseInt(process.env.API_TOKEN_EXPIRATION_TIME),
+        algorithm: 'HS256',
     },
 };

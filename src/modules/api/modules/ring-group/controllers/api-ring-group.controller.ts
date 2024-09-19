@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards } from '@nestjs/common';
-import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { ApiRingGroupService } from '../services/api-ring-group.service';
@@ -7,9 +6,10 @@ import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import { RingGroupListReply } from '@app/modules/pac-connector/modules/pac-ring-group/interfaces/pac-ring-group.interface';
 import { RingGroupMembers } from '../interfaces/api-ring-group.interface';
 import ModifyRingGroupDto from '../dto/modify-ring-group.dto';
+import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
-@UseGuards(JwtAuthenticationGuard)
+@UseGuards(RoleGuard([Role.API]))
+@UseGuards(ApiJwtAuthenticationGuard)
 @Controller('ring-group')
 export class ApiRingGroupController {
     constructor(private readonly apiRingGroupService: ApiRingGroupService) {}

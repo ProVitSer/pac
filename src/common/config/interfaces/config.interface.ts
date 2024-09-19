@@ -14,8 +14,14 @@ export interface ConfigEnvironment {
     files: FileEnvironmentVariables;
     pacConnectorJwt: PacConnectorJwtEnvironmentVariables;
     redis: RedisEnvironmentVariables;
+    api: ApiEnvironmentVariables;
 }
 
+export interface ApiEnvironmentVariables {
+    secret: string;
+    exp: number;
+    algorithm: any;
+}
 export interface RedisEnvironmentVariables {
     host: string;
     port: string;

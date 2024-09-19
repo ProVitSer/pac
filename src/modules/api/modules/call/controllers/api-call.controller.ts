@@ -1,5 +1,4 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { ApiCallService } from '../services/api-call.service';
@@ -8,9 +7,9 @@ import { ActiveCalls, ActiveConnectionsInfoData, CountCalls, CallResult } from '
 import MakeCallDto from '../dto/make-call.dto';
 import HangupCallDto from '../dto/hangup-call.dto';
 import TransferCallDto from '../dto/transfer-call.dto';
-
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
-@UseGuards(JwtAuthenticationGuard)
+import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
+@UseGuards(RoleGuard([Role.API]))
+@UseGuards(ApiJwtAuthenticationGuard)
 @Controller('call')
 export class ApiCallController {
     constructor(private readonly apiCallService: ApiCallService) {}

@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards } from '@nestjs/common';
-import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { ApiQueueService } from '../services/api-queue.service';
@@ -7,9 +6,10 @@ import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import { ApiAgentsQueue, QueueList } from '../interfaces/api-queue.interface';
 import ModifyQueueDto from '../dto/modify-queue.dto';
 import { QueueModifyReply } from '@app/modules/pac-connector/modules/pac-queue/interfaces/pac-queue.interface';
+import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
-@UseGuards(JwtAuthenticationGuard)
+@UseGuards(RoleGuard([Role.API]))
+@UseGuards(ApiJwtAuthenticationGuard)
 @Controller('queue')
 export class ApiQueueController {
     constructor(private readonly apiQueueService: ApiQueueService) {}

@@ -14,10 +14,19 @@ import { PacRingGroupModule } from '../pac-connector/modules/pac-ring-group/pac-
 import { PacContactModule } from '../pac-connector/modules/pac-contact/pac-contact.module';
 import { ApiContactController } from './modules/contact/controllers/api-contact.controller';
 import { ApiContactService } from './modules/contact/services/api-contact.service';
+import { AuthModule } from '../auth/auth.module';
+import { AuthController } from './controller/api-controller';
 
 @Module({
-    imports: [PacCallModule, PacExtensionModule, PacQueueModule, PacRingGroupModule, PacContactModule],
-    controllers: [ApiCallController, ApiExtensionController, ApiQueueController, ApiRingGroupController, ApiContactController],
+    imports: [PacCallModule, PacExtensionModule, PacQueueModule, PacRingGroupModule, PacContactModule, AuthModule],
+    controllers: [
+        ApiCallController,
+        ApiExtensionController,
+        ApiQueueController,
+        ApiRingGroupController,
+        ApiContactController,
+        AuthController,
+    ],
     providers: [ApiCallService, ApiExtensionService, ApiQueueService, ApiRingGroupService, ApiContactService],
 })
 export class ApiModule {}
