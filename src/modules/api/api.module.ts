@@ -8,10 +8,13 @@ import { PacExtensionModule } from '../pac-connector/modules/pac-extension/pac-e
 import { ApiQueueService } from './modules/queue/services/api-queue.service';
 import { ApiQueueController } from './modules/queue/controllers/api-queue.controller';
 import { PacQueueModule } from '../pac-connector/modules/pac-queue/pac-queue.module';
+import { ApiRingGroupController } from './modules/ring-group/controllers/api-ring-group.controller';
+import { ApiRingGroupService } from './modules/ring-group/services/api-ring-group.service';
+import { PacRingGroupModule } from '../pac-connector/modules/pac-ring-group/pac-ring-group.module';
 
 @Module({
-    imports: [PacCallModule, PacExtensionModule, PacQueueModule],
-    controllers: [ApiCallController, ApiExtensionController, ApiQueueController],
-    providers: [ApiCallService, ApiExtensionService, ApiQueueService],
+    imports: [PacCallModule, PacExtensionModule, PacQueueModule, PacRingGroupModule],
+    controllers: [ApiCallController, ApiExtensionController, ApiQueueController, ApiRingGroupController],
+    providers: [ApiCallService, ApiExtensionService, ApiQueueService, ApiRingGroupService],
 })
 export class ApiModule {}

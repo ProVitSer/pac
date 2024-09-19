@@ -13,7 +13,7 @@ export class ApiQueueService {
     public async getQueueList(client: Client): Promise<QueueList> {
         const queueList = await this.pacQueueService.getQueueList(client);
 
-        if (!!queueList?.queues) return { queues: [] };
+        if (!queueList?.queues) return { queues: [] };
 
         return queueList;
     }
