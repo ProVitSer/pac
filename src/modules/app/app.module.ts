@@ -31,6 +31,7 @@ import { RedisModule } from '../redis/redis.module';
 import { PacSqlModule } from '../pac-connector/modules/pac-sql/pac-sql.module';
 import { PacCallModule } from '../pac-connector/modules/pac-call/pac-call.module';
 import { ApiModule } from '../api/api.module';
+import { TgModule } from '../tg/tg.module';
 
 @Module({
     imports: [
@@ -70,6 +71,7 @@ import { ApiModule } from '../api/api.module';
         PacSqlModule,
         PacCallModule,
         ApiModule,
+        TgModule,
         RouterModule.register([
             {
                 path: 'api',
@@ -167,6 +169,15 @@ import { ApiModule } from '../api/api.module';
                     {
                         path: 'pac',
                         module: ApiModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'tg',
+                        module: TgModule,
                     },
                 ],
             },
