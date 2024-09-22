@@ -1,4 +1,4 @@
-import { CallDirection, ActiveCallsStatus } from './pac-call.enum';
+import { CallDirection, ActiveCallsStatus, ConnectionCallStatus } from './pac-call.enum';
 
 export interface CallServicePbxService {
     getActiveCallsInfo(): Promise<GetActiveCallsInfoReply>;
@@ -15,7 +15,7 @@ export interface GetActiveCallsInfoReply {
 
 export interface ActiveConnectionsInfo {
     callId: number;
-    connectionsData: ConnectionsData;
+    connectionsData: ConnectionsData[];
 }
 
 export interface ConnectionsData {
@@ -30,6 +30,8 @@ export interface ConnectionsData {
     dialedNumber: string;
     internalParty: string;
     internalPartyNumber: string;
+    connectionCallStatus: ConnectionCallStatus;
+    destinationNumber: string;
 }
 
 export interface GetCountCallsReply {
@@ -52,8 +54,8 @@ export interface HangupCallRequest {
 
 export interface TrasferCallRequest {
     callId: number;
-    partyConnectionId: number;
-    destinationNumber: string;
+    dn: string;
+    numberTo: string;
 }
 
 export interface GetActiveConnectionsInfoReply {

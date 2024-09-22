@@ -24,3 +24,12 @@ export enum CallDirection {
     Outbound,
     Local,
 }
+
+export enum ConnectionCallStatus {
+    CallUndefined,
+    CallDialing,
+    CallRinging,
+    CallConnected,
+    CallHold,
+    CallHeld,
+}

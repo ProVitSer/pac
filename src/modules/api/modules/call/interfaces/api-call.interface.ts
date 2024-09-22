@@ -1,4 +1,4 @@
-import { ApiActiveCallsStatus, ApiCallDirection } from './api-call.enum';
+import { ApiActiveCallsStatus, ApiCallDirection, ApiConnectionCallStatus } from './api-call.enum';
 
 export interface ActiveCalls {
     activeCallsInfo: ActiveCallsInfo[];
@@ -22,12 +22,12 @@ export interface CallResult {
 }
 
 export interface ActiveConnectionsInfoData {
-    activeConnectionsInfo: ActiveConnectionsInfo[];
+    activeConnectionsInfo: ApiActiveConnectionsInfo[];
 }
 
-export interface ActiveConnectionsInfo {
+export interface ApiActiveConnectionsInfo {
     callId: number;
-    connectionsData: ConnectionsData;
+    connectionsData: ConnectionsData[];
 }
 
 export interface ConnectionsData {
@@ -42,4 +42,6 @@ export interface ConnectionsData {
     dialedNumber: string;
     internalParty: string;
     internalPartyNumber: string;
+    connectionCallStatus: ApiConnectionCallStatus;
+    destinationNumber: string;
 }

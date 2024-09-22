@@ -11,3 +11,12 @@ export enum ApiCallDirection {
     Outbound = 'Outbound',
     Local = 'Local',
 }
+
+export enum ApiConnectionCallStatus {
+    CallUndefined = 'CallUndefined',
+    CallDialing = 'CallDialing',
+    CallRinging = 'CallRinging',
+    CallConnected = 'CallConnected',
+    CallHold = 'CallHold',
+    CallHeld = 'CallHeld',
+}
