@@ -32,6 +32,7 @@ import { PacSqlModule } from '../pac-connector/modules/pac-sql/pac-sql.module';
 import { PacCallModule } from '../pac-connector/modules/pac-call/pac-call.module';
 import { ApiModule } from '../api/api.module';
 import { TgModule } from '../tg/tg.module';
+import { PacPbxSubscribeEventModule } from '../pac-connector/modules/pac-pbx-subscribe-event/pac-pbx-subscribe-event.module';
 
 @Module({
     imports: [
@@ -72,6 +73,7 @@ import { TgModule } from '../tg/tg.module';
         PacCallModule,
         ApiModule,
         TgModule,
+        PacPbxSubscribeEventModule,
         RouterModule.register([
             {
                 path: 'api',

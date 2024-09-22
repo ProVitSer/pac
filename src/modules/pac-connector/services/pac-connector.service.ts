@@ -38,4 +38,10 @@ export class PacConnectorService {
 
         return await this.getPacConnector(client);
     }
+
+    public async getPacConnectorByIp(ip: string): Promise<PacConnectorGrpcServer> {
+        return await this.pcgsRepository.findOne({
+            where: { ip },
+        });
+    }
 }
