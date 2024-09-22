@@ -5,7 +5,7 @@ import { ActiveCalls, ActiveConnectionsInfoData, CountCalls, CallResult } from '
 import { ActiveCallsInfoResultAdapter } from '../adapters/active-calls-info-result.adapter';
 import MakeCallDto from '../dto/make-call.dto';
 import HangupCallDto from '../dto/hangup-call.dto';
-import TransferCallDto from '../dto/transfer-call.dto';
+import { ActiveConnectionsInfoAdapter } from '../adapters/active-connections-info.adapter';
 
 @Injectable()
 export class ApiCallService {
@@ -40,10 +40,6 @@ export class ApiCallService {
 
         if (!('activeConnectionsInfo' in activeConnectionsInfo)) return { activeConnectionsInfo: [] };
 
-        return activeConnectionsInfo;
-    }
-
-    public async transferCall(client: Client, data: TransferCallDto): Promise<CallResult> {
-        return await this.pacCallService.transferCall(client, data);
+        return { activeConnectionsInfo: new ActiveConnectionsInfoAdapter(activeConnectionsInfo).activeConnectionsInfo };
     }
 }

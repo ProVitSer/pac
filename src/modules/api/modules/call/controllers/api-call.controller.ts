@@ -6,7 +6,6 @@ import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import { ActiveCalls, ActiveConnectionsInfoData, CountCalls, CallResult } from '../interfaces/api-call.interface';
 import MakeCallDto from '../dto/make-call.dto';
 import HangupCallDto from '../dto/hangup-call.dto';
-import TransferCallDto from '../dto/transfer-call.dto';
 import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
 @UseGuards(RoleGuard([Role.API]))
 @UseGuards(ApiJwtAuthenticationGuard)
@@ -37,10 +36,5 @@ export class ApiCallController {
     @Get('active-connections')
     async getActiveConnections(@Req() request: RequestWithUser): Promise<ActiveConnectionsInfoData> {
         return this.apiCallService.getActiveConnections(request.user.client);
-    }
-
-    @Post('transfer-call')
-    async transferCall(@Req() request: RequestWithUser, @Body() data: TransferCallDto): Promise<CallResult> {
-        return this.apiCallService.transferCall(request.user.client, data);
     }
 }
