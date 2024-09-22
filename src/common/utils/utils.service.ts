@@ -71,4 +71,11 @@ export class UtilsService {
         const delay = this.getRandomDelay(delays);
         return new Promise((resolve) => setTimeout(resolve, delay));
     }
+
+    static convertToIPv4(ip: string): string {
+        if (ip.startsWith('::ffff:')) {
+            return ip.replace('::ffff:', '');
+        }
+        return ip;
+    }
 }
