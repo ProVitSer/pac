@@ -33,6 +33,7 @@ import { PacCallModule } from '../pac-connector/modules/pac-call/pac-call.module
 import { ApiModule } from '../api/api.module';
 import { TgModule } from '../tg/tg.module';
 import { PacPbxSubscribeEventModule } from '../pac-connector/modules/pac-pbx-subscribe-event/pac-pbx-subscribe-event.module';
+import { SmartRoutingModule } from '../smart-routing/smart-routing.module';
 
 @Module({
     imports: [
@@ -74,6 +75,7 @@ import { PacPbxSubscribeEventModule } from '../pac-connector/modules/pac-pbx-sub
         ApiModule,
         TgModule,
         PacPbxSubscribeEventModule,
+        SmartRoutingModule,
         RouterModule.register([
             {
                 path: 'api',
@@ -180,6 +182,15 @@ import { PacPbxSubscribeEventModule } from '../pac-connector/modules/pac-pbx-sub
                     {
                         path: 'tg',
                         module: TgModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'smart-routing',
+                        module: SmartRoutingModule,
                     },
                 ],
             },
