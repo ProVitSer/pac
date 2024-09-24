@@ -1,4 +1,5 @@
 import { Users } from '@app/modules/users/entities/users.entity';
+import { Request } from 'express';
 
 export interface Health {
     version: string;
