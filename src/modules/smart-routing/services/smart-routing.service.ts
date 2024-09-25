@@ -28,14 +28,14 @@ export class SmartRoutingService {
         };
     }
 
-    public async getRoutingInfo(data: RotingInfoData): Promise<GetRotingInfoData | void> {
+    public async getRoutingInfo(data: RotingInfoData): Promise<GetRotingInfoData> {
         const smartRoutingInfo = await this.getSmartRoutingInfo(data);
 
         if (!smartRoutingInfo) return;
 
         const smartRoutingProvider = this.getRoutingProvider(smartRoutingInfo.routingService);
 
-        return await smartRoutingProvider.getRoutingInfo({ externalNumber: data.externalNumber });
+        return await smartRoutingProvider.getRoutingInfo({ client: data.client, externalNumber: data.externalNumber });
     }
 
     private getRoutingProvider(routingServiceType: RoutingServiceType): SmartRoutingProvider {

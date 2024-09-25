@@ -16,9 +16,10 @@ export interface RotingInfoData {
 }
 
 export interface GetRotingInfoData {
-    extension: string;
+    extension?: string;
 }
 
 export interface IncomingCallData {
+    client: Client;
     externalNumber: string;
 }
