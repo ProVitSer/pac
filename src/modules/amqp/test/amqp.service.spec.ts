@@ -63,6 +63,6 @@ describe('AmqpService', () => {
         // Проверяем, что методы assertExchange и assertQueue были вызваны
         expect(amqpConnection.channel.assertExchange).toHaveBeenCalledTimes(Object.keys(Exchange).length);
         expect(amqpConnection.channel.assertQueue).toHaveBeenCalledTimes(Object.keys(Queues).length);
-        expect(amqpConnection.channel.bindQueue).toHaveBeenCalledWith(Queues.events, Exchange.events, RoutingKey.mail);
+        expect(amqpConnection.channel.bindQueue).toHaveBeenCalledWith(Queues.mail, Exchange.events, RoutingKey.mail);
     });
 });

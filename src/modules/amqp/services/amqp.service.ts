@@ -27,8 +27,11 @@ export class AmqpService extends QueueSenderBaseService {
             for (const [, value] of Object.entries(Queues)) {
                 await channel.assertQueue(value, { durable: true });
             }
-            await channel.bindQueue(Queues.events, Exchange.events, RoutingKey.mail);
+            await channel.bindQueue(Queues.mail, Exchange.events, RoutingKey.sendMail);
             await channel.bindQueue(Queues.pbxCqaQueue, Exchange.events, RoutingKey.pbxCqa);
+            await channel.bindQueue(Queues.calls, Exchange.events, RoutingKey.callRinging);
+            await channel.bindQueue(Queues.calls, Exchange.events, RoutingKey.callConnected);
+            await channel.bindQueue(Queues.calls, Exchange.events, RoutingKey.callEnd);
 
             this.logger.log('AMQP initialization successfully');
         });

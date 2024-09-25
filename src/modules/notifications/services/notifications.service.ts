@@ -39,7 +39,7 @@ export class NotificationsService {
                 subject: LICENSE_CREATE,
             };
 
-            this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
         } catch (e) {
             this.logger.error(e);
         }
@@ -59,7 +59,7 @@ export class NotificationsService {
                 subject: LICENSE_EXPIRE,
             };
 
-            this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
         } catch (e) {
             this.logger.error(e);
         }
@@ -78,7 +78,7 @@ export class NotificationsService {
                 subject: LICENSE_DEACTIVATE,
             };
 
-            this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
         } catch (e) {
             this.logger.error(e);
         }
@@ -96,7 +96,7 @@ export class NotificationsService {
                 template: TemplateTypes.ChangeTrunkStatus,
                 subject: data.subject,
             };
-            this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
         } catch (e) {
             this.logger.error(e);
         }

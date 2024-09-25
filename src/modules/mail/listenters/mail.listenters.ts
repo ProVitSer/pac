@@ -10,8 +10,8 @@ export class MailListenters {
 
     @RabbitSubscribe({
         exchange: Exchange.events,
-        queue: Queues.events,
-        routingKey: RoutingKey.mail,
+        queue: Queues.mail,
+        routingKey: RoutingKey.sendMail,
     })
     public async mailTaskSubHandler(msg: SendMailData<Contexts>): Promise<void | Nack> {
         try {
