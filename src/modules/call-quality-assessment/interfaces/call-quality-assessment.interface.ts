@@ -52,6 +52,8 @@ export interface UpdateStatisticInfoData {
     uniqueid: string;
     rating?: number;
     callResult?: CallResult;
+    clientNumber?: string;
+    clientName?: string;
     externalCallId?: string;
     managerData?: string;
     managerNumber?: string;
@@ -60,4 +62,10 @@ export interface UpdateStatisticInfoData {
 export interface EndCallSubHandlerData {
     cqac: CallQualityAssessmentConfig;
     event: ChannelHangupRequest;
+}
+
+export interface ExternalCdrData {
+    clientNumber?: string;
+    externalCallId?: string;
+    managerNumber?: string;
 }

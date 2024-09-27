@@ -21,7 +21,7 @@ export class CallQualityAssessmentAddCallService {
         const client = await this.clientService.getClientById(data.cqac.clientId);
 
         const externalCdr = await this.pacSqlService.sqlRequest(client, {
-            query: `${cqaSqlCdr} ai.dn = '${data.event.channel.caller.number}' AND si.caller_number = '${data.event.channel.caller.name}' AND ai.caller_number = '${data.event.channel.dialplan.exten}' ORDER BY s.call_id DESC LIMIT 1;`,
+            query: `${cqaSqlCdr} ai.dn = '${data.event.channel.caller.number}' AND ai.caller_number = '${data.event.channel.dialplan.exten}' ORDER BY s.call_id DESC LIMIT 1;`,
         });
 
         if (!externalCdr.error) {
@@ -32,6 +32,7 @@ export class CallQualityAssessmentAddCallService {
             await this.cqas.updateStatistic({
                 uniqueid: data.event.channel.id,
                 externalCallId: externalCdrData[0][0],
+                clientNumber: externalCdrData[0][2],
                 managerData: `${extensionInfo.firstName || ''} ${extensionInfo.lastName || ''}`,
                 managerNumber: extensionInfo.extension,
             });
