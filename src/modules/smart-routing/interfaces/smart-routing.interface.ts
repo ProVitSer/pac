@@ -23,3 +23,8 @@ export interface IncomingCallData {
     client: Client;
     externalNumber: string;
 }
+
+export interface PbxExtensionList {
+    name: string;
+    number: string;
+}

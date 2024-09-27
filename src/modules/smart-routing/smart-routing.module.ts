@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SmartRoutingService } from './services/smart-routing.service';
+import { SmartRoutingProvidersService } from './services/smart-routing-providers.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SmartRouting } from './entities/smart-routing.entity';
 import { SmartRoutingController } from './controllers/smart-routing.controller';
@@ -8,11 +8,19 @@ import { CustomSmartRoutingProvider } from './providers/custom-smart-routing.pro
 import { PhonebookSmartRoutingProvider } from './providers/phonebook-smart-routing.provider';
 import { PacContactModule } from '../pac-connector/modules/pac-contact/pac-contact.module';
 import { PacSqlModule } from '../pac-connector/modules/pac-sql/pac-sql.module';
+import { PacIvrModule } from '../pac-connector/modules/pac-ivr/pac-ivr.module';
+import { SmartRoutingService } from './services/smart-routing.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([SmartRouting]), PacContactModule, PacSqlModule],
+    imports: [TypeOrmModule.forFeature([SmartRouting]), PacContactModule, PacSqlModule, PacIvrModule],
     controllers: [SmartRoutingController],
-    providers: [SmartRoutingService, PhonebookSmartRoutingProvider, CustomSmartRoutingProvider, BitrixSmartRoutingProvider],
-    exports: [SmartRoutingService],
+    providers: [
+        SmartRoutingProvidersService,
+        PhonebookSmartRoutingProvider,
+        CustomSmartRoutingProvider,
+        BitrixSmartRoutingProvider,
+        SmartRoutingService,
+    ],
+    exports: [SmartRoutingProvidersService],
 })
 export class SmartRoutingModule {}

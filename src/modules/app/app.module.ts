@@ -34,6 +34,7 @@ import { ApiModule } from '../api/api.module';
 import { TgModule } from '../tg/tg.module';
 import { PacPbxSubscribeEventModule } from '../pac-connector/modules/pac-pbx-subscribe-event/pac-pbx-subscribe-event.module';
 import { SmartRoutingModule } from '../smart-routing/smart-routing.module';
+import { PacIvrModule } from '../pac-connector/modules/pac-ivr/pac-ivr.module';
 
 @Module({
     imports: [
@@ -72,6 +73,7 @@ import { SmartRoutingModule } from '../smart-routing/smart-routing.module';
         RedisModule,
         PacSqlModule,
         PacCallModule,
+        PacIvrModule,
         ApiModule,
         TgModule,
         PacPbxSubscribeEventModule,

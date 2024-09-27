@@ -6,7 +6,10 @@ export class SmartRouting {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: false, name: 'pbx_extension' })
+    @Column({ nullable: true, name: 'name' })
+    name: string;
+
+    @Column({ nullable: false, name: 'pbx_extension', unique: true })
     pbxExtension: string;
 
     @Column({
