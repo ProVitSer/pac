@@ -7,6 +7,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { CallQualityAssessmentConfigService } from './call-quality-assessment-config.service';
 import { AddInitStaticInfo, UpdateStatisticInfoData } from '../interfaces/call-quality-assessment.interface';
 import { CallQualityAssessmentConfig } from '../entities/call-quality-assessment.-config.entity';
+import { Client } from '@app/modules/client/entities/client.entity';
 
 @Injectable()
 export class CallQualityAssessmentStatisticService {
@@ -29,9 +30,7 @@ export class CallQualityAssessmentStatisticService {
 
             cqas.uniqueid = data.uniqueid;
 
-            cqas.clientNumber = data.clientNumber;
-
-            cqas.client = voip.client;
+            cqas.clientId = voip.client.clientId;
 
             cqas.callQualityAssessmentConfig = cqac;
 
@@ -43,7 +42,7 @@ export class CallQualityAssessmentStatisticService {
         }
     }
 
-    public async updateStatistic(data: UpdateStatisticInfoData) {
+    public async updateStatistic(data: UpdateStatisticInfoData): Promise<void> {
         const { uniqueid, ...statistcUpdateData } = data;
 
         await this.cqas.update({ uniqueid }, { ...statistcUpdateData });
@@ -63,5 +62,13 @@ export class CallQualityAssessmentStatisticService {
         if (!cqac) throw new Error('Cqac not found');
 
         return cqac;
+    }
+
+    public async getCqaStatistic(client: Client): Promise<CallQualityAssessmentStatistic[]> {
+        const cqas = await this.cqas.find({
+            where: { clientId: client.clientId },
+        });
+
+        return cqas;
     }
 }
