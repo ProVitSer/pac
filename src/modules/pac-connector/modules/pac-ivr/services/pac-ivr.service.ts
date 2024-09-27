@@ -12,7 +12,7 @@ import { IvrListReply } from '../interfaces/pac-ivr.interface';
 export class PacIvrService {
     constructor(private readonly pgcs: PacGrpcConnectorService) {}
 
-    public async getRingGroupList(client: Client): Promise<IvrListReply> {
+    public async getIvrList(client: Client): Promise<IvrListReply> {
         // eslint-disable-next-line @typescript-eslint/ban-types
         return await this.grpcSend<{}, IvrListReply>(client, new Empty(), IvrServiceMethods.GetIvrList);
     }

@@ -5,7 +5,7 @@ import { PbxEvenetActiveConnectionsInfo, PbxEventActiveConnectionsInfo } from '.
 import { PbxEventActiveConnectionsInfoAdapter } from '../adapters/pbx-event-active-connections-info.adapter';
 import { ApiConnectionCallStatus } from '@app/modules/api/modules/call/interfaces/api-call.enum';
 import { RequestWithPacInfo } from '@app/modules/pac-connector/interfaces/pac-connector.interface';
-import { SmartRoutingService } from '@app/modules/smart-routing/services/smart-routing.service';
+import { SmartRoutingProvidersService } from '@app/modules/smart-routing/services/smart-routing-providers.service';
 import { AmqpService } from '@app/modules/amqp/services/amqp.service';
 import { Exchange, RoutingKey } from '@app/common/constants/amqp';
 import { ApiActiveConnectionsInfo, ConnectionsData } from '@app/modules/api/modules/call/interfaces/api-call.interface';
@@ -18,7 +18,7 @@ export class PacPbxSubscribeEventNotificationService {
     constructor(
         private readonly pacCallService: PacCallService,
         private readonly amqpService: AmqpService,
-        private readonly smartRoutingService: SmartRoutingService,
+        private readonly smartRoutingProvidersService: SmartRoutingProvidersService,
     ) {}
 
     public async insertEventProcess(request: RequestWithPacInfo, data: PbxEvenetActiveConnectionsInfo): Promise<void> {
@@ -73,7 +73,7 @@ export class PacPbxSubscribeEventNotificationService {
     }
 
     private async getSmartRouting(request: RequestWithPacInfo, connection: ConnectionsData): Promise<GetRotingInfoData> {
-        return this.smartRoutingService.getRoutingInfo({
+        return this.smartRoutingProvidersService.getRoutingInfo({
             client: request.client,
             pbxExtension: connection.destinationNumber,
             externalNumber: connection.externalParty,

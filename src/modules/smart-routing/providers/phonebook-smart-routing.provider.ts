@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { GetRotingInfoData, IncomingCallData, SmartRoutingProvider } from '../interfaces/smart-routing.interface';
-import { PacContactService } from '@app/modules/pac-connector/modules/pac-contact/services/pac-contact.service';
 import { PacSqlService } from '@app/modules/pac-connector/modules/pac-sql/services/pac-sql.service';
 import { SqlResponse } from '@app/modules/pac-connector/modules/pac-sql/interfaces/pac-sql.interface';
 import { phoneBookSql } from '@app/common/constants/sql';
 
 @Injectable()
 export class PhonebookSmartRoutingProvider implements SmartRoutingProvider {
-    constructor(
-        private readonly pacContactService: PacContactService,
-        private readonly pacSqlService: PacSqlService,
-    ) {}
+    constructor(private readonly pacSqlService: PacSqlService) {}
 
     public async getRoutingInfo(data: IncomingCallData): Promise<GetRotingInfoData> {
         const searchResult = await this.searchPhoneNumber(data);
