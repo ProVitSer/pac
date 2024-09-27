@@ -1,6 +1,7 @@
 import { CallServiceName, CallServiceMethods } from '../modules/pac-call/interfaces/pac-call.enum';
 import { ContactServiceName, ContactServiceMethods } from '../modules/pac-contact/interfaces/pac-contact.enum';
 import { ExtensionServiceName, ExtensionServiceMethods } from '../modules/pac-extension/interfaces/pac-extension.enum';
+import { IvrServiceMethods, IvrServiceName } from '../modules/pac-ivr/interfaces/pac-ivr.enum';
 import {
     PbxSubscribeEventServiceName,
     PbxSubscribeEventServiceMethods,
@@ -16,7 +17,8 @@ export type GrpcServiceName =
     | QueueServiceName
     | RingGroupServiceName
     | ContactServiceName
-    | PbxSubscribeEventServiceName;
+    | PbxSubscribeEventServiceName
+    | IvrServiceName;
 
 export type GrpcServiceMethods =
     | SqlServiceMethods
@@ -25,4 +27,5 @@ export type GrpcServiceMethods =
     | QueueServiceMethods
     | RingGroupServiceMethods
     | ContactServiceMethods
-    | PbxSubscribeEventServiceMethods;
+    | PbxSubscribeEventServiceMethods
+    | IvrServiceMethods;
