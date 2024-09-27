@@ -1,5 +1,4 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Client } from '../../client/entities/client.entity';
 import { CallResult } from '../interfaces/call-quality-assessment.enum';
 import { CallQualityAssessmentConfig } from './call-quality-assessment.-config.entity';
 
@@ -11,7 +10,7 @@ export class CallQualityAssessmentStatistic {
     @Column({ nullable: false, default: 0 })
     rating: number;
 
-    @Column({ nullable: false, name: 'client_number' })
+    @Column({ nullable: true, name: 'client_number' })
     clientNumber: string;
 
     @Column({ nullable: true, name: 'number_region' })
@@ -36,9 +35,8 @@ export class CallQualityAssessmentStatistic {
     @JoinColumn({ name: 'cqac_id' })
     callQualityAssessmentConfig: CallQualityAssessmentConfig;
 
-    @ManyToOne(() => Client, (client) => client.callQualityAssessmentStatistic)
-    @JoinColumn({ name: 'client_id' })
-    client: Client;
+    @Column({ name: 'client_id' })
+    clientId: number;
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
