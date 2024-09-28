@@ -36,6 +36,8 @@ import { PacPbxSubscribeEventModule } from '../pac-connector/modules/pac-pbx-sub
 import { SmartRoutingModule } from '../smart-routing/smart-routing.module';
 import { PacIvrModule } from '../pac-connector/modules/pac-ivr/pac-ivr.module';
 import { DadataApiModule } from '../dadata-api/dadata-api.module';
+import { ClientInfoModule } from '../client-info/client-info.module';
+import { CrmModule } from '../crm/crm.module';
 
 @Module({
     imports: [
@@ -80,6 +82,9 @@ import { DadataApiModule } from '../dadata-api/dadata-api.module';
         PacPbxSubscribeEventModule,
         SmartRoutingModule,
         DadataApiModule,
+        ClientInfoModule,
+        CrmModule,
+
         RouterModule.register([
             {
                 path: 'api',
@@ -195,6 +200,15 @@ import { DadataApiModule } from '../dadata-api/dadata-api.module';
                     {
                         path: 'smart-routing',
                         module: SmartRoutingModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'crm',
+                        module: CrmModule,
                     },
                 ],
             },

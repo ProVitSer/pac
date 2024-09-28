@@ -19,6 +19,7 @@ import { CqaEndCallListenters } from './listenters/cqa-end-call.listenters';
 import { CallQualityAssessmentAddCallService } from './services/call-quality-assessment-add-call.service';
 import { PacSqlModule } from '../pac-connector/modules/pac-sql/pac-sql.module';
 import { ApiModule } from '../api/api.module';
+import { DadataApiModule } from '../dadata-api/dadata-api.module';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { ApiModule } from '../api/api.module';
         AmqpModule,
         PacSqlModule,
         ApiModule,
+        DadataApiModule,
     ],
     providers: [
         CallQualityAssessmentStatisticService,

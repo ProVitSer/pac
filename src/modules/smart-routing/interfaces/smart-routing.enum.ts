@@ -1,5 +1,8 @@
 export enum RoutingServiceType {
     phonebook = 'phonebook',
-    bitrix = 'bitrix',
+    bitrix = 'crm-bitrix',
+    alfacrm = 'crm-alfa',
+    amocrm = 'crm-amocrm',
+    customcrm = 'crm-custom',
     custom = 'custom',
 }

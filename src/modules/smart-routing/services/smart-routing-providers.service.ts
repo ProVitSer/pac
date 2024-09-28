@@ -25,6 +25,9 @@ export class SmartRoutingProvidersService {
             [RoutingServiceType.bitrix]: this.bitrix,
             [RoutingServiceType.custom]: this.custom,
             [RoutingServiceType.phonebook]: this.phonebook,
+            [RoutingServiceType.amocrm]: this.custom,
+            [RoutingServiceType.alfacrm]: this.custom,
+            [RoutingServiceType.customcrm]: this.custom,
         };
     }
 
