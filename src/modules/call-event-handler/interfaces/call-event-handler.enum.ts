@@ -1,10 +1,13 @@
-export enum CallResult {
-    successful = 'successful',
-    unsuccessful = 'unsuccessful',
+export enum CallDirection {
+    incoming = 'incoming',
+    outgoung = 'outgoung',
+    local = 'local',
     unknown = 'unknown',
 }
 
-export enum CqaFileType {
-    cqaMain = 'cqa-main',
-    cqaGoodbye = 'cqa-goodbye',
+export enum CallProcess {
+    callInProcess = 'callInProcess',
+    callConnected = 'callConnected',
+    callEnd = 'callEnd',
+    callError = 'callError',
 }

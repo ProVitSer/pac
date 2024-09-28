@@ -6,6 +6,10 @@ import { CallEventHandlerService } from './services/call-event-handler.service';
 import { CallProcessor } from './services/call-processor.service';
 import { СallEventHandlerListenters } from './listenters/call-event-handler.listenters';
 import configuration from '@app/common/config/config.provider';
+import { PacSqlModule } from '../pac-connector/modules/pac-sql/pac-sql.module';
+import { AmqpModule } from '../amqp/amqp.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { CallEventHandler } from './entities/call-event-handler.entity';
 
 @Module({
     imports: [
@@ -17,6 +21,9 @@ import configuration from '@app/common/config/config.provider';
             inject: [ConfigService],
         }),
         BullModule.registerQueue({ name: configuration().bull.queueName }),
+        PacSqlModule,
+        AmqpModule,
+        TypeOrmModule.forFeature([CallEventHandler]),
     ],
     providers: [CallEventHandlerService, CallProcessor, СallEventHandlerListenters],
 })

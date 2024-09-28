@@ -28,7 +28,8 @@ export class PacPbxSubscribeEventNotificationService {
             this.amqpService.sendMessage(Exchange.events, RoutingKey.callRinging, {
                 client: request.client,
                 connector: request.connector,
-                callId: a.callId,
+                callHistoryId: a.callId,
+                activeConnectionsInfo,
             });
         });
     }
@@ -36,6 +37,14 @@ export class PacPbxSubscribeEventNotificationService {
     public async updateEventProcess(request: RequestWithPacInfo, data: PbxEvenetActiveConnectionsInfo): Promise<void> {
         const activeConnectionsInfo = this.getActiveConnectionsInfo(data);
 
+        activeConnectionsInfo.map((a: ApiActiveConnectionsInfo) => {
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.callRinging, {
+                client: request.client,
+                connector: request.connector,
+                callHistoryId: a.callId,
+                activeConnectionsInfo,
+            });
+        });
         const filteredConnections = this.filterConnections(activeConnectionsInfo);
 
         if (filteredConnections.length) {
