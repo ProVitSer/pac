@@ -5,7 +5,7 @@ import { PacSqlService } from '@app/modules/pac-connector/modules/pac-sql/servic
 import { CallQualityAssessmentStatisticService } from './call-quality-assessment-statistic.service';
 import { ClientService } from '@app/modules/client/services/client.service';
 import { ApiExtensionService } from '@app/modules/api/modules/extension/services/api-extension.service';
-import { cqaSqlCdr } from '@app/common/constants/sql';
+import { CQS_CDR_SQL } from '@app/common/constants/sql';
 import { DadataApiService } from '@app/modules/dadata-api/services/dadata-api.service';
 import { DaDataPhoneObj } from '@app/modules/dadata-api/interfaces/dadata-api.interface';
 import { DadataTypes, SuggestionsStatus } from '@app/modules/dadata-api/interfaces/dadata-api.enum';
@@ -47,7 +47,7 @@ export class CallQualityAssessmentAddCallService {
         const client = await this.clientService.getClientById(data.cqac.clientId);
 
         const externalCdr = await this.pacSqlService.sqlRequest(client, {
-            query: `${cqaSqlCdr} ai.dn = '${data.event.channel.caller.number}' AND ai.caller_number = '${data.event.channel.dialplan.exten}' ORDER BY s.call_id DESC LIMIT 1;`,
+            query: `${CQS_CDR_SQL} ai.dn = '${data.event.channel.caller.number}' AND ai.caller_number = '${data.event.channel.dialplan.exten}' ORDER BY s.call_id DESC LIMIT 1;`,
         });
 
         if (!externalCdr.error) {
