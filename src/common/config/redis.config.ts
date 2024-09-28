@@ -2,7 +2,7 @@ import { RedisModuleOptions } from '@nestjs-modules/ioredis';
 import { ConfigService } from '@nestjs/config';
 import { RedisEnvironmentVariables } from './interfaces/config.interface';
 
-export function redisonfig(config: ConfigService): RedisModuleOptions {
+export function redisConfig(config: ConfigService): RedisModuleOptions {
     const redis = config.get('redis') as RedisEnvironmentVariables;
     return {
         type: 'single',

@@ -124,6 +124,12 @@ const DEV_CONF: ConfigEnvironment = {
         secret: process.env.DADATA_API_SECRET,
         apiKey: process.env.DADATA_API_KEY,
     },
+    bull: {
+        queueName: process.env.BULL_QUEUE,
+        username: process.env.BULL_REDIS_USERNAME,
+        password: process.env.BULL_REDIS_PASSWORD,
+        db: parseInt(process.env.BULL_DB),
+    },
 };
 
 const PROD_CONF: ConfigEnvironment = {
@@ -240,5 +246,11 @@ const PROD_CONF: ConfigEnvironment = {
     dadata: {
         secret: process.env.DADATA_API_SECRET,
         apiKey: process.env.DADATA_API_KEY,
+    },
+    bull: {
+        queueName: process.env.BULL_QUEUE,
+        username: process.env.BULL_REDIS_USERNAME,
+        password: process.env.BULL_REDIS_PASSWORD,
+        db: parseInt(process.env.BULL_DB),
     },
 };

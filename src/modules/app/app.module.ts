@@ -38,6 +38,7 @@ import { PacIvrModule } from '../pac-connector/modules/pac-ivr/pac-ivr.module';
 import { DadataApiModule } from '../dadata-api/dadata-api.module';
 import { ClientInfoModule } from '../client-info/client-info.module';
 import { CrmModule } from '../crm/crm.module';
+import { CallEventHandlerModule } from '../call-event-handler/call-event-handler.module';
 
 @Module({
     imports: [
@@ -84,7 +85,7 @@ import { CrmModule } from '../crm/crm.module';
         DadataApiModule,
         ClientInfoModule,
         CrmModule,
-
+        CallEventHandlerModule,
         RouterModule.register([
             {
                 path: 'api',

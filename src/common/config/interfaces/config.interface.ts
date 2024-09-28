@@ -16,8 +16,15 @@ export interface ConfigEnvironment {
     redis: RedisEnvironmentVariables;
     api: ApiEnvironmentVariables;
     dadata: DadataEnvironmentVariables;
+    bull: BullEnvironmentVariables;
 }
 
+export interface BullEnvironmentVariables {
+    queueName: string;
+    username: string;
+    password: string;
+    db: number;
+}
 export interface DadataEnvironmentVariables {
     secret: string;
     apiKey: string;
