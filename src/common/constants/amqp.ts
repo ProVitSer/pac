@@ -2,8 +2,8 @@ export enum RoutingKey {
     sendMail = 'mail.sendMail',
     pbxCqa = 'pbx.cqa',
     callRinging = 'call.ringing',
-    callConnected = 'pbx.connected',
-    callEnd = 'pbx.end',
+    callConnected = 'call.connected',
+    callEnd = 'call.end',
 }
 
 export enum Exchange {
