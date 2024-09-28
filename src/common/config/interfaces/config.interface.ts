@@ -15,6 +15,12 @@ export interface ConfigEnvironment {
     pacConnectorJwt: PacConnectorJwtEnvironmentVariables;
     redis: RedisEnvironmentVariables;
     api: ApiEnvironmentVariables;
+    dadata: DadataEnvironmentVariables;
+}
+
+export interface DadataEnvironmentVariables {
+    secret: string;
+    apiKey: string;
 }
 
 export interface ApiEnvironmentVariables {

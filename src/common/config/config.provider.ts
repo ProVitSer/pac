@@ -120,6 +120,10 @@ const DEV_CONF: ConfigEnvironment = {
         exp: parseInt(process.env.API_TOKEN_EXPIRATION_TIME),
         algorithm: 'HS256',
     },
+    dadata: {
+        secret: process.env.DADATA_API_SECRET,
+        apiKey: process.env.DADATA_API_KEY,
+    },
 };
 
 const PROD_CONF: ConfigEnvironment = {
@@ -232,5 +236,9 @@ const PROD_CONF: ConfigEnvironment = {
         secret: process.env.API_TOKEN_SECRET,
         exp: parseInt(process.env.API_TOKEN_EXPIRATION_TIME),
         algorithm: 'HS256',
+    },
+    dadata: {
+        secret: process.env.DADATA_API_SECRET,
+        apiKey: process.env.DADATA_API_KEY,
     },
 };

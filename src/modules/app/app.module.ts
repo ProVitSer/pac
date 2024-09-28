@@ -35,6 +35,7 @@ import { TgModule } from '../tg/tg.module';
 import { PacPbxSubscribeEventModule } from '../pac-connector/modules/pac-pbx-subscribe-event/pac-pbx-subscribe-event.module';
 import { SmartRoutingModule } from '../smart-routing/smart-routing.module';
 import { PacIvrModule } from '../pac-connector/modules/pac-ivr/pac-ivr.module';
+import { DadataApiModule } from '../dadata-api/dadata-api.module';
 
 @Module({
     imports: [
@@ -78,6 +79,7 @@ import { PacIvrModule } from '../pac-connector/modules/pac-ivr/pac-ivr.module';
         TgModule,
         PacPbxSubscribeEventModule,
         SmartRoutingModule,
+        DadataApiModule,
         RouterModule.register([
             {
                 path: 'api',
