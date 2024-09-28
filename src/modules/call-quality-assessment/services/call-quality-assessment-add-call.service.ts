@@ -28,6 +28,9 @@ export class CallQualityAssessmentAddCallService {
 
         const phosneData = await this.getPhoneData(externalCdrData.clientNumber);
 
+        // TODO
+        // Добавить сервис по получению информации по компании и клиенту из внешних источников
+
         await this.cqas.updateStatistic({
             uniqueid: data.event.channel.id,
             externalCallId: externalCdrData.externalCallId,
