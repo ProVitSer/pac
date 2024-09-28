@@ -24,13 +24,10 @@ export class DadataApiService {
 
     private async send<T>(requestData: DadataRequestQueryParams): Promise<T> {
         const url = this.getApiUrl(requestData);
-        console.log(url);
 
         const response = await firstValueFrom(
             this.dadataAPI.post(`${url}${requestData.type}`, this.formarQuery(url, requestData), { baseURL: url }).pipe(
                 catchError((e: AxiosError) => {
-                    console.log(e);
-
                     throw e;
                 }),
             ),

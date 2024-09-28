@@ -57,6 +57,10 @@ export interface UpdateStatisticInfoData {
     externalCallId?: string;
     managerData?: string;
     managerNumber?: string;
+    country?: string;
+    region?: string;
+    city?: string;
+    clientCompany?: string;
 }
 
 export interface EndCallSubHandlerData {
@@ -68,4 +72,5 @@ export interface ExternalCdrData {
     clientNumber?: string;
     externalCallId?: string;
     managerNumber?: string;
+    managerData?: string;
 }

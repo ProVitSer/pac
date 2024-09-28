@@ -10,17 +10,29 @@ export class CallQualityAssessmentStatistic {
     @Column({ nullable: false, default: 0 })
     rating: number;
 
-    @Column({ nullable: true, name: 'client_number' })
-    clientNumber: string;
+    @Column({ nullable: true, name: 'client_company' })
+    clientCompany?: string;
 
-    @Column({ nullable: true, name: 'number_region' })
-    numberRegion: string;
+    @Column({ nullable: true, name: 'client_name' })
+    clientName?: string;
+
+    @Column({ nullable: true, name: 'client_number' })
+    clientNumber?: string;
+
+    @Column({ nullable: true, name: 'country' })
+    country?: string;
+
+    @Column({ nullable: true, name: 'region' })
+    region?: string;
+
+    @Column({ nullable: true, name: 'city' })
+    city?: string;
 
     @Column({ nullable: true, name: 'manager_data' })
-    managerData: string;
+    managerData?: string;
 
     @Column({ nullable: true, name: 'manager_number' })
-    managerNumber: string;
+    managerNumber?: string;
 
     @Column({ nullable: false, unique: true })
     uniqueid: string;
