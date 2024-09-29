@@ -17,8 +17,13 @@ export interface ConfigEnvironment {
     api: ApiEnvironmentVariables;
     dadata: DadataEnvironmentVariables;
     bull: BullEnvironmentVariables;
+    pbx: PbxEnvironmentVariables;
 }
 
+export interface PbxEnvironmentVariables {
+    extensionLength: number;
+    fqdn: string;
+}
 export interface BullEnvironmentVariables {
     queueName: string;
     username: string;

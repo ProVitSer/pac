@@ -130,6 +130,10 @@ const DEV_CONF: ConfigEnvironment = {
         password: process.env.BULL_REDIS_PASSWORD,
         db: parseInt(process.env.BULL_DB),
     },
+    pbx: {
+        extensionLength: parseInt(process.env.PBX_EXTENSION_LENGTH),
+        fqdn: process.env.PBX_FQDN,
+    },
 };
 
 const PROD_CONF: ConfigEnvironment = {
@@ -252,5 +256,9 @@ const PROD_CONF: ConfigEnvironment = {
         username: process.env.BULL_REDIS_USERNAME,
         password: process.env.BULL_REDIS_PASSWORD,
         db: parseInt(process.env.BULL_DB),
+    },
+    pbx: {
+        extensionLength: parseInt(process.env.PBX_EXTENSION_LENGTH),
+        fqdn: process.env.PBX_FQDN,
     },
 };
