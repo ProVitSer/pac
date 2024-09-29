@@ -133,6 +133,7 @@ const DEV_CONF: ConfigEnvironment = {
     pbx: {
         extensionLength: parseInt(process.env.PBX_EXTENSION_LENGTH),
         fqdn: process.env.PBX_FQDN,
+        recordingPath: process.env.PBX_RECORDING_PATH,
     },
 };
 
@@ -260,5 +261,6 @@ const PROD_CONF: ConfigEnvironment = {
     pbx: {
         extensionLength: parseInt(process.env.PBX_EXTENSION_LENGTH),
         fqdn: process.env.PBX_FQDN,
+        recordingPath: process.env.PBX_RECORDING_PATH,
     },
 };

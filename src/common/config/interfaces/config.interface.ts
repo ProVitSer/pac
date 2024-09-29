@@ -23,6 +23,7 @@ export interface ConfigEnvironment {
 export interface PbxEnvironmentVariables {
     extensionLength: number;
     fqdn: string;
+    recordingPath: string;
 }
 export interface BullEnvironmentVariables {
     queueName: string;
