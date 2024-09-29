@@ -14,7 +14,7 @@ export class TgConfigController {
 
     @Get()
     async getTgConfigs(@Req() request: RequestWithUser): Promise<TgConfig[]> {
-        return this.tgConfigService.getTgConfigs(request.user.client);
+        return this.tgConfigService.getTgConfigs(request.user.client.clientId);
     }
 
     @Post()

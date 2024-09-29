@@ -14,9 +14,9 @@ export class TgConfigService {
         private tgConfigRepository: Repository<TgConfig>,
     ) {}
 
-    public async getTgConfigs(client: Client): Promise<TgConfig[]> {
+    public async getTgConfigs(clientId: number): Promise<TgConfig[]> {
         return this.tgConfigRepository.find({
-            where: { clientId: client.id },
+            where: { clientId: clientId },
         });
     }
 
@@ -28,7 +28,7 @@ export class TgConfigService {
         const config = this.tgConfigRepository.create();
         config.token = data.token;
         config.chatId = data.chatId;
-        config.clientId = client.id;
+        config.clientId = client.clientId;
         await this.tgConfigRepository.save(config);
     }
 
@@ -39,7 +39,7 @@ export class TgConfigService {
     public async updateTgConfig(client: Client, data: UpdateTgConfig): Promise<TgConfig> {
         const { id, ...updateData } = data;
 
-        const tgGonfigs = await this.getTgConfigs(client);
+        const tgGonfigs = await this.getTgConfigs(client.clientId);
 
         if (tgGonfigs.some((t: TgConfig) => t.id == id)) {
             await this.tgConfigRepository.update({ id }, { ...updateData });

@@ -18,7 +18,7 @@ export class TgUsersService {
     ) {}
 
     public async getTgUsers(client: Client): Promise<TgUsers[]> {
-        const tgConfig = await this.tgConfigService.getTgConfigs(client);
+        const tgConfig = await this.tgConfigService.getTgConfigs(client.clientId);
 
         const ids = tgConfig.map((t: TgConfig) => t.id);
 
@@ -30,7 +30,7 @@ export class TgUsersService {
     }
 
     public async createTgUser(client: Client, data: CreatTgUser): Promise<void> {
-        const tgConfig = await this.tgConfigService.getTgConfigs(client);
+        const tgConfig = await this.tgConfigService.getTgConfigs(client.clientId);
 
         const config = this.tgUsersRepository.create();
         config.userName = data.userName;

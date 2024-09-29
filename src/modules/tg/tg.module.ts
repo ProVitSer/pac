@@ -8,10 +8,11 @@ import { TgUsers } from './entities/tg-users.entity';
 import { BotManagerService } from './services/bot-manager.service';
 import { TgConfigService } from './services/tg-config.service';
 import { TgUsersService } from './services/tg-users.service';
+import { TgMissedCallListenters } from './listenters/tg-missed-call.listenters';
 
 @Module({
     imports: [TypeOrmModule.forFeature([TgConfig, TgUsers])],
-    providers: [TgService, BotManagerService, TgConfigService, TgUsersService],
+    providers: [TgService, BotManagerService, TgConfigService, TgUsersService, TgMissedCallListenters],
     controllers: [TgConfigController, TgUsersController],
     exports: [TgService],
 })

@@ -1,7 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { BotManagerService } from './bot-manager.service';
 import { TgConfigService } from './tg-config.service';
-import { Client } from '@app/modules/client/entities/client.entity';
 import { Markup } from 'telegraf';
 import { TgUsersService } from './tg-users.service';
 
@@ -25,8 +24,8 @@ export class TgService implements OnModuleInit {
         }
     }
 
-    public async sendMissedCallMessage(client: Client, number: string) {
-        const clientTgConfig = await this.tgConfigService.getTgConfigs(client);
+    public async sendMissedCallMessage(clientId: number, number: string) {
+        const clientTgConfig = await this.tgConfigService.getTgConfigs(clientId);
 
         for (const tg of clientTgConfig) {
             const message = `У вас пропущенный звонок от абонента ${number}. Для того чтобы перезвонить, нажмите кнопку ниже.`;
@@ -53,7 +52,7 @@ export class TgService implements OnModuleInit {
                 ctx.deleteMessage(ctx.update.callback_query.message.message_id);
 
                 await ctx.reply(
-                    `Вызов подхватил пользователь @${ctx.update.callback_query.from.username}, сейчас пойдет звонок клиенту на номер ${ctx.match[0].match(/-(\d+)$/)[1]}! Начнем звонить...`,
+                    `Вызов подхватил пользователь @${ctx.update.callback_query.from.username}, сейчас пойдет звонок клиенту на номер ${ctx.match[0].split('-').pop()}`,
                 );
             }
         });
