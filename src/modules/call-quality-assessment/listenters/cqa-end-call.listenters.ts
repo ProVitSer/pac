@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Exchange, Queues, RoutingKey } from '../../../common/constants/amqp';
+import { Exchange, Queues } from '../../../common/constants/amqp';
 import { Nack, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { CallQualityAssessmentAddCallService } from '../services/call-quality-assessment-add-call.service';
 import { EndCallSubHandlerData } from '../interfaces/call-quality-assessment.interface';
@@ -10,7 +10,6 @@ export class CqaEndCallListenters {
     @RabbitSubscribe({
         exchange: Exchange.events,
         queue: Queues.pbxCqaQueue,
-        routingKey: RoutingKey.pbxCqa,
     })
     public async endCallSubHandler(msg: EndCallSubHandlerData): Promise<void | Nack> {
         try {

@@ -29,9 +29,13 @@ export class AmqpService extends QueueSenderBaseService {
             }
             await channel.bindQueue(Queues.mail, Exchange.events, RoutingKey.sendMail);
             await channel.bindQueue(Queues.pbxCqaQueue, Exchange.events, RoutingKey.pbxCqa);
-            await channel.bindQueue(Queues.calls, Exchange.events, RoutingKey.callRinging);
-            await channel.bindQueue(Queues.calls, Exchange.events, RoutingKey.callConnected);
-            await channel.bindQueue(Queues.calls, Exchange.events, RoutingKey.callEnd);
+            await channel.bindQueue(Queues.callRinging, Exchange.events, RoutingKey.callRinging);
+            await channel.bindQueue(Queues.callConnected, Exchange.events, RoutingKey.callConnected);
+            await channel.bindQueue(Queues.callEnd, Exchange.events, RoutingKey.callEnd);
+            await channel.bindQueue(Queues.callMissed, Exchange.events, RoutingKey.callMissed);
+            await channel.bindQueue(Queues.callMissedCrm, Exchange.events, RoutingKey.callMissedCrm);
+            await channel.bindQueue(Queues.callMissedSms, Exchange.events, RoutingKey.callMissedSms);
+            await channel.bindQueue(Queues.callMissedTg, Exchange.events, RoutingKey.callMissedTg);
 
             this.logger.log('AMQP initialization successfully');
         });
