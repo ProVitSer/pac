@@ -8,7 +8,9 @@ import { AmqpService } from '@app/modules/amqp/services/amqp.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CallEventHandler } from '../entities/call-event-handler.entity';
-import { END_CALL_SQL } from '@app/common/constants/sql';
+import { END_CALL_SQL, FULL_OUTGOING_CALL_INFO } from '@app/common/constants/sql';
+import { Exchange, RoutingKey } from '@app/common/constants/amqp';
+import { CallProcess } from '../interfaces/call-event-handler.enum';
 
 @Injectable()
 @Processor(configuration().bull.queueName)
@@ -28,7 +30,12 @@ export class CallProcessor {
         const callId = await this.getEndCallId(callRingiingData);
 
         if (callId) {
-            return await job.moveToCompleted();
+            await job.moveToCompleted();
+            await this.callEventHandlerRepository.update(
+                { callHistoryId: callRingiingData.callHistoryId },
+                { callId: callId, callProcess: CallProcess.callEnd },
+            );
+            return this.checkCallInfo(callRingiingData, Number(callId));
         }
         await this.callQueue.add({ data: callRingiingData }, { delay: 5000 });
     }
@@ -41,5 +48,23 @@ export class CallProcessor {
         const parseResult = JSON.parse(externalCdr.result);
 
         return parseResult.length > 0 ? parseResult[0][0] : undefined;
+    }
+
+    private async checkCallInfo(callRingiingData: CallOnProcessEvent, callId: number): Promise<void> {
+        await this.getFullCallInfo(callRingiingData, callId);
+
+        await this.amqpService.sendMessage(Exchange.events, RoutingKey.callMissed, {
+            clientId: callRingiingData.client.clientId,
+            trunkName: '',
+            externalNumber: '',
+        });
+    }
+
+    private async getFullCallInfo(callRingiingData: CallOnProcessEvent, callId: number) {
+        const externalCdr = await this.pacSqlService.sqlRequest(callRingiingData.client, {
+            query: `${FULL_OUTGOING_CALL_INFO} ${callId}`,
+        });
+
+        const parseResult = JSON.parse(externalCdr.result);
     }
 }
