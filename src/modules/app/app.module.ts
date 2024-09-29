@@ -39,6 +39,7 @@ import { DadataApiModule } from '../dadata-api/dadata-api.module';
 import { ClientInfoModule } from '../client-info/client-info.module';
 import { CrmModule } from '../crm/crm.module';
 import { CallEventHandlerModule } from '../call-event-handler/call-event-handler.module';
+import { MissedCallModule } from '../missed-call/missed-call.module';
 
 @Module({
     imports: [
@@ -86,6 +87,7 @@ import { CallEventHandlerModule } from '../call-event-handler/call-event-handler
         ClientInfoModule,
         CrmModule,
         CallEventHandlerModule,
+        MissedCallModule,
         RouterModule.register([
             {
                 path: 'api',
@@ -210,6 +212,15 @@ import { CallEventHandlerModule } from '../call-event-handler/call-event-handler
                     {
                         path: 'crm',
                         module: CrmModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'missed-call',
+                        module: MissedCallModule,
                     },
                 ],
             },
