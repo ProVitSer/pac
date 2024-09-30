@@ -60,7 +60,7 @@ export class CallEventHandlerService {
             {
                 data: {
                     ...data,
-                    determineCallDirection,
+                    callDireciton: determineCallDirection[0].callDireciton,
                 },
             },
             {

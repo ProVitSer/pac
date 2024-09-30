@@ -10,6 +10,7 @@ import { PacSqlModule } from '../pac-connector/modules/pac-sql/pac-sql.module';
 import { AmqpModule } from '../amqp/amqp.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CallEventHandler } from './entities/call-event-handler.entity';
+import { IncomingCallHandlerService } from './services/incoming-call-handler.service';
 
 @Module({
     imports: [
@@ -25,6 +26,6 @@ import { CallEventHandler } from './entities/call-event-handler.entity';
         AmqpModule,
         TypeOrmModule.forFeature([CallEventHandler]),
     ],
-    providers: [CallEventHandlerService, CallProcessor, СallEventHandlerListenters],
+    providers: [CallEventHandlerService, CallProcessor, СallEventHandlerListenters, IncomingCallHandlerService],
 })
 export class CallEventHandlerModule {}

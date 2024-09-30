@@ -27,6 +27,12 @@ export class CallEventHandler {
     })
     callProcess: CallProcess;
 
+    @Column('json', { nullable: true, name: 'original_full_call_info' })
+    originalFullCallInfo: string[][];
+
+    @Column('json', { nullable: true, name: 'full_call_info' })
+    fullCallInfo: string[][];
+
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
 

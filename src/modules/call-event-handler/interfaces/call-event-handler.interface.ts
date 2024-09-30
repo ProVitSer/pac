@@ -14,3 +14,28 @@ export interface DetermineCallDirectionData {
     callHistoryId: string;
     callDireciton: CallDirection;
 }
+
+export interface CallRingingData extends CallOnProcessEvent {
+    callDireciton: CallDirection;
+}
+
+export interface FullCallInfo {
+    segmentId: string;
+    srcId: string;
+    startTime: string;
+    endTime: string;
+    srcDisplayName: string;
+    srcCallerNnumber: string;
+    srcDn: string;
+    dstExtendedDisplayName: string;
+    dstDisplayName: string;
+    dstDn: string;
+    dstCallerNumber: string;
+    dstParticipantId: string;
+    callTime: number;
+    dstRecordingUrl?: string;
+    srcRecordingUrl?: string;
+    operatorName: string;
+    isDstInUsers: boolean;
+    callAnswered: boolean;
+}
