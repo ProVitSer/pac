@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column } from 'typeorm';
 import { CallProcess, CallDirection } from '../interfaces/call-event-handler.enum';
+import { FullCallInfo } from '../interfaces/call-event-handler.interface';
 
 @Entity()
 export class CallEventHandler {
@@ -31,7 +32,7 @@ export class CallEventHandler {
     originalFullCallInfo: string[][];
 
     @Column('json', { nullable: true, name: 'full_call_info' })
-    fullCallInfo: string[][];
+    fullCallInfo: FullCallInfo[];
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;

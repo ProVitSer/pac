@@ -4,12 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CallEventHandler } from '../entities/call-event-handler.entity';
-import { CallRingingData, FullCallInfo } from '../interfaces/call-event-handler.interface';
+import { CallOnProcessEvent, CallRingingData, FullCallInfo } from '../interfaces/call-event-handler.interface';
 import { FULL_INCOMING_CALL_INFO } from '@app/common/constants/sql';
 import { ConfigService } from '@nestjs/config';
 import { PbxEnvironmentVariables } from '@app/common/config/interfaces/config.interface';
 import { format, parse } from 'date-fns';
 import { DateTime } from 'luxon';
+import { Exchange, RoutingKey } from '@app/common/constants/amqp';
 
 @Injectable()
 export class IncomingCallHandlerService {
@@ -22,19 +23,42 @@ export class IncomingCallHandlerService {
     ) {}
 
     public async handleOutbound(callRingiingData: CallRingingData, callId: number): Promise<void> {
-        const fullCallInfo = await this.getFullCallInfo(callRingiingData, callId);
+        try {
+            const fullCallInfo = await this.getFullCallInfo(callRingiingData, callId);
 
-        console.log(fullCallInfo);
+            await this.checkCallInfo(callRingiingData, fullCallInfo, callId);
+        } catch (e) {
+            return;
+        }
     }
 
-    // private async checkCallInfo(callRingiingData: CallOnProcessEvent, callId: number): Promise<void> {
-    // await this.getFullCallInfo(callRingiingData, callId);
-    // await this.amqpService.sendMessage(Exchange.events, RoutingKey.callMissed, {
-    //     clientId: callRingiingData.client.clientId,
-    //     trunkName: '',
-    //     externalNumber: '',
-    // });
-    // }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    private async checkCallInfo(callRingiingData: CallOnProcessEvent, fullCallInfo: FullCallInfo[], callId: number): Promise<void> {
+        const sortedFullCallInfo = fullCallInfo.sort((a, b) => Number(a.segmentId) - Number(b.segmentId));
+
+        await this.addCallData(callRingiingData, fullCallInfo);
+
+        //Проверить первый объект и отправить, если callAnswered равно false, неотвеченный входящий
+        if (sortedFullCallInfo.length > 0 && !sortedFullCallInfo[0].callAnswered) {
+            const { operatorName, srcCallerNnumber } = sortedFullCallInfo[0];
+            this.sendMissedCall(callRingiingData.client.clientId, operatorName, srcCallerNnumber);
+        }
+    }
+
+    private async sendCallToStatistic(): Promise<void> {}
+    private async sendCallToCrm(): Promise<void> {}
+
+    private async addCallData(callRingiingData: CallOnProcessEvent, fullCallInfo: FullCallInfo[]): Promise<void> {
+        await this.callEventHandlerRepository.update({ callHistoryId: callRingiingData.callHistoryId }, { fullCallInfo });
+    }
+
+    private async sendMissedCall(clientId: number, trunkName: string, externalNumber: string): Promise<void> {
+        await this.amqpService.sendMessage(Exchange.events, RoutingKey.callMissed, {
+            clientId,
+            trunkName,
+            externalNumber,
+        });
+    }
 
     private async getFullCallInfo(callRingiingData: CallRingingData, callId: number) {
         const fullCallInfo = await this.pacSqlService.sqlRequest(callRingiingData.client, {
