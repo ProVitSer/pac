@@ -16,9 +16,10 @@ import { ApiContactController } from './modules/contact/controllers/api-contact.
 import { ApiContactService } from './modules/contact/services/api-contact.service';
 import { AuthModule } from '../auth/auth.module';
 import { AuthController } from './controller/api-controller';
+import { VoipModule } from '../voip/voip.module';
 
 @Module({
-    imports: [PacCallModule, PacExtensionModule, PacQueueModule, PacRingGroupModule, PacContactModule, AuthModule],
+    imports: [PacCallModule, PacExtensionModule, PacQueueModule, PacRingGroupModule, PacContactModule, AuthModule, VoipModule],
     controllers: [
         ApiCallController,
         ApiExtensionController,

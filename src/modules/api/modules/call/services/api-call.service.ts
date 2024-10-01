@@ -2,13 +2,18 @@ import { PacCallService } from '@app/modules/pac-connector/modules/pac-call/serv
 import { Injectable } from '@nestjs/common';
 import { ActiveCalls, ActiveConnectionsInfoData, CountCalls, CallResult } from '../interfaces/api-call.interface';
 import { ActiveCallsInfoResultAdapter } from '../adapters/active-calls-info-result.adapter';
-import MakeCallDto from '../dto/make-call.dto';
+import MakeCallDto from '../dto/make-local-call.dto';
 import HangupCallDto from '../dto/hangup-call.dto';
 import { ActiveConnectionsInfoAdapter } from '../adapters/active-connections-info.adapter';
+import MakeExternalCallDto from '../dto/make-external-call.dto';
+import { VoipService } from '@app/modules/voip/services/voip.service';
 
 @Injectable()
 export class ApiCallService {
-    constructor(private readonly pacCallService: PacCallService) {}
+    constructor(
+        private readonly pacCallService: PacCallService,
+        private readonly voipService: VoipService,
+    ) {}
 
     public async getActiveCallInfo(clientId: number): Promise<ActiveCalls> {
         const activeCallsInfo = await this.pacCallService.getActiveCallsInfo(clientId);
@@ -26,8 +31,12 @@ export class ApiCallService {
         return countCalls;
     }
 
-    public async makeCall(clientId: number, data: MakeCallDto): Promise<CallResult> {
+    public async makeLocalCall(clientId: number, data: MakeCallDto): Promise<CallResult> {
         return await this.pacCallService.makeCall(clientId, data);
+    }
+
+    public async makeExternalCall(clientId: number, data: MakeExternalCallDto): Promise<void> {
+        await this.voipService.makeExternalCall(clientId, data.externalNumber, data.localExtension);
     }
 
     public async hangupCall(clientId: number, data: HangupCallDto): Promise<CallResult> {
