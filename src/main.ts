@@ -21,7 +21,7 @@ async function bootstrap() {
             ...(httpsOptions ? { httpsOptions } : {}),
         });
 
-        app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+        app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true, forbidUnknownValues: true }));
 
         app.enableCors(loadCorsConfiguration(configService.get('cors')));
 
