@@ -40,7 +40,7 @@ export class TgUsersService {
     }
 
     public async deleteTgUser(client: Client, data: DeleteTgUser): Promise<void> {
-        await this.tgUsersRepository.delete({ id: data.id });
+        await this.tgUsersRepository.update(data.id, { deleted: true });
     }
 
     public async updateTgUser(client: Client, data: UpdateTgUser): Promise<TgUsers> {
