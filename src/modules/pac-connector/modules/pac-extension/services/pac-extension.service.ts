@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { Client } from '@app/modules/client/entities/client.entity';
 import { PacGrpcConnectorData } from '@app/modules/pac-connector/interfaces/pac-connector.interface';
 import { PacGrpcConnectorService } from '@app/modules/pac-connector/services/pac-grpc-connector.service';
 import { Injectable } from '@nestjs/common';
@@ -30,86 +29,92 @@ import {
 export class PacExtensionService {
     constructor(private readonly pgcs: PacGrpcConnectorService) {}
 
-    public async getExtensionInfo(client: Client, data: GetExtensionInfoRequest): Promise<ExtensionInfoReply> {
-        return await this.grpcSend<GetExtensionInfoRequest, ExtensionInfoReply>(client, data, ExtensionServiceMethods.GetExtensionInfo);
+    public async getExtensionInfo(clientId: number, data: GetExtensionInfoRequest): Promise<ExtensionInfoReply> {
+        return await this.grpcSend<GetExtensionInfoRequest, ExtensionInfoReply>(clientId, data, ExtensionServiceMethods.GetExtensionInfo);
     }
 
-    public async getExtensionStatus(client: Client, data: GetExtensionStatusRequest): Promise<ExtensionStatusReply> {
+    public async getExtensionStatus(clientId: number, data: GetExtensionStatusRequest): Promise<ExtensionStatusReply> {
         return await this.grpcSend<GetExtensionStatusRequest, ExtensionStatusReply>(
-            client,
+            clientId,
             data,
             ExtensionServiceMethods.GetExtensionStatus,
         );
     }
 
-    public async getExtensions(client: Client): Promise<GetExtensionsReply> {
-        return await this.grpcSend<{}, GetExtensionsReply>(client, new Empty(), ExtensionServiceMethods.GetExtensions);
+    public async getExtensions(clientId: number): Promise<GetExtensionsReply> {
+        return await this.grpcSend<{}, GetExtensionsReply>(clientId, new Empty(), ExtensionServiceMethods.GetExtensions);
     }
 
-    public async getRegisteredExtensions(client: Client): Promise<GetRegisteredExtensionsReply> {
-        return await this.grpcSend<{}, GetRegisteredExtensionsReply>(client, new Empty(), ExtensionServiceMethods.GetRegisteredExtensions);
+    public async getRegisteredExtensions(clientId: number): Promise<GetRegisteredExtensionsReply> {
+        return await this.grpcSend<{}, GetRegisteredExtensionsReply>(
+            clientId,
+            new Empty(),
+            ExtensionServiceMethods.GetRegisteredExtensions,
+        );
     }
 
-    public async getExtensionDeviceInfo(client: Client, data: GetExtensionDeviceInfoRequest): Promise<GetExtensionDeviceInfoReply> {
+    public async getExtensionDeviceInfo(clientId: number, data: GetExtensionDeviceInfoRequest): Promise<GetExtensionDeviceInfoReply> {
         return await this.grpcSend<GetExtensionDeviceInfoRequest, GetExtensionDeviceInfoReply>(
-            client,
+            clientId,
             data,
             ExtensionServiceMethods.GetExtensionDeviceInfo,
         );
     }
 
-    public async createExtension(client: Client, data: CreateExtensionRequest): Promise<ExtensionInfoReply> {
-        console.log(data);
-        return await this.grpcSend<CreateExtensionRequest, ExtensionInfoReply>(client, data, ExtensionServiceMethods.CreateExtension);
+    public async createExtension(clientId: number, data: CreateExtensionRequest): Promise<ExtensionInfoReply> {
+        return await this.grpcSend<CreateExtensionRequest, ExtensionInfoReply>(clientId, data, ExtensionServiceMethods.CreateExtension);
     }
 
-    public async deleteExtension(client: Client, data: DeleteExtensionRequest): Promise<DeleteExtensionReply> {
-        return await this.grpcSend<DeleteExtensionRequest, DeleteExtensionReply>(client, data, ExtensionServiceMethods.DeleteExtension);
+    public async deleteExtension(clientId: number, data: DeleteExtensionRequest): Promise<DeleteExtensionReply> {
+        return await this.grpcSend<DeleteExtensionRequest, DeleteExtensionReply>(clientId, data, ExtensionServiceMethods.DeleteExtension);
     }
 
-    public async updateExtensionInfo(client: Client, data: UpdateExtensionInfoRequest): Promise<ExtensionInfoReply> {
+    public async updateExtensionInfo(clientId: number, data: UpdateExtensionInfoRequest): Promise<ExtensionInfoReply> {
         return await this.grpcSend<UpdateExtensionInfoRequest, ExtensionInfoReply>(
-            client,
+            clientId,
             data,
             ExtensionServiceMethods.UpdateExtensionInfo,
         );
     }
 
-    public async setExtensionForwardStatus(client: Client, data: SetExtensionForwardStatusRequest): Promise<ExtensionInfoReply> {
+    public async setExtensionForwardStatus(clientId: number, data: SetExtensionForwardStatusRequest): Promise<ExtensionInfoReply> {
         return await this.grpcSend<SetExtensionForwardStatusRequest, ExtensionInfoReply>(
-            client,
+            clientId,
             data,
             ExtensionServiceMethods.SetExtensionForwardStatus,
         );
     }
 
-    public async setExtensionGlobalQueuesStatus(client: Client, data: SetExtensionGlobalQueuesStatusRequest): Promise<ExtensionInfoReply> {
+    public async setExtensionGlobalQueuesStatus(
+        clientId: number,
+        data: SetExtensionGlobalQueuesStatusRequest,
+    ): Promise<ExtensionInfoReply> {
         return await this.grpcSend<SetExtensionGlobalQueuesStatusRequest, ExtensionInfoReply>(
-            client,
+            clientId,
             data,
             ExtensionServiceMethods.SetExtensionGlobalQueuesStatus,
         );
     }
 
-    public async setExtensionStatusInQueue(client: Client, data: SetExtensionStatusInQueueRequest): Promise<ExtensionInfoReply> {
+    public async setExtensionStatusInQueue(clientId: number, data: SetExtensionStatusInQueueRequest): Promise<ExtensionInfoReply> {
         return await this.grpcSend<SetExtensionStatusInQueueRequest, ExtensionInfoReply>(
-            client,
+            clientId,
             data,
             ExtensionServiceMethods.SetExtensionStatusInQueue,
         );
     }
 
-    public async setExtensionCallForwardStatus(client: Client, data: SetExtensionCallForwardStatusRequest): Promise<ExtensionInfoReply> {
+    public async setExtensionCallForwardStatus(clientId: number, data: SetExtensionCallForwardStatusRequest): Promise<ExtensionInfoReply> {
         return await this.grpcSend<SetExtensionCallForwardStatusRequest, ExtensionInfoReply>(
-            client,
+            clientId,
             data,
             ExtensionServiceMethods.SetExtensionCallForwardStatus,
         );
     }
 
-    private async grpcSend<T, D>(client: Client, data: T, methodName: ExtensionServiceMethods): Promise<D> {
+    private async grpcSend<T, D>(clientId: number, data: T, methodName: ExtensionServiceMethods): Promise<D> {
         const pacGrpcConnectorData: PacGrpcConnectorData<T> = {
-            client,
+            clientId,
             serviceName: ExtensionServiceName.ExtensionsPbxService,
             methodName,
             data,

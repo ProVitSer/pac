@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Repository } from 'typeorm';
 import { SmartRouting } from '../entities/smart-routing.entity';
-import { Client } from '@app/modules/client/entities/client.entity';
 import { PacIvrService } from '@app/modules/pac-connector/modules/pac-ivr/services/pac-ivr.service';
 import { PbxExtensionList } from '../interfaces/smart-routing.interface';
 import DeleteSmartRouting from '../dto/delete-smart-routing.dto';
@@ -20,22 +19,22 @@ export class SmartRoutingService {
         private readonly pacIvrService: PacIvrService,
     ) {}
 
-    public async getPbxExtension(client: Client): Promise<PbxExtensionList[]> {
-        const pbxExtension = await this.pacIvrService.getIvrList(client);
+    public async getPbxExtension(clientId: number): Promise<PbxExtensionList[]> {
+        const pbxExtension = await this.pacIvrService.getIvrList(clientId);
 
-        return await this.getFreePbxExtension(client, pbxExtension.ivrs);
+        return await this.getFreePbxExtension(clientId, pbxExtension.ivrs);
     }
 
-    public async getSmartRouting(client: Client): Promise<SmartRouting[]> {
+    public async getSmartRouting(clientId: number): Promise<SmartRouting[]> {
         const smartRoutingInfo = await this.smartRoutingRepository.find({
-            where: { clientId: client.clientId },
+            where: { clientId },
         });
 
         return smartRoutingInfo;
     }
 
-    public async deleteSmartRoutingById(client: Client, data: DeleteSmartRouting): Promise<void> {
-        const smartRouting = await this.getSmartRouting(client);
+    public async deleteSmartRoutingById(clientId: number, data: DeleteSmartRouting): Promise<void> {
+        const smartRouting = await this.getSmartRouting(clientId);
         const ids = smartRouting.map((item) => item.id);
 
         if (ids.includes(data.id)) {
@@ -43,8 +42,8 @@ export class SmartRoutingService {
         }
     }
 
-    public async addSmartRouting(client: Client, data: AddSmartRouting): Promise<void> {
-        const pbxExtensions = await this.getPbxExtension(client);
+    public async addSmartRouting(clientId: number, data: AddSmartRouting): Promise<void> {
+        const pbxExtensions = await this.getPbxExtension(clientId);
 
         const existsNumber = pbxExtensions.map((item) => item.number);
 
@@ -54,34 +53,34 @@ export class SmartRoutingService {
         smartRouting.name = data.name || '';
         smartRouting.pbxExtension = data.pbxExtension;
         smartRouting.routingService = data.routingService;
-        smartRouting.clientId = client.clientId;
+        smartRouting.clientId = clientId;
         await this.smartRoutingRepository.save(smartRouting);
     }
 
-    public async updateSmartRouting(client: Client, data: UpdateSmartRouting): Promise<SmartRouting[]> {
+    public async updateSmartRouting(clientId: number, data: UpdateSmartRouting): Promise<SmartRouting[]> {
         const { id, ...updateData } = data;
 
-        const smartRouting = await this.getSmartRouting(client);
+        const smartRouting = await this.getSmartRouting(clientId);
 
-        const pbxExtensions = await this.getPbxExtension(client);
+        const pbxExtensions = await this.getPbxExtension(clientId);
 
         const existsNumber = pbxExtensions.map((item) => item.number);
 
-        if (updateData?.pbxExtension && !existsNumber.includes(updateData?.pbxExtension)) return await this.getSmartRouting(client);
+        if (updateData?.pbxExtension && !existsNumber.includes(updateData?.pbxExtension)) return await this.getSmartRouting(clientId);
 
         if (smartRouting.some((s: SmartRouting) => s.id == id)) {
             await this.smartRoutingRepository.update({ id }, { ...updateData });
         }
 
-        return await this.getSmartRouting(client);
+        return await this.getSmartRouting(clientId);
     }
 
-    private async getFreePbxExtension(client: Client, data: PbxExtensionList[]): Promise<PbxExtensionList[]> {
+    private async getFreePbxExtension(clientId: number, data: PbxExtensionList[]): Promise<PbxExtensionList[]> {
         const smartRoutingInfo = await this.smartRoutingRepository.find({
             select: {
                 pbxExtension: true,
             },
-            where: { clientId: client.clientId },
+            where: { clientId },
         });
 
         const numbersToRemove = smartRoutingInfo.map((item) => item.pbxExtension);

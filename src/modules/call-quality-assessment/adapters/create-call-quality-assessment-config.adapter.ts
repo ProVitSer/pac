@@ -8,7 +8,7 @@ export class CreateCallQualityAssessmentConfigAdapter {
     constructor(data: CqacDataAdapter) {
         this.audioFiles = this.audioFilesStruct(data);
         this.voipTrunkId = data.trunk.trunkId;
-        this.clientId = data.client.id;
+        this.clientId = data.client.clientId;
     }
 
     private audioFilesStruct(data: CqacDataAdapter): CqacAudioFiles[] {

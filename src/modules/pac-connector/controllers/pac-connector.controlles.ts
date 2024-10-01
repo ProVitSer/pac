@@ -16,21 +16,21 @@ export class PacConnectorController {
 
     @Post()
     async addPacConnector(@Req() request: RequestWithUser, @Body() data: CreatePacConnectorDto): Promise<void> {
-        return this.pacConnectorService.addPacConnector(request.user.client, data);
+        return this.pacConnectorService.addPacConnector(request.user.client.clientId, data);
     }
 
     @Get()
     async getPacConnector(@Req() request: RequestWithUser): Promise<PacConnectorGrpcServer> {
-        return this.pacConnectorService.getPacConnector(request.user.client);
+        return this.pacConnectorService.getPacConnector(request.user.client.clientId);
     }
 
     @Delete()
     async deletePacConnector(@Req() request: RequestWithUser): Promise<void> {
-        return this.pacConnectorService.deletePacConnector(request.user.client);
+        return this.pacConnectorService.deletePacConnector(request.user.client.clientId);
     }
 
     @Put()
     async updatePacConnector(@Req() request: RequestWithUser, @Body() pacData: UpdatePacConnectorDto): Promise<PacConnectorGrpcServer> {
-        return this.pacConnectorService.updatePacConnector(request.user.client, pacData);
+        return this.pacConnectorService.updatePacConnector(request.user.client.clientId, pacData);
     }
 }

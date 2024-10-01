@@ -15,25 +15,22 @@ export class ApiRingGroupController {
     constructor(private readonly apiRingGroupService: ApiRingGroupService) {}
 
     @Get()
-    async getRingGroupList(@Req() request: RequestWithUser): Promise<RingGroupListReply> {
-        return await this.apiRingGroupService.getRingGroupList(request.user.client);
+    async getRingGroupList(@Req() req: RequestWithUser): Promise<RingGroupListReply> {
+        return await this.apiRingGroupService.getRingGroupList(req.user.client.clientId);
     }
 
     @Get('members/:ringGroupNumber')
-    async getRingGroupMembers(
-        @Req() request: RequestWithUser,
-        @Param('ringGroupNumber') ringGroupNumber: string,
-    ): Promise<RingGroupMembers> {
-        return await this.apiRingGroupService.getRingGroupMembers(request.user.client, ringGroupNumber);
+    async getRingGroupMembers(@Req() req: RequestWithUser, @Param('ringGroupNumber') ringGroupNumber: string): Promise<RingGroupMembers> {
+        return await this.apiRingGroupService.getRingGroupMembers(req.user.client.clientId, ringGroupNumber);
     }
 
     @Put('members')
-    async addMemberInRingGroup(@Req() request: RequestWithUser, @Body() data: ModifyRingGroupDto): Promise<RingGroupMembers> {
-        return await this.apiRingGroupService.addMemberInRingGroup(request.user.client, data);
+    async addMemberInRingGroup(@Req() req: RequestWithUser, @Body() data: ModifyRingGroupDto): Promise<RingGroupMembers> {
+        return await this.apiRingGroupService.addMemberInRingGroup(req.user.client.clientId, data);
     }
 
     @Delete('members')
-    async deleteMemberInRingGroup(@Req() request: RequestWithUser, @Body() data: ModifyRingGroupDto): Promise<RingGroupMembers> {
-        return await this.apiRingGroupService.deleteMemberInRingGroup(request.user.client, data);
+    async deleteMemberInRingGroup(@Req() req: RequestWithUser, @Body() data: ModifyRingGroupDto): Promise<RingGroupMembers> {
+        return await this.apiRingGroupService.deleteMemberInRingGroup(req.user.client.clientId, data);
     }
 }

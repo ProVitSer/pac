@@ -1,4 +1,3 @@
-import { Client } from '@app/modules/client/entities/client.entity';
 import { PacCallService } from '@app/modules/pac-connector/modules/pac-call/services/pac-call.service';
 import { Injectable } from '@nestjs/common';
 import { ActiveCalls, ActiveConnectionsInfoData, CountCalls, CallResult } from '../interfaces/api-call.interface';
@@ -11,32 +10,32 @@ import { ActiveConnectionsInfoAdapter } from '../adapters/active-connections-inf
 export class ApiCallService {
     constructor(private readonly pacCallService: PacCallService) {}
 
-    public async getActiveCallInfo(client: Client): Promise<ActiveCalls> {
-        const activeCallsInfo = await this.pacCallService.getActiveCallsInfo(client);
+    public async getActiveCallInfo(clientId: number): Promise<ActiveCalls> {
+        const activeCallsInfo = await this.pacCallService.getActiveCallsInfo(clientId);
 
         if (!('activeCallsInfoData' in activeCallsInfo)) return { activeCallsInfo: [] };
 
         return { activeCallsInfo: new ActiveCallsInfoResultAdapter(activeCallsInfo).activeCallsInfo };
     }
 
-    public async getCountCalls(client: Client): Promise<CountCalls> {
-        const countCalls = await this.pacCallService.getCountCalls(client);
+    public async getCountCalls(clientId: number): Promise<CountCalls> {
+        const countCalls = await this.pacCallService.getCountCalls(clientId);
 
         if (!('currentCountCalls' in countCalls)) return { currentCountCalls: 0 };
 
         return countCalls;
     }
 
-    public async makeCall(client: Client, data: MakeCallDto): Promise<CallResult> {
-        return await this.pacCallService.makeCall(client, data);
+    public async makeCall(clientId: number, data: MakeCallDto): Promise<CallResult> {
+        return await this.pacCallService.makeCall(clientId, data);
     }
 
-    public async hangupCall(client: Client, data: HangupCallDto): Promise<CallResult> {
-        return await this.pacCallService.hangupCall(client, data);
+    public async hangupCall(clientId: number, data: HangupCallDto): Promise<CallResult> {
+        return await this.pacCallService.hangupCall(clientId, data);
     }
 
-    public async getActiveConnections(client: Client): Promise<ActiveConnectionsInfoData> {
-        const activeConnectionsInfo = await this.pacCallService.getActiveConnectionsInfo(client);
+    public async getActiveConnections(clientId: number): Promise<ActiveConnectionsInfoData> {
+        const activeConnectionsInfo = await this.pacCallService.getActiveConnectionsInfo(clientId);
 
         if (!('activeConnectionsInfo' in activeConnectionsInfo)) return { activeConnectionsInfo: [] };
 

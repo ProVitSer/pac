@@ -61,7 +61,7 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
     private async handleCall(event: StasisStart, incomingChannel: Channel, trunkId: string): Promise<void> {
         const trunk = await this.getTrunkData(trunkId);
 
-        const cqac = await this.getCqacConfig(trunk.client.id);
+        const cqac = await this.getCqacConfig(trunk.client.clientId);
 
         const callQualitySound = await this.getCallQualitySound(cqac);
 

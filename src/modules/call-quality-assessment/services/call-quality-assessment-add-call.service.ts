@@ -46,14 +46,14 @@ export class CallQualityAssessmentAddCallService {
     private async getExternalCdrCallData(data: EndCallSubHandlerData): Promise<ExternalCdrData | undefined> {
         const client = await this.clientService.getClientById(data.cqac.clientId);
 
-        const externalCdr = await this.pacSqlService.sqlRequest(client, {
+        const externalCdr = await this.pacSqlService.sqlRequest(client.clientId, {
             query: `${CQS_CDR_SQL} ai.dn = '${data.event.channel.caller.number}' AND ai.caller_number = '${data.event.channel.dialplan.exten}' ORDER BY s.call_id DESC LIMIT 1;`,
         });
 
         if (!externalCdr.error) {
             const externalCdrData = JSON.parse(externalCdr.result);
 
-            const extensionInfo = await this.apiExtensionService.getExtensionInfo(client, externalCdrData[0][1]);
+            const extensionInfo = await this.apiExtensionService.getExtensionInfo(client.clientId, externalCdrData[0][1]);
 
             return {
                 externalCallId: externalCdrData[0][0] || '',

@@ -1,4 +1,3 @@
-import { Client } from '@app/modules/client/entities/client.entity';
 import { PacExtensionService } from '@app/modules/pac-connector/modules/pac-extension/services/pac-extension.service';
 import { Injectable } from '@nestjs/common';
 import {
@@ -28,82 +27,82 @@ import { ExtensionCallForwardStatusAdapter } from '../adapters/extension-call-fo
 export class ApiExtensionService {
     constructor(private readonly pacExtensionService: PacExtensionService) {}
 
-    public async getExtensionInfo(client: Client, extension: string): Promise<ExtensionInfo> {
-        const extensionInfo = await this.pacExtensionService.getExtensionInfo(client, { extension });
+    public async getExtensionInfo(clientId: number, extension: string): Promise<ExtensionInfo> {
+        const extensionInfo = await this.pacExtensionService.getExtensionInfo(clientId, { extension });
 
         return { ...new ExtensionInfoAdapter(extensionInfo).toPublicObject() };
     }
 
-    public async getExtensionStatus(client: Client, extension: string): Promise<ExtensionStatus> {
-        const extensionStatus = await this.pacExtensionService.getExtensionStatus(client, { extension });
+    public async getExtensionStatus(clientId: number, extension: string): Promise<ExtensionStatus> {
+        const extensionStatus = await this.pacExtensionService.getExtensionStatus(clientId, { extension });
 
         return { ...new ExtensionStatusReplyAdapter(extensionStatus).toPublicObject() };
     }
 
-    public async getExtensions(client: Client): Promise<ExtensionsList> {
-        return await this.pacExtensionService.getExtensions(client);
+    public async getExtensions(clientId: number): Promise<ExtensionsList> {
+        return await this.pacExtensionService.getExtensions(clientId);
     }
 
-    public async getRegisteredExtensions(client: Client): Promise<RegisteredExtensions> {
-        return await this.pacExtensionService.getRegisteredExtensions(client);
+    public async getRegisteredExtensions(clientId: number): Promise<RegisteredExtensions> {
+        return await this.pacExtensionService.getRegisteredExtensions(clientId);
     }
 
-    public async getExtensionDeviceInfo(client: Client, extension: string): Promise<GetExtensionDeviceInfoReply> {
-        return await this.pacExtensionService.getExtensionDeviceInfo(client, { extension });
+    public async getExtensionDeviceInfo(clientId: number, extension: string): Promise<GetExtensionDeviceInfoReply> {
+        return await this.pacExtensionService.getExtensionDeviceInfo(clientId, { extension });
     }
 
-    public async createExtension(client: Client, extension: CreateExtensionDto): Promise<ExtensionInfo> {
-        await this.pacExtensionService.createExtension(client, extension);
+    public async createExtension(clientId: number, extension: CreateExtensionDto): Promise<ExtensionInfo> {
+        await this.pacExtensionService.createExtension(clientId, extension);
 
-        return this.getExtensionInfo(client, extension.extension);
+        return this.getExtensionInfo(clientId, extension.extension);
     }
 
-    public async deleteExtension(client: Client, extension: string): Promise<BaseExtensionResult> {
-        return await this.pacExtensionService.deleteExtension(client, { extension });
+    public async deleteExtension(clientId: number, extension: string): Promise<BaseExtensionResult> {
+        return await this.pacExtensionService.deleteExtension(clientId, { extension });
     }
 
-    public async updateExtensionInfo(client: Client, extension: UpdateExtensionDto): Promise<ExtensionInfo> {
-        const extensionData = await this.getExtensionInfo(client, extension.extension);
+    public async updateExtensionInfo(clientId: number, extension: UpdateExtensionDto): Promise<ExtensionInfo> {
+        const extensionData = await this.getExtensionInfo(clientId, extension.extension);
 
         const updateData = new UpdateExtensionAdapter(extensionData, extension).toPublicObject();
 
-        await this.pacExtensionService.updateExtensionInfo(client, updateData);
+        await this.pacExtensionService.updateExtensionInfo(clientId, updateData);
 
-        return this.getExtensionInfo(client, extension.extension);
+        return this.getExtensionInfo(clientId, extension.extension);
     }
 
-    public async setExtensionForwardStatus(client: Client, data: ExtensionForwardStatusDto): Promise<ExtensionStatus> {
-        await this.pacExtensionService.setExtensionForwardStatus(client, {
+    public async setExtensionForwardStatus(clientId: number, data: ExtensionForwardStatusDto): Promise<ExtensionStatus> {
+        await this.pacExtensionService.setExtensionForwardStatus(clientId, {
             extension: data.extension,
             fwStatus: data.fwStatus as unknown as ExtensionForwardStatus,
         });
 
-        return this.getExtensionStatus(client, data.extension);
+        return this.getExtensionStatus(clientId, data.extension);
     }
 
-    public async setExtensionGlobalQueuesStatus(client: Client, data: ExtensionGlobalQueueStatusDto): Promise<ExtensionStatus> {
-        await this.pacExtensionService.setExtensionGlobalQueuesStatus(client, {
+    public async setExtensionGlobalQueuesStatus(clientId: number, data: ExtensionGlobalQueueStatusDto): Promise<ExtensionStatus> {
+        await this.pacExtensionService.setExtensionGlobalQueuesStatus(clientId, {
             extension: data.extension,
             status: data.status as unknown as ExtensionQueueStatus,
         });
 
-        return this.getExtensionStatus(client, data.extension);
+        return this.getExtensionStatus(clientId, data.extension);
     }
 
-    public async setExtensionStatusInQueue(client: Client, data: ExtensionQueueStatusDto): Promise<ExtensionStatus> {
-        await this.pacExtensionService.setExtensionStatusInQueue(client, {
+    public async setExtensionStatusInQueue(clientId: number, data: ExtensionQueueStatusDto): Promise<ExtensionStatus> {
+        await this.pacExtensionService.setExtensionStatusInQueue(clientId, {
             extension: data.extension,
             queueNumber: data.queueNumber,
             status: data.status as unknown as ExtensionQueueStatus,
         });
 
-        return this.getExtensionStatus(client, data.extension);
+        return this.getExtensionStatus(clientId, data.extension);
     }
 
-    public async setExtensionCallForwardStatus(client: Client, data: ExtensionCallForwardStatusDto): Promise<ExtensionStatus> {
+    public async setExtensionCallForwardStatus(clientId: number, data: ExtensionCallForwardStatusDto): Promise<ExtensionStatus> {
         const updateData = new ExtensionCallForwardStatusAdapter(data).toPublicObject();
-        await this.pacExtensionService.setExtensionCallForwardStatus(client, updateData);
+        await this.pacExtensionService.setExtensionCallForwardStatus(clientId, updateData);
 
-        return this.getExtensionStatus(client, data.extension);
+        return this.getExtensionStatus(clientId, data.extension);
     }
 }

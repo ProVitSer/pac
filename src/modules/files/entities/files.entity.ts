@@ -1,5 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Client } from '../../../modules/client/entities/client.entity';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApplicationServiceType } from '../../../common/interfaces/enums';
 
 @Entity()
@@ -31,8 +30,8 @@ export class Files {
     @Column({ nullable: false, type: 'enum', enum: ApplicationServiceType, name: 'application_service_type' })
     applicationServiceType: ApplicationServiceType;
 
-    @ManyToOne(() => Client, (client) => client.files, { cascade: true })
-    client: Client;
+    @Column({ name: 'client_id' })
+    clientId: number;
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;

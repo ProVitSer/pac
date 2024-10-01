@@ -25,6 +25,6 @@ export class PhonebookSmartRoutingProvider implements SmartRoutingProvider {
 
         const sql = `${PHONEBOOK_SQL} like '%${phone}' or pv_an1 like '%${phone}' or pv_an0 like '%${phone}' or pv_an3 like '%${phone}' or pv_an4 like '%${phone}'`;
 
-        return this.pacSqlService.sqlRequest(data.client, { query: sql });
+        return this.pacSqlService.sqlRequest(data.clientId, { query: sql });
     }
 }

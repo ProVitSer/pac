@@ -16,26 +16,26 @@ export class SmartRoutingController {
 
     @Get('pbx-extension')
     async getPbxExtension(@Req() req: RequestWithUser) {
-        return this.smartRoutingService.getPbxExtension(req.user.client);
+        return this.smartRoutingService.getPbxExtension(req.user.client.clientId);
     }
 
     @Get()
     async getSmartRouting(@Req() req: RequestWithUser) {
-        return this.smartRoutingService.getSmartRouting(req.user.client);
+        return this.smartRoutingService.getSmartRouting(req.user.client.clientId);
     }
 
     @Delete()
     async deleteSmartRoutingById(@Req() req: RequestWithUser, @Body() data: DeleteSmartRouting) {
-        return this.smartRoutingService.deleteSmartRoutingById(req.user.client, data);
+        return this.smartRoutingService.deleteSmartRoutingById(req.user.client.clientId, data);
     }
 
     @Post()
     async addSmartRouting(@Req() req: RequestWithUser, @Body() data: AddSmartRouting) {
-        return this.smartRoutingService.addSmartRouting(req.user.client, data);
+        return this.smartRoutingService.addSmartRouting(req.user.client.clientId, data);
     }
 
     @Put()
     async updateSmartRouting(@Req() req: RequestWithUser, @Body() data: UpdateSmartRouting) {
-        return this.smartRoutingService.updateSmartRouting(req.user.client, data);
+        return this.smartRoutingService.updateSmartRouting(req.user.client.clientId, data);
     }
 }

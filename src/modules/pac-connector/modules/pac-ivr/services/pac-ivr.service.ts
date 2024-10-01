@@ -1,4 +1,3 @@
-import { Client } from '@app/modules/client/entities/client.entity';
 import { PacGrpcConnectorData } from '@app/modules/pac-connector/interfaces/pac-connector.interface';
 import { PacGrpcConnectorService } from '@app/modules/pac-connector/services/pac-grpc-connector.service';
 import { Injectable } from '@nestjs/common';
@@ -12,14 +11,14 @@ import { IvrListReply } from '../interfaces/pac-ivr.interface';
 export class PacIvrService {
     constructor(private readonly pgcs: PacGrpcConnectorService) {}
 
-    public async getIvrList(client: Client): Promise<IvrListReply> {
+    public async getIvrList(clientId: number): Promise<IvrListReply> {
         // eslint-disable-next-line @typescript-eslint/ban-types
-        return await this.grpcSend<{}, IvrListReply>(client, new Empty(), IvrServiceMethods.GetIvrList);
+        return await this.grpcSend<{}, IvrListReply>(clientId, new Empty(), IvrServiceMethods.GetIvrList);
     }
 
-    private async grpcSend<T, D>(client: Client, data: T, methodName: IvrServiceMethods): Promise<D> {
+    private async grpcSend<T, D>(clientId: number, data: T, methodName: IvrServiceMethods): Promise<D> {
         const pacGrpcConnectorData: PacGrpcConnectorData<T> = {
-            client,
+            clientId,
             serviceName: IvrServiceName.IvrPbxService,
             methodName,
             data,

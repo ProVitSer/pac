@@ -31,7 +31,7 @@ export class FilesService {
 
     public async getFilesByClientId(clientId: number): Promise<Files[]> {
         return this.fileRepository.find({
-            where: { client: { id: clientId } },
+            where: { clientId },
             relations: ['client'],
         });
     }

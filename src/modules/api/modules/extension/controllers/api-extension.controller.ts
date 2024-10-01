@@ -26,71 +26,68 @@ export class ApiExtensionController {
     constructor(private readonly apiExtensionService: ApiExtensionService) {}
 
     @Get(':extension')
-    async getExtensionInfo(@Req() request: RequestWithUser, @Param('extension') extension: string): Promise<ExtensionInfo> {
-        return await this.apiExtensionService.getExtensionInfo(request.user.client, extension);
+    async getExtensionInfo(@Req() req: RequestWithUser, @Param('extension') extension: string): Promise<ExtensionInfo> {
+        return await this.apiExtensionService.getExtensionInfo(req.user.client.clientId, extension);
     }
 
     @Get('status/:extension')
-    async getExtensionStatus(@Req() request: RequestWithUser, @Param('extension') extension: string): Promise<ExtensionStatus> {
-        return await this.apiExtensionService.getExtensionStatus(request.user.client, extension);
+    async getExtensionStatus(@Req() req: RequestWithUser, @Param('extension') extension: string): Promise<ExtensionStatus> {
+        return await this.apiExtensionService.getExtensionStatus(req.user.client.clientId, extension);
     }
 
     @Get('list')
-    async getExtensions(@Req() request: RequestWithUser): Promise<ExtensionsList> {
-        return await this.apiExtensionService.getExtensions(request.user.client);
+    async getExtensions(@Req() req: RequestWithUser): Promise<ExtensionsList> {
+        return await this.apiExtensionService.getExtensions(req.user.client.clientId);
     }
 
     @Get('registered')
-    async getRegisteredExtensions(@Req() request: RequestWithUser): Promise<RegisteredExtensions> {
-        return await this.apiExtensionService.getRegisteredExtensions(request.user.client);
+    async getRegisteredExtensions(@Req() req: RequestWithUser): Promise<RegisteredExtensions> {
+        return await this.apiExtensionService.getRegisteredExtensions(req.user.client.clientId);
     }
 
     @Get('device-info/:extension')
-    async getExtensionDeviceInfo(
-        @Req() request: RequestWithUser,
-        @Param('extension') extension: string,
-    ): Promise<GetExtensionDeviceInfoReply> {
-        return await this.apiExtensionService.getExtensionDeviceInfo(request.user.client, extension);
+    async getExtensionDeviceInfo(@Req() req: RequestWithUser, @Param('extension') extension: string): Promise<GetExtensionDeviceInfoReply> {
+        return await this.apiExtensionService.getExtensionDeviceInfo(req.user.client.clientId, extension);
     }
 
     @Post()
-    async createExtension(@Req() request: RequestWithUser, @Body() extension: CreateExtensionDto): Promise<ExtensionInfo> {
-        return await this.apiExtensionService.createExtension(request.user.client, extension);
+    async createExtension(@Req() req: RequestWithUser, @Body() extension: CreateExtensionDto): Promise<ExtensionInfo> {
+        return await this.apiExtensionService.createExtension(req.user.client.clientId, extension);
     }
 
     @Delete(':extension')
-    async deleteExtension(@Req() request: RequestWithUser, @Param('extension') extension: string): Promise<BaseExtensionResult> {
-        return await this.apiExtensionService.deleteExtension(request.user.client, extension);
+    async deleteExtension(@Req() req: RequestWithUser, @Param('extension') extension: string): Promise<BaseExtensionResult> {
+        return await this.apiExtensionService.deleteExtension(req.user.client.clientId, extension);
     }
 
     @Put()
-    async updateExtensionInfo(@Req() request: RequestWithUser, @Body() extension: UpdateExtensionDto): Promise<ExtensionInfo> {
-        return await this.apiExtensionService.updateExtensionInfo(request.user.client, extension);
+    async updateExtensionInfo(@Req() req: RequestWithUser, @Body() extension: UpdateExtensionDto): Promise<ExtensionInfo> {
+        return await this.apiExtensionService.updateExtensionInfo(req.user.client.clientId, extension);
     }
 
     @Post('forward-status')
-    async setExtensionForwardStatus(@Req() request: RequestWithUser, @Body() data: ExtensionForwardStatusDto): Promise<ExtensionStatus> {
-        return await this.apiExtensionService.setExtensionForwardStatus(request.user.client, data);
+    async setExtensionForwardStatus(@Req() req: RequestWithUser, @Body() data: ExtensionForwardStatusDto): Promise<ExtensionStatus> {
+        return await this.apiExtensionService.setExtensionForwardStatus(req.user.client.clientId, data);
     }
 
     @Post('global-queue-status')
     async setExtensionGlobalQueuesStatus(
-        @Req() request: RequestWithUser,
+        @Req() req: RequestWithUser,
         @Body() data: ExtensionGlobalQueueStatusDto,
     ): Promise<ExtensionStatus> {
-        return await this.apiExtensionService.setExtensionGlobalQueuesStatus(request.user.client, data);
+        return await this.apiExtensionService.setExtensionGlobalQueuesStatus(req.user.client.clientId, data);
     }
 
     @Post('queue-status')
-    async setExtensionStatusInQueue(@Req() request: RequestWithUser, @Body() data: ExtensionQueueStatusDto): Promise<ExtensionStatus> {
-        return await this.apiExtensionService.setExtensionStatusInQueue(request.user.client, data);
+    async setExtensionStatusInQueue(@Req() req: RequestWithUser, @Body() data: ExtensionQueueStatusDto): Promise<ExtensionStatus> {
+        return await this.apiExtensionService.setExtensionStatusInQueue(req.user.client.clientId, data);
     }
 
     @Post('call-forward')
     async setExtensionCallForwardStatus(
-        @Req() request: RequestWithUser,
+        @Req() req: RequestWithUser,
         @Body() data: ExtensionCallForwardStatusDto,
     ): Promise<ExtensionStatus> {
-        return await this.apiExtensionService.setExtensionCallForwardStatus(request.user.client, data);
+        return await this.apiExtensionService.setExtensionCallForwardStatus(req.user.client.clientId, data);
     }
 }

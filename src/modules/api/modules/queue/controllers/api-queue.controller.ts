@@ -15,32 +15,32 @@ export class ApiQueueController {
     constructor(private readonly apiQueueService: ApiQueueService) {}
 
     @Get()
-    async getQueueList(@Req() request: RequestWithUser): Promise<QueueList> {
-        return await this.apiQueueService.getQueueList(request.user.client);
+    async getQueueList(@Req() req: RequestWithUser): Promise<QueueList> {
+        return await this.apiQueueService.getQueueList(req.user.client.clientId);
     }
 
     @Get('agents/:queueNumber')
-    async getQueueAgents(@Req() request: RequestWithUser, @Param('queueNumber') queueNumber: string): Promise<ApiAgentsQueue> {
-        return await this.apiQueueService.getQueueAgents(request.user.client, queueNumber);
+    async getQueueAgents(@Req() req: RequestWithUser, @Param('queueNumber') queueNumber: string): Promise<ApiAgentsQueue> {
+        return await this.apiQueueService.getQueueAgents(req.user.client.clientId, queueNumber);
     }
 
     @Get('free-agents/:queueNumber')
-    async getFreeQueueAgents(@Req() request: RequestWithUser, @Param('queueNumber') queueNumber: string): Promise<ApiAgentsQueue> {
-        return await this.apiQueueService.getFreeQueueAgents(request.user.client, queueNumber);
+    async getFreeQueueAgents(@Req() req: RequestWithUser, @Param('queueNumber') queueNumber: string): Promise<ApiAgentsQueue> {
+        return await this.apiQueueService.getFreeQueueAgents(req.user.client.clientId, queueNumber);
     }
 
     @Get('busy-agents/:queueNumber')
-    async getBusyQueueAgents(@Req() request: RequestWithUser, @Param('queueNumber') queueNumber: string): Promise<ApiAgentsQueue> {
-        return await this.apiQueueService.getBusyQueueAgents(request.user.client, queueNumber);
+    async getBusyQueueAgents(@Req() req: RequestWithUser, @Param('queueNumber') queueNumber: string): Promise<ApiAgentsQueue> {
+        return await this.apiQueueService.getBusyQueueAgents(req.user.client.clientId, queueNumber);
     }
 
     @Put('agents')
-    async addAgentsToQueue(@Req() request: RequestWithUser, @Body() data: ModifyQueueDto): Promise<QueueModifyReply> {
-        return await this.apiQueueService.addAgentsToQueue(request.user.client, data);
+    async addAgentsToQueue(@Req() req: RequestWithUser, @Body() data: ModifyQueueDto): Promise<QueueModifyReply> {
+        return await this.apiQueueService.addAgentsToQueue(req.user.client.clientId, data);
     }
 
     @Delete('agents')
-    async deleteAgentsFromQueue(@Req() request: RequestWithUser, @Body() data: ModifyQueueDto): Promise<QueueModifyReply> {
-        return await this.apiQueueService.deleteAgentsFromQueue(request.user.client, data);
+    async deleteAgentsFromQueue(@Req() req: RequestWithUser, @Body() data: ModifyQueueDto): Promise<QueueModifyReply> {
+        return await this.apiQueueService.deleteAgentsFromQueue(req.user.client.clientId, data);
     }
 }

@@ -38,7 +38,7 @@ export class SmartRoutingProvidersService {
 
         const smartRoutingProvider = this.getRoutingProvider(smartRoutingInfo.routingService);
 
-        return await smartRoutingProvider.getRoutingInfo({ client: data.client, externalNumber: data.externalNumber });
+        return await smartRoutingProvider.getRoutingInfo({ clientId: data.clientId, externalNumber: data.externalNumber });
     }
 
     private getRoutingProvider(routingServiceType: RoutingServiceType): SmartRoutingProvider {
@@ -47,7 +47,7 @@ export class SmartRoutingProvidersService {
 
     private async getSmartRoutingInfo(data: RotingInfoData): Promise<SmartRouting> {
         const smartRoutingInfo = await this.smartRoutingRepository.findOne({
-            where: { clientId: data.client.clientId, pbxExtension: data.pbxExtension },
+            where: { clientId: data.clientId, pbxExtension: data.pbxExtension },
         });
 
         return smartRoutingInfo;

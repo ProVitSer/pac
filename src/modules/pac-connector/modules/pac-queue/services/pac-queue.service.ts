@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { Client } from '@app/modules/client/entities/client.entity';
 import { PacGrpcConnectorData } from '@app/modules/pac-connector/interfaces/pac-connector.interface';
 import { PacGrpcConnectorService } from '@app/modules/pac-connector/services/pac-grpc-connector.service';
 import { Injectable } from '@nestjs/common';
@@ -19,33 +18,33 @@ import {
 export class PacQueueService {
     constructor(private readonly pgcs: PacGrpcConnectorService) {}
 
-    public async getQueueList(client: Client): Promise<QueueListDataReply> {
-        return await this.grpcSend<{}, QueueListDataReply>(client, new Empty(), QueueServiceMethods.GetQueueList);
+    public async getQueueList(clientId: number): Promise<QueueListDataReply> {
+        return await this.grpcSend<{}, QueueListDataReply>(clientId, new Empty(), QueueServiceMethods.GetQueueList);
     }
 
-    public async getQueueAgents(client: Client, data: QueueInfoRequest): Promise<QueueInfoReply> {
-        return await this.grpcSend<QueueInfoRequest, QueueInfoReply>(client, data, QueueServiceMethods.GetQueueAgents);
+    public async getQueueAgents(clientId: number, data: QueueInfoRequest): Promise<QueueInfoReply> {
+        return await this.grpcSend<QueueInfoRequest, QueueInfoReply>(clientId, data, QueueServiceMethods.GetQueueAgents);
     }
 
-    public async getFreeQueueAgents(client: Client, data: QueueInfoRequest): Promise<QueueInfoReply> {
-        return await this.grpcSend<QueueInfoRequest, QueueInfoReply>(client, data, QueueServiceMethods.GetFreeQueueAgents);
+    public async getFreeQueueAgents(clientId: number, data: QueueInfoRequest): Promise<QueueInfoReply> {
+        return await this.grpcSend<QueueInfoRequest, QueueInfoReply>(clientId, data, QueueServiceMethods.GetFreeQueueAgents);
     }
 
-    public async getBusyQueueAgents(client: Client, data: QueueInfoRequest): Promise<QueueInfoReply> {
-        return await this.grpcSend<QueueInfoRequest, QueueInfoReply>(client, data, QueueServiceMethods.GetBusyQueueAgents);
+    public async getBusyQueueAgents(clientId: number, data: QueueInfoRequest): Promise<QueueInfoReply> {
+        return await this.grpcSend<QueueInfoRequest, QueueInfoReply>(clientId, data, QueueServiceMethods.GetBusyQueueAgents);
     }
 
-    public async addAgentsToQueue(client: Client, data: QueueModifyRequest): Promise<QueueModifyReply> {
-        return await this.grpcSend<QueueModifyRequest, QueueModifyReply>(client, data, QueueServiceMethods.AddAgentsToQueue);
+    public async addAgentsToQueue(clientId: number, data: QueueModifyRequest): Promise<QueueModifyReply> {
+        return await this.grpcSend<QueueModifyRequest, QueueModifyReply>(clientId, data, QueueServiceMethods.AddAgentsToQueue);
     }
 
-    public async deleteAgentsFromQueue(client: Client, data: QueueModifyRequest): Promise<QueueModifyReply> {
-        return await this.grpcSend<QueueModifyRequest, QueueModifyReply>(client, data, QueueServiceMethods.DeleteAgentsFromQueue);
+    public async deleteAgentsFromQueue(clientId: number, data: QueueModifyRequest): Promise<QueueModifyReply> {
+        return await this.grpcSend<QueueModifyRequest, QueueModifyReply>(clientId, data, QueueServiceMethods.DeleteAgentsFromQueue);
     }
 
-    private async grpcSend<T, D>(client: Client, data: T, methodName: QueueServiceMethods): Promise<D> {
+    private async grpcSend<T, D>(clientId: number, data: T, methodName: QueueServiceMethods): Promise<D> {
         const pacGrpcConnectorData: PacGrpcConnectorData<T> = {
-            client,
+            clientId,
             serviceName: QueueServiceName.QueuePbxService,
             methodName,
             data,

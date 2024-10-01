@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { MissedCall } from '../entities/missed-call.entity';
 import AddMissedCallConfig from '../dto/add-missed-call-config.dto';
 import { PacSqlService } from '@app/modules/pac-connector/modules/pac-sql/services/pac-sql.service';
-import { Client } from '@app/modules/client/entities/client.entity';
 import UpdateMissedCall from '../dto/update-missed-call.dto';
 
 @Injectable()
@@ -39,8 +38,8 @@ export class MissedCallService {
         await this.missedCallRepository.delete({ id });
     }
 
-    public async getTrunkName(client: Client): Promise<string[]> {
-        return await this.getTrunks(client);
+    public async getTrunkName(clientId: number): Promise<string[]> {
+        return await this.getTrunks(clientId);
     }
 
     public async updateMissedCall(clientId: number, data: UpdateMissedCall): Promise<MissedCall[]> {
@@ -55,10 +54,10 @@ export class MissedCallService {
         return await this.getMissedCallConfigList(id);
     }
 
-    private async getTrunks(client: Client): Promise<string[]> {
+    private async getTrunks(clientId: number): Promise<string[]> {
         const sql = `SELECT name from gateway`;
 
-        const result = await this.pacSqlService.sqlRequest(client, { query: sql });
+        const result = await this.pacSqlService.sqlRequest(clientId, { query: sql });
 
         const parseResult = JSON.parse(result.result);
 

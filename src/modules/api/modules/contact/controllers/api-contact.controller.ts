@@ -15,22 +15,22 @@ export class ApiContactController {
     constructor(private readonly apiContactService: ApiContactService) {}
 
     @Post()
-    async getContactList(@Req() request: RequestWithUser, @Body() data: GetContactListDto): Promise<ContactListReply> {
-        return await this.apiContactService.getContactList(request.user.client, data);
+    async getContactList(@Req() req: RequestWithUser, @Body() data: GetContactListDto): Promise<ContactListReply> {
+        return await this.apiContactService.getContactList(req.user.client.clientId, data);
     }
 
     @Get(':contactId')
-    async getContactInfoById(@Req() request: RequestWithUser, @Param('contactId') contactId: string): Promise<ContactInfoDataReply> {
-        return await this.apiContactService.getContactInfoById(request.user.client, contactId);
+    async getContactInfoById(@Req() req: RequestWithUser, @Param('contactId') contactId: string): Promise<ContactInfoDataReply> {
+        return await this.apiContactService.getContactInfoById(req.user.client.clientId, contactId);
     }
 
     @Put()
-    async updateContactInfoById(@Req() request: RequestWithUser, @Body() data: UpdateContactDto): Promise<ContactInfoDataReply> {
-        return await this.apiContactService.updateContactInfoById(request.user.client, data);
+    async updateContactInfoById(@Req() req: RequestWithUser, @Body() data: UpdateContactDto): Promise<ContactInfoDataReply> {
+        return await this.apiContactService.updateContactInfoById(req.user.client.clientId, data);
     }
 
     @Delete(':contactId')
-    async deleteContactById(@Req() request: RequestWithUser, @Param('contactId') contactId: string): Promise<void> {
-        return await this.apiContactService.deleteContactById(request.user.client, contactId);
+    async deleteContactById(@Req() req: RequestWithUser, @Param('contactId') contactId: string): Promise<void> {
+        return await this.apiContactService.deleteContactById(req.user.client.clientId, contactId);
     }
 }

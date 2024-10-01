@@ -13,6 +13,6 @@ export class CallQualityAssessmentStatisticController {
 
     @Get()
     async getCqaStatistic(@Req() req: RequestWithUser) {
-        return this.cqas.getCqaStatistic(req.user.client);
+        return this.cqas.getCqaStatistic(req.user.client.clientId);
     }
 }

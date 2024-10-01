@@ -27,7 +27,7 @@ export class MissedCallController {
 
     @Get('/trunks/name')
     async getTrunkName(@Req() req: RequestWithUser) {
-        return this.missedCallService.getTrunkName(req.user.client);
+        return this.missedCallService.getTrunkName(req.user.client.clientId);
     }
 
     @Delete(':id')

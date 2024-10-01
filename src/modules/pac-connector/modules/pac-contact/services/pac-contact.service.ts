@@ -18,29 +18,33 @@ import {
 export class PacContactService {
     constructor(private readonly pgcs: PacGrpcConnectorService) {}
 
-    public async getContactInfoById(client: Client, data: GetContactInfoByIdRequest): Promise<ContactInfoDataReply> {
-        return await this.grpcSend<GetContactInfoByIdRequest, ContactInfoDataReply>(client, data, ContactServiceMethods.GetContactInfoById);
+    public async getContactInfoById(clientId: number, data: GetContactInfoByIdRequest): Promise<ContactInfoDataReply> {
+        return await this.grpcSend<GetContactInfoByIdRequest, ContactInfoDataReply>(
+            clientId,
+            data,
+            ContactServiceMethods.GetContactInfoById,
+        );
     }
 
-    public async updateContactInfoById(client: Client, data: UpdateContactInfoRequest): Promise<ContactInfoDataReply> {
+    public async updateContactInfoById(clientId: number, data: UpdateContactInfoRequest): Promise<ContactInfoDataReply> {
         return await this.grpcSend<UpdateContactInfoRequest, ContactInfoDataReply>(
-            client,
+            clientId,
             data,
             ContactServiceMethods.UpdateContactInfoById,
         );
     }
 
-    public async getContactList(client: Client, data: GetContactListRequest): Promise<ContactListReply> {
-        return await this.grpcSend<GetContactListRequest, ContactListReply>(client, data, ContactServiceMethods.GetContactList);
+    public async getContactList(clientId: number, data: GetContactListRequest): Promise<ContactListReply> {
+        return await this.grpcSend<GetContactListRequest, ContactListReply>(clientId, data, ContactServiceMethods.GetContactList);
     }
 
-    public async deleteContactById(client: Client, data: DeleteContactByIdRequest): Promise<ContactInfoDataReply> {
-        return await this.grpcSend<DeleteContactByIdRequest, ContactInfoDataReply>(client, data, ContactServiceMethods.DeleteContactById);
+    public async deleteContactById(clientId: number, data: DeleteContactByIdRequest): Promise<ContactInfoDataReply> {
+        return await this.grpcSend<DeleteContactByIdRequest, ContactInfoDataReply>(clientId, data, ContactServiceMethods.DeleteContactById);
     }
 
-    private async grpcSend<T, D>(client: Client, data: T, methodName: ContactServiceMethods): Promise<D> {
+    private async grpcSend<T, D>(clientId: number, data: T, methodName: ContactServiceMethods): Promise<D> {
         const pacGrpcConnectorData: PacGrpcConnectorData<T> = {
-            client,
+            clientId,
             serviceName: ContactServiceName.ContactPbxService,
             methodName,
             data,

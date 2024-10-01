@@ -30,7 +30,7 @@ export class CallQualityAssessmentConfigController {
 
     @Get()
     async getCqaClientConfig(@Req() req: RequestWithUser) {
-        return this.cqac.getCqaConfig(req.user.client.id);
+        return this.cqac.getCqaConfig(req.user.client.clientId);
     }
 
     @Delete()

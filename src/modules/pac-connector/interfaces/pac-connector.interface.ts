@@ -8,7 +8,7 @@ export interface PacPayload {
 }
 
 export interface PacGrpcConnectorData<T> {
-    client: Client;
+    clientId: number;
     serviceName: GrpcServiceName;
     methodName: GrpcServiceMethods;
     data: T;

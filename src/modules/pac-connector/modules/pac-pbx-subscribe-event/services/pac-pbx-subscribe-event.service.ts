@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { Client } from '@app/modules/client/entities/client.entity';
 import { PacGrpcConnectorData } from '@app/modules/pac-connector/interfaces/pac-connector.interface';
 import { PacGrpcConnectorService } from '@app/modules/pac-connector/services/pac-grpc-connector.service';
 import { Injectable } from '@nestjs/common';
@@ -12,33 +11,33 @@ import { PbxSubscribeEventServiceMethods, PbxSubscribeEventServiceName } from '.
 export class PacPbxSubscribeEventService {
     constructor(private readonly pgcs: PacGrpcConnectorService) {}
 
-    public async subscribeUpdateEvent(client: Client): Promise<void> {
-        await this.grpcSend<{}, void>(client, new Empty(), PbxSubscribeEventServiceMethods.SubscribeUpdateEvent);
+    public async subscribeUpdateEvent(clientId: number): Promise<void> {
+        await this.grpcSend<{}, void>(clientId, new Empty(), PbxSubscribeEventServiceMethods.SubscribeUpdateEvent);
     }
 
-    public async subscribeInsertedEvent(client: Client): Promise<void> {
-        await this.grpcSend<{}, void>(client, new Empty(), PbxSubscribeEventServiceMethods.SubscribeInsertedEvent);
+    public async subscribeInsertedEvent(clientId: number): Promise<void> {
+        await this.grpcSend<{}, void>(clientId, new Empty(), PbxSubscribeEventServiceMethods.SubscribeInsertedEvent);
     }
 
-    public async subscribeDeletedEvent(client: Client): Promise<void> {
-        await this.grpcSend<{}, void>(client, new Empty(), PbxSubscribeEventServiceMethods.SubscribeDeletedEvent);
+    public async subscribeDeletedEvent(clientId: number): Promise<void> {
+        await this.grpcSend<{}, void>(clientId, new Empty(), PbxSubscribeEventServiceMethods.SubscribeDeletedEvent);
     }
 
-    public async unsubscribeDeletedEvent(client: Client): Promise<void> {
-        await this.grpcSend<{}, void>(client, new Empty(), PbxSubscribeEventServiceMethods.UnsubscribeDeletedEvent);
+    public async unsubscribeDeletedEvent(clientId: number): Promise<void> {
+        await this.grpcSend<{}, void>(clientId, new Empty(), PbxSubscribeEventServiceMethods.UnsubscribeDeletedEvent);
     }
 
-    public async unsubscribeInsertedEvent(client: Client): Promise<void> {
-        await this.grpcSend<{}, void>(client, new Empty(), PbxSubscribeEventServiceMethods.UnsubscribeInsertedEvent);
+    public async unsubscribeInsertedEvent(clientId: number): Promise<void> {
+        await this.grpcSend<{}, void>(clientId, new Empty(), PbxSubscribeEventServiceMethods.UnsubscribeInsertedEvent);
     }
 
-    public async unsubscribeUpdateEvent(client: Client): Promise<void> {
-        await this.grpcSend<{}, void>(client, new Empty(), PbxSubscribeEventServiceMethods.UnsubscribeUpdateEvent);
+    public async unsubscribeUpdateEvent(clientId: number): Promise<void> {
+        await this.grpcSend<{}, void>(clientId, new Empty(), PbxSubscribeEventServiceMethods.UnsubscribeUpdateEvent);
     }
 
-    private async grpcSend<T, D>(client: Client, data: T, methodName: PbxSubscribeEventServiceMethods): Promise<D> {
+    private async grpcSend<T, D>(clientId: number, data: T, methodName: PbxSubscribeEventServiceMethods): Promise<D> {
         const pacGrpcConnectorData: PacGrpcConnectorData<T> = {
-            client,
+            clientId,
             serviceName: PbxSubscribeEventServiceName.PbxSubscribeEventService,
             methodName,
             data,

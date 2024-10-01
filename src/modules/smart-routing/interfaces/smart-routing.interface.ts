@@ -1,4 +1,3 @@
-import { Client } from '@app/modules/client/entities/client.entity';
 import { RoutingServiceType } from './smart-routing.enum';
 
 export type SmartRoutingProviders = {
@@ -10,7 +9,7 @@ export interface SmartRoutingProvider {
 }
 
 export interface RotingInfoData {
-    client: Client;
+    clientId: number;
     pbxExtension: string;
     externalNumber: string;
 }
@@ -20,7 +19,7 @@ export interface GetRotingInfoData {
 }
 
 export interface IncomingCallData {
-    client: Client;
+    clientId: number;
     externalNumber: string;
 }
 

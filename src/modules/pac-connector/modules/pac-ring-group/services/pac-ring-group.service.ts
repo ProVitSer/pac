@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { Client } from '@app/modules/client/entities/client.entity';
 import { PacGrpcConnectorData } from '@app/modules/pac-connector/interfaces/pac-connector.interface';
 import { PacGrpcConnectorService } from '@app/modules/pac-connector/services/pac-grpc-connector.service';
 import { Injectable } from '@nestjs/common';
@@ -19,37 +18,37 @@ import {
 export class PacRingGroupService {
     constructor(private readonly pgcs: PacGrpcConnectorService) {}
 
-    public async getRingGroupList(client: Client): Promise<RingGroupListReply> {
-        return await this.grpcSend<{}, RingGroupListReply>(client, new Empty(), RingGroupServiceMethods.GetRingGroupList);
+    public async getRingGroupList(clientId: number): Promise<RingGroupListReply> {
+        return await this.grpcSend<{}, RingGroupListReply>(clientId, new Empty(), RingGroupServiceMethods.GetRingGroupList);
     }
 
-    public async getRingGroupMembers(client: Client, data: GetRingGroupMembersRequest): Promise<RingGroupMembersReply> {
+    public async getRingGroupMembers(clientId: number, data: GetRingGroupMembersRequest): Promise<RingGroupMembersReply> {
         return await this.grpcSend<GetRingGroupMembersRequest, RingGroupMembersReply>(
-            client,
+            clientId,
             data,
             RingGroupServiceMethods.GetRingGroupMembers,
         );
     }
 
-    public async addMemberInRingGroup(client: Client, data: AddMemberInRingGroupRequest): Promise<RingGroupMembersReply> {
+    public async addMemberInRingGroup(clientId: number, data: AddMemberInRingGroupRequest): Promise<RingGroupMembersReply> {
         return await this.grpcSend<AddMemberInRingGroupRequest, RingGroupMembersReply>(
-            client,
+            clientId,
             data,
             RingGroupServiceMethods.AddMemberInRingGroup,
         );
     }
 
-    public async deleteMemberInRingGroup(client: Client, data: DeleteMemberInRingGroupRequest): Promise<RingGroupMembersReply> {
+    public async deleteMemberInRingGroup(clientId: number, data: DeleteMemberInRingGroupRequest): Promise<RingGroupMembersReply> {
         return await this.grpcSend<DeleteMemberInRingGroupRequest, RingGroupMembersReply>(
-            client,
+            clientId,
             data,
             RingGroupServiceMethods.DeleteMemberInRingGroup,
         );
     }
 
-    private async grpcSend<T, D>(client: Client, data: T, methodName: RingGroupServiceMethods): Promise<D> {
+    private async grpcSend<T, D>(clientId: number, data: T, methodName: RingGroupServiceMethods): Promise<D> {
         const pacGrpcConnectorData: PacGrpcConnectorData<T> = {
-            client,
+            clientId,
             serviceName: RingGroupServiceName.RingGroupPbxService,
             methodName,
             data,

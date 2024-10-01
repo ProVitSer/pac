@@ -9,7 +9,6 @@ import { FULL_INCOMING_CALL_INFO } from '@app/common/constants/sql';
 import { ConfigService } from '@nestjs/config';
 import { PbxEnvironmentVariables } from '@app/common/config/interfaces/config.interface';
 import { format, parse } from 'date-fns';
-import { DateTime } from 'luxon';
 import { Exchange, RoutingKey } from '@app/common/constants/amqp';
 
 @Injectable()
@@ -41,7 +40,7 @@ export class IncomingCallHandlerService {
         //Проверить первый объект и отправить, если callAnswered равно false, неотвеченный входящий
         if (sortedFullCallInfo.length > 0 && !sortedFullCallInfo[0].callAnswered) {
             const { operatorName, srcCallerNnumber } = sortedFullCallInfo[0];
-            this.sendMissedCall(callRingiingData.client.clientId, operatorName, srcCallerNnumber);
+            this.sendMissedCall(callRingiingData.clientId, operatorName, srcCallerNnumber);
         }
     }
 
@@ -61,7 +60,7 @@ export class IncomingCallHandlerService {
     }
 
     private async getFullCallInfo(callRingiingData: CallRingingData, callId: number) {
-        const fullCallInfo = await this.pacSqlService.sqlRequest(callRingiingData.client, {
+        const fullCallInfo = await this.pacSqlService.sqlRequest(callRingiingData.clientId, {
             query: `${FULL_INCOMING_CALL_INFO} ${callId}`,
         });
 

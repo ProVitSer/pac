@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { Files } from '../entities/files.entity';
 import { CreateFilesService } from './create-files.service';
 import { FilesService } from './files.service';
-import { Client } from '@app/modules/client/entities/client.entity';
 import { ApplicationServiceType } from '@app/common/interfaces/enums';
 import { AudioConverterService } from '@app/modules/audio-converter/audio-converter.service';
 
@@ -15,13 +14,13 @@ export class AudioFilesService {
         private readonly filesService: FilesService,
     ) {}
 
-    async saveAudioFile(client: Client, file: Express.Multer.File, appServiceType: ApplicationServiceType): Promise<Files> {
+    async saveAudioFile(clientId: number, file: Express.Multer.File, appServiceType: ApplicationServiceType): Promise<Files> {
         const audioDir = this.configService.get<string>('files.audioDir');
 
         const fileStruct = await this.createFilesService.createFile({
             fileName: file.originalname,
             path: audioDir,
-            client,
+            clientId,
             mimetype: file.mimetype,
             size: file.size,
             fileType: 'wav',
@@ -31,6 +30,6 @@ export class AudioFilesService {
 
         await AudioConverterService.convertToWav(file, faliPath);
 
-        return await this.filesService.createFile({ ...fileStruct, client, applicationServiceType: appServiceType });
+        return await this.filesService.createFile({ ...fileStruct, clientId, applicationServiceType: appServiceType });
     }
 }

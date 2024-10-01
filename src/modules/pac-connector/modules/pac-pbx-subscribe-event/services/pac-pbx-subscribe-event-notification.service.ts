@@ -83,14 +83,14 @@ export class PacPbxSubscribeEventNotificationService {
 
     private async getSmartRouting(request: RequestWithPacInfo, connection: ConnectionsData): Promise<GetRotingInfoData> {
         return this.smartRoutingProvidersService.getRoutingInfo({
-            client: request.client,
+            clientId: request.client.clientId,
             pbxExtension: connection.destinationNumber,
             externalNumber: connection.externalParty,
         });
     }
 
     private async transferCall(request: RequestWithPacInfo, callId: number, destinationNumber: string, extension: string): Promise<void> {
-        await this.pacCallService.transferCall(request.client, {
+        await this.pacCallService.transferCall(request.client.clientId, {
             callId,
             dn: destinationNumber,
             numberTo: extension,

@@ -7,7 +7,6 @@ import { CallQualityAssessmentConfig } from '../entities/call-quality-assessment
 import { CreateTrunkResult } from '@app/modules/voip/interfaces/voip.interface';
 import { ApplicationServiceType } from '@app/common/interfaces/enums';
 import { AudioFilesService } from '@app/modules/files/services/audio-files.service';
-import { Client } from '@app/modules/client/entities/client.entity';
 import { CreateCallQualityAssessmentConfigAdapter } from '../adapters/create-call-quality-assessment-config.adapter';
 import { VoipService } from '@app/modules/voip/services/voip.service';
 import CqacNotFoundException from '../exceptions/cqac-not-found.exception';
@@ -17,6 +16,7 @@ import { Voip } from '@app/modules/voip/entities/voip.entity';
 import { CqacTrunkNotFoundException } from '../exceptions/cqac-trunk-not-found';
 import { Files } from '@app/modules/files/entities/files.entity';
 import { CqaFileType } from '../interfaces/call-quality-assessment.enum';
+import { Client } from '@app/modules/client/entities/client.entity';
 
 @Injectable()
 export class CallQualityAssessmentConfigService {
@@ -31,11 +31,13 @@ export class CallQualityAssessmentConfigService {
 
     public async addCqacConfig(data: CreateCqacConfigData): Promise<void> {
         try {
+            const { clientId } = data.client;
+
             const trunk = await this.createTrunk(data);
 
-            const mainFile = await this.addSoundFile(data.soundMain, data.client);
+            const mainFile = await this.addSoundFile(data.soundMain, clientId);
 
-            const goodByeFile = data.soundGoodbye ? await this.addSoundFile(data.soundGoodbye, data.client) : undefined;
+            const goodByeFile = data.soundGoodbye ? await this.addSoundFile(data.soundGoodbye, clientId) : undefined;
 
             const cqac = this.cqac.create(
                 new CreateCallQualityAssessmentConfigAdapter({ trunk, mainFile, goodByeFile, client: data.client }),
@@ -62,7 +64,7 @@ export class CallQualityAssessmentConfigService {
     }
 
     public async deleteCqacConfig(client: Client): Promise<void> {
-        const cqac = await this.getCqaConfig(client.id);
+        const cqac = await this.getCqaConfig(client.clientId);
 
         for (const file of cqac.audioFiles) {
             await this.filesService.deleteFile(file.fileId);
@@ -74,7 +76,7 @@ export class CallQualityAssessmentConfigService {
     }
 
     public async updateTrunkData(client: Client, trunkData: UpdateCqaConfigkDto): Promise<void> {
-        const cqac = await this.getCqaConfig(client.id);
+        const cqac = await this.getCqaConfig(client.clientId);
 
         const trunkId = client.voip.filter((t: Voip) => (t.applicationServiceType = ApplicationServiceType.cqa));
 
@@ -129,19 +131,19 @@ export class CallQualityAssessmentConfigService {
         audioFileData?: AudioFilesData,
     ): Promise<Files> {
         if (audioFileData) {
-            return await this.updateSoundFile(audioFileData.fileId, soundFile, data.client);
+            return await this.updateSoundFile(audioFileData.fileId, soundFile, data.client.clientId);
         } else {
-            return await this.addSoundFile(soundFile, data.client);
+            return await this.addSoundFile(soundFile, data.client.clientId);
         }
     }
 
-    private async updateSoundFile(fileId: number, file: Express.Multer.File, client: Client): Promise<Files> {
+    private async updateSoundFile(fileId: number, file: Express.Multer.File, clientId: number): Promise<Files> {
         await this.filesService.deleteFile(fileId);
-        return await this.addSoundFile(file, client);
+        return await this.addSoundFile(file, clientId);
     }
 
-    private async addSoundFile(file: Express.Multer.File, client: Client): Promise<Files> {
-        return await this.audioFilesService.saveAudioFile(client, file, ApplicationServiceType.cqa);
+    private async addSoundFile(file: Express.Multer.File, clientId: number): Promise<Files> {
+        return await this.audioFilesService.saveAudioFile(clientId, file, ApplicationServiceType.cqa);
     }
 
     private async createTrunk(data: CreateCqacConfigData): Promise<CreateTrunkResult> {

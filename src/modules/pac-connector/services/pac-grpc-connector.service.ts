@@ -18,7 +18,7 @@ export class PacGrpcConnectorService {
     ) {}
 
     public async callGrpcMethod<T, D>(data: PacGrpcConnectorData<T>): Promise<Observable<D>> {
-        const pcgs = await this.pcs.getPacConnector(data.client);
+        const pcgs = await this.pcs.getPacConnector(data.clientId);
 
         const metadata = await this.getGrpcTokenMetadata(pcgs);
 

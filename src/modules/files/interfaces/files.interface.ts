@@ -1,5 +1,3 @@
-import { Client } from '../../../modules/client/entities/client.entity';
-
 export interface SaveAudioFileData {
     stream: NodeJS.ReadableStream;
     fileName: string;
@@ -11,7 +9,7 @@ export interface SaveFileData {
     fileName: string;
     mimetype: string;
     path: string;
-    client: Client;
+    clientId: number;
     size: number;
     fileType: string;
 }

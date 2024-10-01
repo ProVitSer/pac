@@ -56,16 +56,16 @@ export class ClientService {
         return client;
     }
 
-    public async getClientById(id: number): Promise<Client> {
+    public async getClientById(clientId: number): Promise<Client> {
         const client = await this.clientRepository.findOne({
-            where: { id: id, deleted: false },
+            where: { clientId, deleted: false },
             relations: {
                 licenses: true,
             },
         });
 
         if (!client) {
-            throw new ClientNotFoundException(id);
+            throw new ClientNotFoundException(clientId);
         }
 
         return client;

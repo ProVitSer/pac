@@ -40,7 +40,7 @@ export class CallProcessor {
     }
 
     private async getEndCallId(callRingiingData: CallRingingData): Promise<string | undefined> {
-        const externalCdr = await this.pacSqlService.sqlRequest(callRingiingData.client, {
+        const externalCdr = await this.pacSqlService.sqlRequest(callRingiingData.clientId, {
             query: `${END_CALL_SQL} '%_${callRingiingData.callHistoryId}' ORDER BY id DESC`,
         });
 

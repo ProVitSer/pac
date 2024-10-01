@@ -19,6 +19,6 @@ export class FilesController {
         @UploadedFile() file: Express.Multer.File,
         @Body() data: { appServiceType: ApplicationServiceType },
     ) {
-        return await this.audioFilesService.saveAudioFile(req.user.client, file, data.appServiceType);
+        return await this.audioFilesService.saveAudioFile(req.user.client.clientId, file, data.appServiceType);
     }
 }
