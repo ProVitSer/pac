@@ -32,7 +32,7 @@ export interface SendCallData {
 }
 
 export interface SendCallResult {
-    uniqCallId: string;
+    uniqCallId?: string;
     originateCallStatus: OriginateCallStatus;
 }
 

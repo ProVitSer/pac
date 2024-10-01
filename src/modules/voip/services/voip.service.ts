@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateTrunkData, TrunkStatusResult, VoipPbxService } from '../interfaces/voip.interface';
+import { CreateTrunkData, SendCallResult, TrunkStatusResult, VoipPbxService } from '../interfaces/voip.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Voip } from '../entities/voip.entity';
@@ -94,5 +94,26 @@ export class VoipService {
         await this.voipRepository.update({ trunkId: trunkData.trunkId }, { trunkId: updateTrunk.trunkId });
 
         return this.getTrunkStatusById(updateTrunk.trunkId);
+    }
+
+    public async makeExternalCall(clientId: number, dstNumber: string, srcNumber: string): Promise<SendCallResult> {
+        const voip = await this.voipRepository.findOne({
+            where: {
+                applicationServiceType: ApplicationServiceType.cqa,
+                client: {
+                    clientId: clientId,
+                },
+            },
+            relations: ['client'],
+        });
+
+        if (!voip) throw new TrunkNotFoundException();
+
+        return await this.voipPbxService.sendCall({
+            clientId,
+            trunkId: voip.trunkId,
+            dstNumber,
+            srcNumber,
+        });
     }
 }

@@ -13,15 +13,15 @@ export class OriginateAction extends BaseAction {
         try {
             const action = new namiLib.Actions.Originate();
 
-            action.channel = `${ChannelType.PJSIP}/${data.clientTrunkId}/${data.srcNumber}`;
+            action.channel = `${ChannelType.LOCAL}/${data.srcNumber}@${AMI_ORIGINATE_OUTBOUND_CALL.context}`;
             action.callerid = data.dstNumber;
             action.priority = AMI_ORIGINATE_OUTBOUND_CALL.priority;
             action.timeout = AMI_ORIGINATE_OUTBOUND_CALL.timeout;
             action.context = AMI_ORIGINATE_OUTBOUND_CALL.context;
             action.exten = data.dstNumber;
             action.async = AMI_ORIGINATE_OUTBOUND_CALL.async;
+            action.variable = `trunkId=${data.clientTrunkId}`;
             action.ChannelId = uuid.v4();
-
             try {
                 await this.sendPromiseAction(action);
             } catch (e) {

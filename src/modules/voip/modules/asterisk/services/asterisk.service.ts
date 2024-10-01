@@ -19,6 +19,7 @@ import { CreateTrunkDataWithTrunkId, UpdateTrunkDataWithTrunkId } from '../inter
 import { AsteriskUtils } from '../utils/asterisk.utils';
 import { UtilsService } from '@app/common/utils/utils.service';
 import { TrunkNotFoundException } from '@app/modules/voip/exceptions/trunk-not-found.exeption';
+import { OriginateCallStatus } from '@app/modules/voip/interfaces/voip.enum';
 
 @Injectable()
 export class AstersikService implements VoipPbxService {
@@ -78,7 +79,21 @@ export class AstersikService implements VoipPbxService {
     }
 
     public async sendCall(data: SendCallData): Promise<SendCallResult> {
-        throw new Error('Method not implemented.');
+        try {
+            const uniqCallId = (await this.originateAction.originateCall({
+                clientTrunkId: data.trunkId,
+                dstNumber: data.dstNumber,
+                srcNumber: data.srcNumber,
+            })) as unknown as string;
+            return {
+                uniqCallId,
+                originateCallStatus: OriginateCallStatus.successful,
+            };
+        } catch (e) {
+            return {
+                originateCallStatus: OriginateCallStatus.error,
+            };
+        }
     }
 
     public async sendCallWithAudio(data: SendCallWithAudioData): Promise<SendCallResult> {

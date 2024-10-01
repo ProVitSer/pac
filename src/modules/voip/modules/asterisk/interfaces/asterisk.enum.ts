@@ -133,6 +133,7 @@ export enum OutgoingCallOfferPref {
 
 export enum AsteriskContext {
     client_trunk = 'client-trunk',
+    to_client_trunk = 'to-client-trunk',
 }
 
 export enum ChannelType {
