@@ -78,4 +78,8 @@ export class UtilsService {
         }
         return ip;
     }
+
+    static formatNumber(number: string): string {
+        return number.replace(/\D/g, '');
+    }
 }
