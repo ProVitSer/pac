@@ -15,6 +15,9 @@ export class TgUsers {
     @ManyToMany(() => TgConfig, (tgConfig) => tgConfig.tgUsers, { onDelete: 'CASCADE' })
     tgConfig: TgConfig[];
 
+    @Column({ nullable: true })
+    deleted: boolean;
+
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
 
