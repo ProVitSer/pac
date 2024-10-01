@@ -26,7 +26,7 @@ export class PacPbxSubscribeEventNotificationService {
 
         activeConnectionsInfo.map((a: ApiActiveConnectionsInfo) => {
             this.amqpService.sendMessage(Exchange.events, RoutingKey.callRinging, {
-                client: request.client,
+                clientId: request.client.clientId,
                 connector: request.connector,
                 callHistoryId: a.callId,
                 activeConnectionsInfo,
@@ -39,7 +39,7 @@ export class PacPbxSubscribeEventNotificationService {
 
         activeConnectionsInfo.map((a: ApiActiveConnectionsInfo) => {
             this.amqpService.sendMessage(Exchange.events, RoutingKey.callRinging, {
-                client: request.client,
+                clientId: request.client.clientId,
                 connector: request.connector,
                 callHistoryId: a.callId,
                 activeConnectionsInfo,
