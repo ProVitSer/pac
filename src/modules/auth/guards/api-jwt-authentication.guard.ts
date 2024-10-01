@@ -9,7 +9,6 @@ export default class ApiJwtAuthenticationGuard extends AuthGuard('api-jwt') {
     }
 
     handleRequest(err: Error, user: any, info: any, context: any) {
-        console.log(err);
         if (err || !user) throw new UnauthorizedException();
 
         return user;
