@@ -5,7 +5,7 @@ interface TemplateVariables {
     [key: string]: string | number | unknown;
 }
 
-export type Contexts = LicenseCreateContext | LicenseDeactivateContext | LicenseExpireContext;
+export type Contexts = LicenseCreateContext | LicenseDeactivateContext | LicenseExpireContext | ChangeTrunkStatusContext;
 
 export interface LicenseCreateContext {
     fio: string;

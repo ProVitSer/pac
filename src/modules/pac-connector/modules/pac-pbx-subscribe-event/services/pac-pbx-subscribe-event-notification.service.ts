@@ -28,7 +28,7 @@ export class PacPbxSubscribeEventNotificationService {
             this.amqpService.sendMessage(Exchange.events, RoutingKey.callRinging, {
                 clientId: request.client.clientId,
                 connector: request.connector,
-                callHistoryId: a.callId,
+                callHistoryId: String(a.callId),
                 activeConnectionsInfo,
             });
         });
@@ -41,10 +41,11 @@ export class PacPbxSubscribeEventNotificationService {
             this.amqpService.sendMessage(Exchange.events, RoutingKey.callRinging, {
                 clientId: request.client.clientId,
                 connector: request.connector,
-                callHistoryId: a.callId,
+                callHistoryId: String(a.callId),
                 activeConnectionsInfo,
             });
         });
+
         const filteredConnections = this.filterConnections(activeConnectionsInfo);
 
         if (filteredConnections.length) {
