@@ -24,7 +24,7 @@ export interface FullCallInfo {
     startTime: string;
     endTime: string;
     srcDisplayName: string;
-    srcCallerNnumber: string;
+    srcCallerNumber: string;
     srcDn: string;
     dstExtendedDisplayName: string;
     dstDisplayName: string;

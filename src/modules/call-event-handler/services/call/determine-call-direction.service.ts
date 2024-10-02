@@ -1,6 +1,6 @@
 import { ApiActiveConnectionsInfo } from '@app/modules/api/modules/call/interfaces/api-call.interface';
-import { CallDirection } from '../interfaces/call-event-handler.enum';
-import { DetermineCallDirectionData } from '../interfaces/call-event-handler.interface';
+import { CallDirection } from '../../interfaces/call-event-handler.enum';
+import { DetermineCallDirectionData } from '../../interfaces/call-event-handler.interface';
 import configuration from '@app/common/config/config.provider';
 
 export class DetermineCallDirectionService {
@@ -37,7 +37,7 @@ export class DetermineCallDirectionService {
                 internalPartyNumber.length > this.pbxExtensionLegth &&
                 destinationNumber.length === this.pbxExtensionLegth
             ) {
-                callDirection = CallDirection.outgoung;
+                callDirection = CallDirection.outgoing;
             } else if (
                 externalParty.length > this.pbxExtensionLegth &&
                 internalPartyNumber.length > this.pbxExtensionLegth &&

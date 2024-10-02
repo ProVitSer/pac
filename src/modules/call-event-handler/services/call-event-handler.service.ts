@@ -6,7 +6,7 @@ import { CallOnProcessEvent, DetermineCallDirectionData } from '../interfaces/ca
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CallEventHandler } from '../entities/call-event-handler.entity';
-import { DetermineCallDirectionService } from './determine-call-direction.service';
+import { DetermineCallDirectionService } from './call/determine-call-direction.service';
 
 @Injectable()
 export class CallEventHandlerService {

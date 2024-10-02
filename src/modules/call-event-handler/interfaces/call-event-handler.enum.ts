@@ -1,6 +1,6 @@
 export enum CallDirection {
     incoming = 'incoming',
-    outgoung = 'outgoung',
+    outgoing = 'outgoing',
     local = 'local',
     unknown = 'unknown',
 }
