@@ -18,8 +18,26 @@ export interface ConfigEnvironment {
     dadata: DadataEnvironmentVariables;
     bull: BullEnvironmentVariables;
     pbx: PbxEnvironmentVariables;
+    voiceKit: {
+        tts: {
+            voiceFileDir: string;
+            tinkoff: VoiceKitTtsTinkoffEnvironmentVariables;
+            sber: VoiceKitTtsSberEnvironmentVariables;
+        };
+        stt: string;
+    };
 }
 
+export interface VoiceKitTtsSberEnvironmentVariables {
+    url: string;
+    accessToken: string;
+}
+
+export interface VoiceKitTtsTinkoffEnvironmentVariables {
+    url: string;
+    apiKey: string;
+    secretKey: string;
+}
 export interface PbxEnvironmentVariables {
     extensionLength: number;
     fqdn: string;
