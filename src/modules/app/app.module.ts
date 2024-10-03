@@ -41,6 +41,7 @@ import { CrmModule } from '../crm/crm.module';
 import { CallEventHandlerModule } from '../call-event-handler/call-event-handler.module';
 import { MissedCallModule } from '../missed-call/missed-call.module';
 import { CallAnalyticsModule } from '../call-analytics/call-analytics.module';
+import { VoiceKitModule } from '../voice-kit/voice-kit.module';
 
 @Module({
     imports: [
@@ -90,6 +91,7 @@ import { CallAnalyticsModule } from '../call-analytics/call-analytics.module';
         CallEventHandlerModule,
         MissedCallModule,
         CallAnalyticsModule,
+        VoiceKitModule,
         RouterModule.register([
             {
                 path: 'api',
@@ -232,6 +234,15 @@ import { CallAnalyticsModule } from '../call-analytics/call-analytics.module';
                     {
                         path: 'call-analytics',
                         module: CallAnalyticsModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'voice-kit',
+                        module: VoiceKitModule,
                     },
                 ],
             },

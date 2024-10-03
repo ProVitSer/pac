@@ -16,7 +16,11 @@
         {
             "include": "../src/modules/pac-connector/modules/**/**/*.proto",
             "outDir": "./dist/src"
-          }
+        },
+        {
+            "include": "../src/modules/voice-kit/tts/providers/tinkoff/proto/tts/v1/tts.proto",
+            "outDir": "./dist/src"
+        }
       ]
   
   }

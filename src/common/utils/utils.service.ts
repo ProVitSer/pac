@@ -82,4 +82,13 @@ export class UtilsService {
     static formatNumber(number: string): string {
         return number.replace(/\D/g, '');
     }
+
+    static base64Encode(string: string): string {
+        const encoded = Buffer.from(string).toString('base64');
+        return encoded.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    static base64Decode(base64: string) {
+        return Buffer.from(base64, 'base64');
+    }
 }
