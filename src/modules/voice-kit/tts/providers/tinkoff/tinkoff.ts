@@ -10,6 +10,7 @@ export class TinkoffTTS implements TTSProvider {
 
     public async convertTextToRawVoiceFile(data: TTSData): Promise<TTSProviderVoiceFileData> {
         try {
+            throw new Error('Method not implemented.');
             return await this.tinkoffTTSService.streamingSynthesize(new TinkoffStreamingTTSDataAdapter(data));
         } catch (e) {
             throw e;
@@ -17,6 +18,7 @@ export class TinkoffTTS implements TTSProvider {
     }
 
     public async checkVoiceEmotion(data: TTSData): Promise<void> {
+        throw new Error('Method not implemented.');
         const { voice, emotion } = data;
         if (voice) {
             const listVoices = await this.tinkoffTTSService.getListVoices();
@@ -28,6 +30,7 @@ export class TinkoffTTS implements TTSProvider {
 
     public async voiceList(): Promise<ListVoicesData[]> {
         try {
+            throw new Error('Method not implemented.');
             return await this.tinkoffTTSService.getListVoices();
         } catch (e) {
             throw e;
