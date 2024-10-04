@@ -18,7 +18,7 @@
             "outDir": "./dist/src"
         },
         {
-            "include": "../src/modules/voice-kit/tts/providers/tinkoff/proto/tts/v1/tts.proto",
+            "include": "../src/modules/voice-kit/tts/providers/tinkoff/proto/**/**/*.proto",
             "outDir": "./dist/src"
         }
       ]
