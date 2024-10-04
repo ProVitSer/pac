@@ -6,7 +6,7 @@ export enum SberScope {
 
 export enum SberApiUrl {
     token = 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth',
-    tts = 'https://smartspeech.sber.ru/rest/v1/text:synthesize',
+    synthesize = 'https://smartspeech.sber.ru/rest/v1/text:synthesize',
 }
 
 export enum SberSpeechVoice {
@@ -26,8 +26,9 @@ export enum SberSpeechSampleRateHertz {
 
 export enum SberSpeechFormat {
     wav = 'wav16',
-    pcm = 'pcm16_se',
+    pcm = 'pcm16',
     opus = 'opus',
+    alaw = 'alaw',
 }
 
 export enum SberContentType {

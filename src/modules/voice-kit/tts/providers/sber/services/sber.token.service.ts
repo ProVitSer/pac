@@ -5,19 +5,26 @@ import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import { SberApiUrl, SberScope } from '../interfaces/sber.enum';
 import * as uuid from 'uuid';
-import * as qs from 'qs';
+import { stringify } from 'qs';
 import { SberTokenResponse } from '../interfaces/sber.interface';
 import { getTime } from 'date-fns';
 import { VoiceKitTtsSberEnvironmentVariables } from '@app/common/config/interfaces/config.interface';
+import * as https from 'https';
 
 @Injectable()
 export class SberTokenService implements OnModuleInit {
     private accessToken: string;
     private accessTokenExpiresAt: number;
+    private httpsAgent: https.Agent;
+
     constructor(
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
-    ) {}
+    ) {
+        this.httpsAgent = new https.Agent({
+            rejectUnauthorized: false,
+        });
+    }
 
     async onModuleInit() {
         const tokenData = await this._getAccessToken();
@@ -50,21 +57,28 @@ export class SberTokenService implements OnModuleInit {
 
     private async _getAccessToken(): Promise<SberTokenResponse> {
         const response = await firstValueFrom(
-            this.httpService.post<SberTokenResponse>(SberApiUrl.token, this.getTokenRequestData(), this.getTokenHeader()).pipe(
-                catchError((error: AxiosError) => {
-                    throw error;
-                }),
-            ),
+            this.httpService
+                .post<SberTokenResponse>(SberApiUrl.token, this.getTokenRequestData(), {
+                    ...this.getTokenHeader(),
+                    httpsAgent: this.httpsAgent,
+                })
+                .pipe(
+                    catchError((error: AxiosError) => {
+                        console.log(error);
+                        throw error;
+                    }),
+                ),
         );
         return response.data;
     }
 
     private getTokenRequestData() {
-        return qs.stringify({ scope: SberScope.personal });
+        return stringify({ scope: SberScope.personal });
     }
 
     private getTokenHeader() {
         const { accessToken } = this.configService.get('voiceKit.tts.sber') as VoiceKitTtsSberEnvironmentVariables;
+
         return {
             headers: {
                 Authorization: `Basic ${accessToken}`,
