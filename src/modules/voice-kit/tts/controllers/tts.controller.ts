@@ -6,7 +6,10 @@ import { TtsService } from '../services/tts.service';
 import { TtsConvertDto } from '../dto/tts-convert.dto';
 import { ListVoicesData } from '../interfaces/tts.interface';
 import { TtsVoicesDTO } from '../dto/tts-voices.dto';
+import { Role } from '@app/common/interfaces/enums';
+import RoleGuard from '@app/modules/auth/guards/role.guard';
 
+@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
 @UseGuards(JwtAuthenticationGuard)
 @Controller('tts')
 export class TtsController {

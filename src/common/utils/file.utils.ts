@@ -19,7 +19,7 @@ export class FileUtilsService {
     }
 
     public static async writeStreamVoiceFile(fileName: string, filePath: string) {
-        return createWriteStream(`${join(__dirname, '..', filePath)}${fileName}`);
+        return createWriteStream(`${filePath}${fileName}`);
     }
 
     public static getFullPath(filePath: string): string {

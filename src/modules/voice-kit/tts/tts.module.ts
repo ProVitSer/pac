@@ -8,7 +8,7 @@ import { TinkoffModule } from './providers/tinkoff/tinkoff.module';
 import { SberModule } from './providers/sber/sber.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Tts]), TinkoffModule],
+    imports: [TypeOrmModule.forFeature([Tts]), TinkoffModule, SberModule],
     providers: [TTSProviderService, TtsService, TTSConvertService],
     exports: [TtsService],
 })
