@@ -13,7 +13,6 @@ export class TinkoffGRPCAuth {
                 aud: params['service_url'].split('/').pop(),
             };
             const token = this.generateJwt(apiKey, secretKey, authPayload);
-            console.log(token);
 
             const metadata = new Metadata();
 
@@ -31,7 +30,7 @@ export class TinkoffGRPCAuth {
             typ: 'JWT',
             kid: apiKey,
         };
-        console.log(header);
+
         payload['exp'] = Math.floor(Date.now() / 1000) + expirationTime;
 
         const headerBytes = JSON.stringify(header);

@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { TTSProvider, TTSData, TTSProviderVoiceFileData, ListVoicesData } from '../../interfaces/tts.interface';
 import { VOICE_ERROR, EMOTION_ERROR } from '../../tts.constants';
 import { TinkoffTTSService } from './services/tinkoff.service';
-import { TinkoffStreamingTTSDataAdapter } from './grpc/adapters/tinkoff.streaming.adapter';
+import { TinkoffStreamingTTSDataAdapter } from './adapters/tinkoff.streaming.adapter';
 
 @Injectable()
 export class TinkoffTTS implements TTSProvider {

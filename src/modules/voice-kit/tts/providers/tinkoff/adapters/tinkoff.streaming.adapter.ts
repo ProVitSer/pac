@@ -1,6 +1,6 @@
 import { TTSData } from '@app/modules/voice-kit/tts/interfaces/tts.interface';
-import { TinkoffSpeechFormat, TinkoffSpeechSampleRateHertz, TinkoffSpeechVoice } from '../../interfaces/tinkoff.enum';
-import { StreamingSynthesizeSpeechRequest } from '../../interfaces/tinkoff.interface';
+import { TinkoffSpeechFormat, TinkoffSpeechSampleRateHertz, TinkoffSpeechVoice } from '../interfaces/tinkoff.enum';
+import { StreamingSynthesizeSpeechRequest } from '../interfaces/tinkoff.interface';
 
 export class TinkoffStreamingTTSDataAdapter {
     streamingData: StreamingSynthesizeSpeechRequest;

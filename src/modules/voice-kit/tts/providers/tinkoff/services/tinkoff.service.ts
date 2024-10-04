@@ -4,19 +4,19 @@ import { TinkoffGRPCClient } from '../grpc/tinkoff.grpc.client';
 import * as uuid from 'uuid';
 import { StreamingSynthesizeSpeechResponse, VoicesListData } from '../interfaces/tinkoff.interface';
 import { TinkoffSpeechLang } from '../interfaces/tinkoff.enum';
-import { TinkoffStreamingTTSDataAdapter } from '../grpc/adapters/tinkoff.streaming.adapter';
+import { TinkoffStreamingTTSDataAdapter } from '../adapters/tinkoff.streaming.adapter';
 import { ListVoicesData, TTSProviderVoiceFileData } from '../../../interfaces/tts.interface';
 import { VoiceFileFormat } from '../../../interfaces/tts.enum';
 import { FileUtilsService } from '@app/common/utils/file.utils';
 
 @Injectable()
 export class TinkoffTTSService {
-    private readonly voicePath: string;
+    private readonly voiceTmpDir: string;
     constructor(
         private readonly configService: ConfigService,
         private readonly tinkoffClient: TinkoffGRPCClient,
     ) {
-        this.voicePath = this.configService.get('voiceKit.tts.voiceFileDir');
+        this.voiceTmpDir = this.configService.get('voiceKit.tts.voiceTmpDir');
     }
 
     public async streamingSynthesize(dataAdapter: TinkoffStreamingTTSDataAdapter): Promise<TTSProviderVoiceFileData> {
@@ -32,7 +32,7 @@ export class TinkoffTTSService {
             return {
                 fileName,
                 generatedFileName: fileName.slice(0, fileName.lastIndexOf('.')),
-                fullFilePath: FileUtilsService.getFullPath(this.voicePath),
+                fullFilePath: this.voiceTmpDir,
                 format: VoiceFileFormat.raw,
                 sampleRateHertz: dataAdapter.streamingData.audioConfig.sampleRateHertz,
             };
@@ -43,7 +43,6 @@ export class TinkoffTTSService {
 
     public async getListVoices(): Promise<ListVoicesData[]> {
         const ttsClient = this.getTTSClient();
-        console.log(ttsClient);
 
         const voicesList: VoicesListData = await new Promise((resolve, reject) => {
             ttsClient.ListVoices({ language_code: TinkoffSpeechLang.RU }, (err, response) => {
@@ -99,7 +98,7 @@ export class TinkoffTTSService {
     }
 
     private async writeStreamVoiceFile(ttsStreamingResponse: any, ttsClient: any, fileName: string) {
-        const writer = await FileUtilsService.writeStreamVoiceFile(fileName, this.voicePath);
+        const writer = await FileUtilsService.writeStreamVoiceFile(fileName, this.voiceTmpDir);
 
         await new Promise((resolve, reject) => {
             ttsStreamingResponse.on('status', (status) => {
