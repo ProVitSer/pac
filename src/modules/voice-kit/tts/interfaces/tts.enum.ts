@@ -1,5 +1,5 @@
 export enum TTSProviderType {
-    // yandex = 'yandex',
+    yandex = 'yandex',
     tinkoff = 'tinkoff',
     sber = 'sber',
 }

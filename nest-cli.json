@@ -20,7 +20,8 @@
         {
             "include": "../src/modules/voice-kit/tts/providers/tinkoff/proto/**/**/*.proto",
             "outDir": "./dist/src"
-        }
+        },
+        {"include": "../src/modules/voice-kit/tts/providers/yandex/config/*.json", "outDir": "./dist/src"}
       ]
   
   }

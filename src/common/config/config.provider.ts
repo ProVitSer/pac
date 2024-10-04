@@ -153,6 +153,11 @@ const DEV_CONF: ConfigEnvironment = {
                 url: process.env.SBER_TTS_URL,
                 accessToken: process.env.SBER_TTS_ACCESS_TOKEN,
             },
+            yandex: {
+                url: process.env.YANDEX_TTS_URL,
+                folderId: process.env.YANDEX_TTS_FOLDER_ID,
+                tokenFolder: process.env.YANDEX_TTS_TOKEN_FOLDER,
+            },
         },
         stt: '',
     },
@@ -296,6 +301,11 @@ const PROD_CONF: ConfigEnvironment = {
             sber: {
                 url: process.env.SBER_TTS_URL,
                 accessToken: process.env.SBER_TTS_ACCESS_TOKEN,
+            },
+            yandex: {
+                url: process.env.YANDEX_TTS_URL,
+                folderId: process.env.YANDEX_TTS_FOLDER_ID,
+                tokenFolder: process.env.YANDEX_TTS_TOKEN_FOLDER,
             },
         },
         stt: '',

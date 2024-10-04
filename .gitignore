@@ -64,3 +64,4 @@ assets/*
 sql.ts
 *pem
 *crt
+public

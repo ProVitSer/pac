@@ -24,9 +24,16 @@ export interface ConfigEnvironment {
             voiceTmpDir: string;
             tinkoff: VoiceKitTtsTinkoffEnvironmentVariables;
             sber: VoiceKitTtsSberEnvironmentVariables;
+            yandex: VoiceKitTtsYandexEnvironmentVariables;
         };
         stt: string;
     };
+}
+
+export interface VoiceKitTtsYandexEnvironmentVariables {
+    url: string;
+    folderId: string;
+    tokenFolder: string;
 }
 
 export interface VoiceKitTtsSberEnvironmentVariables {

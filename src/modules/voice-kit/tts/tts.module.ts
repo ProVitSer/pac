@@ -6,9 +6,10 @@ import { TTSProviderService } from './services/tts.provider';
 import { TtsService } from './services/tts.service';
 import { TinkoffModule } from './providers/tinkoff/tinkoff.module';
 import { SberModule } from './providers/sber/sber.module';
+import { YandexModule } from './providers/yandex/yandex.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Tts]), TinkoffModule, SberModule],
+    imports: [TypeOrmModule.forFeature([Tts]), TinkoffModule, SberModule, YandexModule],
     providers: [TTSProviderService, TtsService, TTSConvertService],
     exports: [TtsService],
 })
