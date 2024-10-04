@@ -142,7 +142,8 @@ const DEV_CONF: ConfigEnvironment = {
     },
     voiceKit: {
         tts: {
-            voiceFileDir: 'public/voice/',
+            voiceFileDir: process.env.VOICE_FILE_DIR,
+            voiceTmpDir: process.env.VOICE_TMP_DIR,
             tinkoff: {
                 url: process.env.TINKOFF_TTS_URL,
                 apiKey: process.env.TINKOFF_TTS_API_KEY,
@@ -285,7 +286,8 @@ const PROD_CONF: ConfigEnvironment = {
     },
     voiceKit: {
         tts: {
-            voiceFileDir: 'public/voice/',
+            voiceFileDir: process.env.VOICE_FILE_DIR,
+            voiceTmpDir: process.env.VOICE_TMP_DIR,
             tinkoff: {
                 url: process.env.TINKOFF_TTS_URL,
                 apiKey: process.env.TINKOFF_TTS_API_KEY,

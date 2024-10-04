@@ -21,6 +21,7 @@ export interface ConfigEnvironment {
     voiceKit: {
         tts: {
             voiceFileDir: string;
+            voiceTmpDir: string;
             tinkoff: VoiceKitTtsTinkoffEnvironmentVariables;
             sber: VoiceKitTtsSberEnvironmentVariables;
         };
