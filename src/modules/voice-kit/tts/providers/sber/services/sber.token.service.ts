@@ -12,7 +12,7 @@ import { VoiceKitTtsSberEnvironmentVariables } from '@app/common/config/interfac
 import * as https from 'https';
 
 @Injectable()
-export class SberTokenService implements OnModuleInit {
+export class SberTTSTokenService implements OnModuleInit {
     private accessToken: string;
     private accessTokenExpiresAt: number;
     private httpsAgent: https.Agent;
@@ -64,7 +64,6 @@ export class SberTokenService implements OnModuleInit {
                 })
                 .pipe(
                     catchError((error: AxiosError) => {
-                        console.log(error);
                         throw error;
                     }),
                 ),

@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { SynthesisRequest } from '../interfaces/sber.interface';
-import { SberTokenService } from '../services/sber.token.service';
+import { SberTTSTokenService } from '../services/sber.token.service';
 import * as https from 'https';
 import { SberApiUrl } from '../interfaces/sber.enum';
 import { catchError, firstValueFrom } from 'rxjs';
@@ -13,7 +13,7 @@ export class SberApiService {
     private httpsAgent: https.Agent;
 
     constructor(
-        private readonly sberTokenService: SberTokenService,
+        private readonly sberTokenService: SberTTSTokenService,
         private readonly httpService: HttpService,
     ) {
         this.httpsAgent = new https.Agent({

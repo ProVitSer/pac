@@ -5,7 +5,7 @@ import { writeFile, readFile } from 'fs/promises';
 import { join } from 'path';
 
 @Injectable()
-export class YandexIAMTokenService implements OnModuleInit {
+export class YandexTTSIAMTokenService implements OnModuleInit {
     constructor(private readonly configService: ConfigService) {}
 
     async onModuleInit() {

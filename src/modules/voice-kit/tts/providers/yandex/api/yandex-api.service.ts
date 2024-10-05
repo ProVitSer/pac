@@ -5,16 +5,16 @@ import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
 import { YandexSpeechDataAdapter } from '../adapters/yandex.adapter';
 import { YandexSpeech } from '../interfaces/yandex.interface';
-import { YandexIAMTokenService } from '../services/yandex.iam.token.service';
+import { YandexTTSIAMTokenService } from '../services/yandex.iam.token.service';
 
 @Injectable()
-export class YandexTtsApiervice {
+export class YandexTTSApiService {
     private readonly axios: AxiosInstance;
-    private readonly iam: YandexIAMTokenService;
+    private readonly iam: YandexTTSIAMTokenService;
     constructor(
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
-        private readonly iamToken: YandexIAMTokenService,
+        private readonly iamToken: YandexTTSIAMTokenService,
     ) {
         const axios = this.httpService.axiosRef;
         const iam = this.iamToken;

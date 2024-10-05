@@ -5,11 +5,11 @@ import { TTSConvertService } from './services/tts.convert.service';
 import { TTSProviderService } from './services/tts.provider';
 import { TtsService } from './services/tts.service';
 import { TinkoffModule } from './providers/tinkoff/tinkoff.module';
-import { SberModule } from './providers/sber/sber.module';
-import { YandexModule } from './providers/yandex/yandex.module';
+import { SberTTSModule } from './providers/sber/sber-tts.module';
+import { YandexTTSModule } from './providers/yandex/yandex-tts.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Tts]), TinkoffModule, SberModule, YandexModule],
+    imports: [TypeOrmModule.forFeature([Tts]), TinkoffModule, SberTTSModule, YandexTTSModule],
     providers: [TTSProviderService, TtsService, TTSConvertService],
     exports: [TtsService],
 })

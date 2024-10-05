@@ -9,7 +9,7 @@ import { SberApiService } from '../api/sber-api.service';
 import { Readable } from 'stream';
 
 @Injectable()
-export class SberService {
+export class SberTTSService {
     private readonly voiceTmpDir: string;
     constructor(
         private readonly configService: ConfigService,
@@ -34,7 +34,6 @@ export class SberService {
                 sampleRateHertz: dataAdapter.sampleRateHertz,
             };
         } catch (e) {
-            console.log(e);
             throw e;
         }
     }

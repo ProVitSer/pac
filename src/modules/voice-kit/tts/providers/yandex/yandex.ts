@@ -2,13 +2,13 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { VOICE_ERROR, EMOTION_ERROR } from '../../tts.constants';
 import { YandexSpeechDataAdapter } from './adapters/yandex.adapter';
 import { YandexSpeechVoice, YandexSpeechEmotion } from './interfaces/yandex.enum';
-import { YandexService } from './services/yandex.service';
+import { YandexTTSService } from './services/yandex.service';
 import { VOICE_EMOTION_MAP } from './yandex.constants';
 import { TTSProvider, TTSData, TTSProviderVoiceFileData, ListVoicesData } from '../../interfaces/tts.interface';
 
 @Injectable()
 export class YandexTTS implements TTSProvider {
-    constructor(private readonly yandexService: YandexService) {}
+    constructor(private readonly yandexService: YandexTTSService) {}
 
     public async convertTextToRawVoiceFile(data: TTSData): Promise<TTSProviderVoiceFileData> {
         try {

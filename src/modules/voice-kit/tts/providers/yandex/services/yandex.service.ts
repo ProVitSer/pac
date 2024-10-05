@@ -6,15 +6,15 @@ import { AxiosResponse } from 'axios';
 import { FileUtilsService } from '@app/common/utils/file.utils';
 import { VoiceFileFormat } from '../../../interfaces/tts.enum';
 import { TTSProviderVoiceFileData } from '../../../interfaces/tts.interface';
-import { YandexTtsApiervice } from '../api/yandex-api.service';
+import { YandexTTSApiService } from '../api/yandex-api.service';
 
 @Injectable()
-export class YandexService {
+export class YandexTTSService {
     private readonly voiceTmpDir: string;
 
     constructor(
         private readonly configService: ConfigService,
-        private readonly yandexTtsApiervice: YandexTtsApiervice,
+        private readonly yandexTtsApiService: YandexTTSApiService,
     ) {
         this.voiceTmpDir = this.configService.get('voiceKit.tts.voiceTmpDir');
     }
@@ -39,7 +39,7 @@ export class YandexService {
         try {
             const fileName = `yandex-${uuid.v4()}.${VoiceFileFormat.raw}`;
 
-            const response = await this.yandexTtsApiervice.request(dataAdapter);
+            const response = await this.yandexTtsApiService.request(dataAdapter);
 
             await this.writeStreamVoiceFile(response, fileName);
 

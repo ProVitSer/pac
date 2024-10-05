@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { SberService } from './services/sber.service';
+import { SberTTSService } from './services/sber.service';
 import { SberSpeechDataAdapter } from './adapters/sber.adapter';
 import { SberSpeechVoice } from './interfaces/sber.enum';
 import { EMOTION_ERROR, VOICE_ERROR } from '../../tts.constants';
@@ -7,7 +7,7 @@ import { TTSProvider, TTSData, TTSProviderVoiceFileData, ListVoicesData } from '
 
 @Injectable()
 export class SberTTS implements TTSProvider {
-    constructor(private readonly sberService: SberService) {}
+    constructor(private readonly sberService: SberTTSService) {}
 
     public async convertTextToRawVoiceFile(data: TTSData): Promise<TTSProviderVoiceFileData> {
         return await this.sberService.streamingSynthesize(new SberSpeechDataAdapter(data));
