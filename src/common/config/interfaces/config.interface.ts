@@ -26,8 +26,17 @@ export interface ConfigEnvironment {
             sber: VoiceKitTtsSberEnvironmentVariables;
             yandex: VoiceKitTtsYandexEnvironmentVariables;
         };
-        stt: string;
+        stt: {
+            voiceFileDir: string;
+            voiceTmpDir: string;
+            sber: VoiceKitSttSberEnvironmentVariables;
+        };
     };
+}
+
+export interface VoiceKitSttSberEnvironmentVariables {
+    url: string;
+    accessToken: string;
 }
 
 export interface VoiceKitTtsYandexEnvironmentVariables {

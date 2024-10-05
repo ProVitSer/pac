@@ -15,7 +15,7 @@ export default (): ConfigEnvironment => {
 
 const DEV_CONF: ConfigEnvironment = {
     appPort: 3000,
-    appProtocol: AppProtocol.https,
+    appProtocol: AppProtocol.http,
     certsPathFile: {
         key: `${process.env.CERT_KEY_PATH_FILE}`,
         ca: `${process.env.CERT_CA_PATH_FILE}`,
@@ -142,8 +142,8 @@ const DEV_CONF: ConfigEnvironment = {
     },
     voiceKit: {
         tts: {
-            voiceFileDir: process.env.VOICE_FILE_DIR,
-            voiceTmpDir: process.env.VOICE_TMP_DIR,
+            voiceFileDir: process.env.TTS_VOICE_FILE_DIR,
+            voiceTmpDir: process.env.TTS_VOICE_TMP_DIR,
             tinkoff: {
                 url: process.env.TINKOFF_TTS_URL,
                 apiKey: process.env.TINKOFF_TTS_API_KEY,
@@ -159,7 +159,14 @@ const DEV_CONF: ConfigEnvironment = {
                 tokenFolder: process.env.YANDEX_TTS_TOKEN_FOLDER,
             },
         },
-        stt: '',
+        stt: {
+            voiceFileDir: process.env.STT_VOICE_FILE_DIR,
+            voiceTmpDir: process.env.STT_VOICE_TMP_DIR,
+            sber: {
+                url: process.env.SBER_STT_URL,
+                accessToken: process.env.SBER_STT_ACCESS_TOKEN,
+            },
+        },
     },
 };
 
@@ -291,8 +298,8 @@ const PROD_CONF: ConfigEnvironment = {
     },
     voiceKit: {
         tts: {
-            voiceFileDir: process.env.VOICE_FILE_DIR,
-            voiceTmpDir: process.env.VOICE_TMP_DIR,
+            voiceFileDir: process.env.TTS_VOICE_FILE_DIR,
+            voiceTmpDir: process.env.TTS_VOICE_TMP_DIR,
             tinkoff: {
                 url: process.env.TINKOFF_TTS_URL,
                 apiKey: process.env.TINKOFF_TTS_API_KEY,
@@ -308,6 +315,13 @@ const PROD_CONF: ConfigEnvironment = {
                 tokenFolder: process.env.YANDEX_TTS_TOKEN_FOLDER,
             },
         },
-        stt: '',
+        stt: {
+            voiceFileDir: process.env.STT_VOICE_FILE_DIR,
+            voiceTmpDir: process.env.STT_VOICE_TMP_DIR,
+            sber: {
+                url: process.env.SBER_STT_URL,
+                accessToken: process.env.SBER_STT_ACCESS_TOKEN,
+            },
+        },
     },
 };
