@@ -34,7 +34,7 @@ export class TransformedCallData {
             dstCallerNumber: row[10],
             dstParticipantId: row[11],
             callTime: Math.round(new Date(`1970-01-01T${row[12]}Z`).getTime() / 1000) | 0,
-            dstRecordingUrl: row[14] ? `${pbxConf.recordingPath}${row[14]}` : null,
+            dstRecordingUrl: row[14] ? `${pbxConf.recordingPath}/${row[14]}` : null,
             srcRecordingUrl: row[13] || null,
             operatorName: row[15] || null,
             isDstInUsers: row[16] === 'True',
