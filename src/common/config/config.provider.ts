@@ -166,6 +166,17 @@ const DEV_CONF: ConfigEnvironment = {
                 url: process.env.SBER_STT_URL,
                 accessToken: process.env.SBER_STT_ACCESS_TOKEN,
             },
+            yandex: {
+                apiKey: process.env.YANDEX_STT_API_KEY,
+                tokenFolder: process.env.YANDEX_STT_TOKEN_FOLDER,
+                s3: {
+                    backetPath: process.env.YANDEX_STT_S3_BACKET_PATH_NAME,
+                    accessKeyId: process.env.YANDEX_STT_S3_BACKET_ACCESS_KEY_ID,
+                    secretAccessKey: process.env.YANDEX_STT_S3_BACKET_SECRET_ACCESS_KEY,
+                    region: process.env.YANDEX_STT_S3_BACKET_REGION,
+                    endpoint: process.env.YANDEX_STT_S3_BACKET_ENDPOINT,
+                },
+            },
         },
     },
 };
@@ -321,6 +332,17 @@ const PROD_CONF: ConfigEnvironment = {
             sber: {
                 url: process.env.SBER_STT_URL,
                 accessToken: process.env.SBER_STT_ACCESS_TOKEN,
+            },
+            yandex: {
+                apiKey: process.env.YANDEX_STT_API_KEY,
+                tokenFolder: process.env.YANDEX_STT_TOKEN_FOLDER,
+                s3: {
+                    backetPath: process.env.YANDEX_STT_S3_BACKET_PATH_NAME,
+                    accessKeyId: process.env.YANDEX_STT_S3_BACKET_ACCESS_KEY_ID,
+                    secretAccessKey: process.env.YANDEX_STT_S3_BACKET_SECRET_ACCESS_KEY,
+                    region: process.env.YANDEX_STT_S3_BACKET_REGION,
+                    endpoint: process.env.YANDEX_STT_S3_BACKET_ENDPOINT,
+                },
             },
         },
     },

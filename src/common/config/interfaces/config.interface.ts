@@ -30,8 +30,22 @@ export interface ConfigEnvironment {
             voiceFileDir: string;
             voiceTmpDir: string;
             sber: VoiceKitSttSberEnvironmentVariables;
+            yandex: VoiceKitSttYandexEnvironmentVariables;
         };
     };
+}
+
+export interface VoiceKitSttYandexEnvironmentVariables {
+    apiKey: string;
+    tokenFolder: string;
+    s3: VoiceKitSttS3YandexEnvironmentVariables;
+}
+export interface VoiceKitSttS3YandexEnvironmentVariables {
+    backetPath: string;
+    accessKeyId: string;
+    secretAccessKey: string;
+    region: string;
+    endpoint: string;
 }
 
 export interface VoiceKitSttSberEnvironmentVariables {
