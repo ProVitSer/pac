@@ -3,6 +3,7 @@ import {
     CheckRecognizeTaskData,
     CheckRecognizeTaskResult,
     GetRecognizeResultData,
+    RecognizeResultData,
     RecognizeSpeechProviderResult,
     STTProvider,
     VoiceFileData,
@@ -11,6 +12,7 @@ import { SberSTTApiService } from './api/sber-api.service';
 import { DEFAULT_SBER_STT_RECOGNIZE_OPTIONS, SBER_TTS_STATUS_TO_RECOGNIZE_STATUS } from './sber-stt.constants';
 import { RecognizeTaskStatus } from './interfaces/sber.enum';
 import { SttRecognizeStatus } from '../../interfaces/stt.enum';
+import { RecognizeResultDataResponse } from './interfaces/sber.interface';
 
 @Injectable()
 export class SberSTT implements STTProvider {
@@ -40,7 +42,30 @@ export class SberSTT implements STTProvider {
             sttRecognizeStatus: SBER_TTS_STATUS_TO_RECOGNIZE_STATUS[taskStatus.result.status],
         };
     }
-    public async getRecognizeResult(data: GetRecognizeResultData): Promise<any> {
-        return await this.sberSTTApiService.download(data.processedVoiceFileId);
+    public async getRecognizeResult(data: GetRecognizeResultData): Promise<RecognizeResultData> {
+        const originalResult = await this.sberSTTApiService.download(data.processedVoiceFileId);
+
+        return {
+            originalResult,
+            transformedDialog: this.extractUniqueTexts(originalResult),
+        };
+    }
+
+    private extractUniqueTexts(originalResult: RecognizeResultDataResponse[]) {
+        const texts = [];
+        let previousText = '';
+
+        originalResult.forEach((item) => {
+            if (item.results && item.results.length > 0) {
+                const currentText = item.results[0].normalized_text.trim();
+
+                if (currentText !== previousText) {
+                    texts.push(currentText);
+                    previousText = currentText;
+                }
+            }
+        });
+
+        return texts;
     }
 }
