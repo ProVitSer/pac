@@ -1,5 +1,5 @@
 export enum STTProviderType {
-    // yandex = 'yandex',
+    yandex = 'yandex',
     sber = 'sber',
 }
 

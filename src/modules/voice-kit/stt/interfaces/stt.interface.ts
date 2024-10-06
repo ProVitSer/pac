@@ -29,13 +29,13 @@ export interface SttData {
 export interface STTProvider {
     recognizeSpeech(data: VoiceFileData): Promise<RecognizeSpeechProviderResult>;
     checkRecognizeTask(data: CheckRecognizeTaskData): Promise<CheckRecognizeTaskResult>;
-    getRecognizeResult(data: GetRecognizeResultData): Promise<any>;
+    getRecognizeResult(data: GetRecognizeResultData): Promise<RecognizeResultData>;
 }
 
 export interface STTProviderInterface {
     recognizeSpeech(data: VoiceFileData): Promise<RecognizeSpeechProviderResult>;
     checkRecognizeTask(data: CheckRecognizeTaskData): Promise<CheckRecognizeTaskResult>;
-    getRecognizeResult(data: GetRecognizeResultData): Promise<any>;
+    getRecognizeResult(data: GetRecognizeResultData): Promise<RecognizeResultData>;
     get provider(): STTProviders;
 }
 
@@ -88,3 +88,8 @@ export interface GetRecignizeResultData {
 }
 
 export interface GetRecognizeResultData extends CheckRecognizeTaskData {}
+
+export interface RecognizeResultData {
+    transformedDialog: string[];
+    originalResult: any;
+}

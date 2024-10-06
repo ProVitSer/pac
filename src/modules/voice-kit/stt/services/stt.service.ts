@@ -12,6 +12,7 @@ import {
 import { SttGetVoiceFileService } from './stt-get-voice-file.service';
 import { STTProviderService } from './stt.provider';
 import { getUnixTime } from 'date-fns';
+import { SttRecognizeStatus } from '../interfaces/stt.enum';
 
 @Injectable()
 export class SttService {
@@ -35,32 +36,35 @@ export class SttService {
     }
 
     public async getRecognizeStatus(data: CheckRecognizeData): Promise<CheckRecognizeTaskResult> {
+        const stt = await this.sstRepository.findOne({ where: { sttId: data.sttId } });
+
+        if (!stt) throw new Error();
         try {
-            const stt = await this.sstRepository.findOne({ where: { sttId: data.sttId } });
-
-            if (!stt) throw new Error();
-
             const statusData = await this.sttProvider.checkRecognizeTask({ sttProviderType: data.sttProviderType, ...stt });
 
             await this.updateSttRecognizeStatus(stt.sttId, { ...statusData });
 
             return statusData;
         } catch (e) {
-            throw e;
+            await this.updateSttRecognizeStatus(stt.sttId, { sttRecognizeStatus: SttRecognizeStatus.error });
         }
     }
 
     public async getRecognizeResult(data: GetRecignizeResultData): Promise<void> {
+        const stt = await this.sstRepository.findOne({ where: { sttId: data.sttId } });
+
+        if (!stt) throw new Error();
+
         try {
-            const stt = await this.sstRepository.findOne({ where: { sttId: data.sttId } });
-
-            if (!stt) throw new Error();
-
             const result = await this.sttProvider.getRecognizeResult({ sttProviderType: data.sttProviderType, ...stt });
 
-            console.log(JSON.stringify(result));
+            await this.updateSttRecognizeStatus(stt.sttId, {
+                textDialog: result.transformedDialog,
+                originalProvicerRecognize: result.originalResult,
+                sttRecognizeStatus: SttRecognizeStatus.completed,
+            });
         } catch (e) {
-            throw e;
+            await this.updateSttRecognizeStatus(stt.sttId, { sttRecognizeStatus: SttRecognizeStatus.error });
         }
     }
 
