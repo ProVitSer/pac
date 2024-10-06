@@ -27,6 +27,7 @@
     "migration:sync": "npm run typeorm -- -d src/common/config/typeorm.ts schema:sync"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.665.0",
     "@golevelup/nestjs-rabbitmq": "^5.4.0",
     "@grpc/grpc-js": "^1.11.2",
     "@grpc/proto-loader": "^0.7.13",
@@ -41,7 +42,7 @@
     "@nestjs/microservices": "^9.4.3",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.4.1",
-    "@nestjs/schedule": "^4.1.0",
+    "@nestjs/schedule": "^4.1.1",
     "@nestjs/typeorm": "^10.0.2",
     "@types/google-protobuf": "^3.15.12",
     "argon2": "^0.41.0",
@@ -63,6 +64,7 @@
     "multer": "^1.4.4-lts.1",
     "nami": "^0.7.2",
     "nest-winston": "^1.9.7",
+    "nestjs-s3": "^2.0.1",
     "nestjs-telegraf": "^2.8.1",
     "nodemailer": "^6.9.14",
     "passport": "^0.7.0",
