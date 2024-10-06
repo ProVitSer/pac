@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
-import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
 import { YandexSpeechDataAdapter } from '../adapters/yandex.adapter';
 import { YandexSpeech } from '../interfaces/yandex.interface';
@@ -11,6 +11,8 @@ import { YandexTTSIAMTokenService } from '../services/yandex.iam.token.service';
 export class YandexTTSApiService {
     private readonly axios: AxiosInstance;
     private readonly iam: YandexTTSIAMTokenService;
+    private readonly maxRetries = 5;
+
     constructor(
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
@@ -18,15 +20,27 @@ export class YandexTTSApiService {
     ) {
         const axios = this.httpService.axiosRef;
         const iam = this.iamToken;
+        const maxRetries = this.maxRetries;
+
         this.httpService.axiosRef.interceptors.response.use(
             (response: AxiosResponse) => {
                 return response;
             },
             async function (error: AxiosError) {
-                const originalRequest = error.config;
+                const originalRequest = error.config as InternalAxiosRequestConfig & { _retryCount?: number };
+
+                if (!originalRequest?._retryCount) {
+                    originalRequest._retryCount = 0;
+                }
 
                 try {
                     if (error.response.status === HttpStatus.UNAUTHORIZED) {
+                        originalRequest._retryCount += 1;
+
+                        if (originalRequest._retryCount > maxRetries) {
+                            return Promise.reject(error);
+                        }
+
                         const iamToken = await iam.refreshIAMToken();
 
                         originalRequest.headers['Authorization'] = `Bearer ${iamToken}`;

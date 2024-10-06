@@ -24,7 +24,9 @@ export class YandexTTSIAMTokenService implements OnModuleInit {
                     reject(error);
                 });
             });
+
             await this.saveToken(token);
+
             return token;
         } catch (e) {
             throw e;
@@ -46,7 +48,6 @@ export class YandexTTSIAMTokenService implements OnModuleInit {
 
     private async saveToken(token: string): Promise<void> {
         try {
-            console.log(`${join(__dirname, '../..', this.configService.get('voiceKit.tts.yandex.tokenFolder'))}/token.json`);
             await writeFile(
                 `${join(__dirname, '../..', this.configService.get('voiceKit.tts.yandex.tokenFolder'))}/token.json`,
                 JSON.stringify({ iamToken: token }),
