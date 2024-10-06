@@ -15,9 +15,11 @@ export class YandexTTSIAMTokenService implements OnModuleInit {
 
     public async refreshIAMToken(): Promise<string> {
         try {
+            const folderId = this.configService.get('voiceKit.tts.yandex.folderId');
+
             const token = await new Promise<string>(function (resolve, reject) {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                exec('yc iam create-token', (error: ExecException, stdout, stderr: string) => {
+                exec(`yc iam create-token --folder-id ${folderId}`, (error: ExecException, stdout, stderr: string) => {
                     if (!!stdout) {
                         resolve(stdout.replace(/\n/g, ''));
                     }
