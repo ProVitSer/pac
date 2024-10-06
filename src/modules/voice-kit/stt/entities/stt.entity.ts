@@ -36,6 +36,9 @@ export class Stt {
     @Column('json', { nullable: true, name: 'text_dialog' })
     textDialog?: string[];
 
+    @Column('json', { nullable: true, name: 'original_provicer_recognize' })
+    originalProvicerRecognize?: any;
+
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
 
