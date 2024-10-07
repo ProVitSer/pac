@@ -6,7 +6,7 @@ export class TgConfig {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ unique: true, nullable: false, name: 'is_test' })
+    @Column({ unique: true, nullable: false, name: 'token' })
     token: string;
 
     @Column({ unique: true, nullable: false, name: 'chat_id' })
