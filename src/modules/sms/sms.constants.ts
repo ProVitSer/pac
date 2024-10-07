@@ -1,5 +1,7 @@
 import { SmscErrorCode, SmscStatus, SmsSendStatus } from './interfaces/sms.enum';
 
+export const DEFAULTMISSED_CALL_SMS_TEXT = 'Здравствуйте, к сожалению все менеджеры были заняты, мы свяжемся с вами в ближашйее время!';
+
 export const SMSC_STATUS_DESCRIPTION: { [state in SmscStatus]: string } = {
     [SmscStatus.SmsNotFound]: 'Сообщение не найдено',
     [SmscStatus.Stop]: 'Остановлено',

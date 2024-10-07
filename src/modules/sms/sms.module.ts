@@ -10,11 +10,12 @@ import { SmsController } from './controllers/sms.controller';
 import { HttpModule } from '@nestjs/axios';
 import { SmscApiService } from './services/smsc-api.service';
 import { CheckSmsSendingStatusSchedule } from './schedules/check-sms-sending-status.schedule';
+import { SmsMissedCallListenters } from './listenters/sms-missed-call.listenters';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Sms, SmsConfig]), HttpModule],
     controllers: [SmsConfigController, SmsController],
-    providers: [SmsConfigService, SmscService, SmsService, SmscApiService, CheckSmsSendingStatusSchedule],
+    providers: [SmsConfigService, SmscService, SmsService, SmscApiService, CheckSmsSendingStatusSchedule, SmsMissedCallListenters],
     exports: [SmsService],
 })
 export class SmsModule {}
