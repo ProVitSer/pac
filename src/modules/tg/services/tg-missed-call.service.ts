@@ -78,6 +78,12 @@ export class TgMissedCallService implements OnModuleInit {
                 );
 
                 await this.voipService.makeExternalCall(tgMessage.clientId, UtilsService.formatNumber(number), user.extension);
+            } else {
+                ctx.deleteMessage(ctx.update.callback_query.message.message_id);
+
+                await ctx.reply(`Пользователь @${ctx.update.callback_query.from.username}, неуспешно подхватил вызов`);
+
+                this.sendMissedCallMessage(tgMessage.clientId, number);
             }
         });
     }
