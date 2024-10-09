@@ -23,8 +23,8 @@ export class TransformedCallData {
         const transformedData = callData.map((row) => ({
             segmentId: row[0],
             srcId: row[1],
-            startTime: format(parse(row[2].replace(/AM|PM/g, '').trim(), 'M/d/yyyy h:mm:ss', new Date()), 'yyyy-mm-dd hh:mm:ss.SSSSSS'),
-            endTime: format(parse(row[3].replace(/AM|PM/g, '').trim(), 'M/d/yyyy h:mm:ss', new Date()), 'yyyy-mm-dd hh:mm:ss.SSSSSS'),
+            startTime: format(parse(row[2].replace(/AM|PM/g, '').trim(), 'M/d/yyyy h:mm:ss', new Date()), 'yyyy-MM-dd hh:mm:ss'),
+            endTime: format(parse(row[3].replace(/AM|PM/g, '').trim(), 'M/d/yyyy h:mm:ss', new Date()), 'yyyy-MM-dd hh:mm:ss'),
             srcDisplayName: row[4],
             srcCallerNumber: row[5],
             srcDn: row[6],
