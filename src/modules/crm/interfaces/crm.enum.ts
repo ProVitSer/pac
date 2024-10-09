@@ -49,8 +49,8 @@ export const enum CreateOutgoingLead {
 }
 
 export const enum Show {
-    YES = 0,
-    NO = 1,
+    YES = 1,
+    NO = 0,
 }
 
 export const enum BitrixCallStatusType {

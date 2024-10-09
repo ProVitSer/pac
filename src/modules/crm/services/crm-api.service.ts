@@ -6,6 +6,7 @@ import { ActiveUser, BitrixMetod } from '../interfaces/crm.enum';
 import { HttpService } from '@nestjs/axios';
 import {
     BitirxUserGet,
+    BitrixAttachRecordResult,
     BitrixFinishCallFields,
     BitrixRegisterCallResponse,
     BitrixTasksFields,
@@ -14,6 +15,7 @@ import {
 } from '../interfaces/crm.interface';
 import { BitrixRegisterCallDataAdapter } from '../adapters/bitrix-register-call-data.adapter';
 import { BitrixCallFinishDataAdapter } from '../adapters/bitrix-call-finish-data.adapter';
+import * as FormData from 'form-data';
 
 @Injectable()
 export class CrmApiService {
@@ -49,7 +51,7 @@ export class CrmApiService {
         return response.data;
     }
 
-    public async getActiveUsers(crmConfig: CrmConfig, startPage: number): Promise<BitirxUserGet[]> {
+    public async getActiveUsers(crmConfig: CrmConfig, startPage: number): Promise<BitirxUserGet> {
         const data = {
             FILTER: {
                 ACTIVE: ActiveUser.active,
@@ -98,10 +100,44 @@ export class CrmApiService {
         return response.data;
     }
 
-    public async attachRecord(crmConfig: CrmConfig, dataAdapter: BitrixCallFinishDataAdapter): Promise<BitrixFinishCallFields> {
+    public async attachCallRecord(crmConfig: CrmConfig, crmCallId: string, filename: string): Promise<BitrixAttachRecordResult> {
         const response = await firstValueFrom(
             this.httpService
-                .post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ExternalCallAttachRecord}`, { ...dataAdapter.attachRecordData })
+                .post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ExternalCallAttachRecord}`, {
+                    CALL_ID: crmCallId,
+                    FILENAME: filename,
+                })
+                .pipe(
+                    catchError((error: AxiosError) => {
+                        throw error;
+                    }),
+                ),
+        );
+
+        return response.data;
+    }
+
+    public async uploadCallRecord(filename: string, fileUrl: string, uploadUrl: string): Promise<BitrixAttachRecordResult> {
+        const fileResponse = await firstValueFrom(
+            this.httpService.get(fileUrl, {
+                responseType: 'stream',
+            }),
+        );
+
+        const form = new FormData();
+
+        form.append('file', fileResponse.data, filename);
+
+        const formHeaders = form.getHeaders();
+
+        const response = await firstValueFrom(
+            this.httpService
+                .post(uploadUrl, form, {
+                    headers: {
+                        ...formHeaders,
+                        'Content-Type': `multipart/form-data; boundary=${form.getBoundary()}`,
+                    },
+                })
                 .pipe(
                     catchError((error: AxiosError) => {
                         throw error;

@@ -1,4 +1,6 @@
+import { CallDirection } from '@app/modules/call-event-handler/interfaces/call-event-handler.enum';
 import { BitrixCallType, BitrixCallStatusType, CreateTaskType, Show } from './crm.enum';
+import { FullCallInfo } from '@app/modules/call-event-handler/interfaces/call-event-handler.interface';
 
 export interface CallRegisterData {
     bitrixId: string;
@@ -33,42 +35,45 @@ export interface OnExternalCallStart {
 }
 
 export interface BitirxUserGet {
-    ID: string;
-    ACTIVE: boolean;
-    EMAIL: string;
-    NAME: string;
-    LAST_NAME: string;
-    SECOND_NAME: string;
-    PERSONAL_GENDER: string;
-    PERSONAL_PROFESSION: string;
-    PERSONAL_WWW: string;
-    PERSONAL_BIRTHDAY: string;
-    PERSONAL_PHOTO: string | null;
-    PERSONAL_ICQ: string;
-    PERSONAL_PHONE: string;
-    PERSONAL_FAX: string;
-    PERSONAL_MOBILE: string;
-    PERSONAL_PAGER: string;
-    PERSONAL_STREET: string;
-    PERSONAL_CITY: string;
-    PERSONAL_STATE: string;
-    PERSONAL_ZIP: string;
-    PERSONAL_COUNTRY: string;
-    WORK_COMPANY: string;
-    WORK_POSITION: string;
-    WORK_PHONE: string;
-    UF_DEPARTMENT: Array<number>;
-    UF_INTERESTS: string | null;
-    UF_SKILLS: string | null;
-    UF_WEB_SITES: string | null;
-    UF_XING: string | null;
-    UF_LINKEDIN: string | null;
-    UF_FACEBOOK: string | null;
-    UF_TWITTER: string | null;
-    UF_SKYPE: string | null;
-    UF_DISTRICT: string | null;
-    UF_PHONE_INNER: string;
-    USER_TYPE: string;
+    result: {
+        ID: string;
+        ACTIVE: boolean;
+        EMAIL: string;
+        NAME: string;
+        LAST_NAME: string;
+        SECOND_NAME: string;
+        PERSONAL_GENDER: string;
+        PERSONAL_PROFESSION: string;
+        PERSONAL_WWW: string;
+        PERSONAL_BIRTHDAY: string;
+        PERSONAL_PHOTO: string | null;
+        PERSONAL_ICQ: string;
+        PERSONAL_PHONE: string;
+        PERSONAL_FAX: string;
+        PERSONAL_MOBILE: string;
+        PERSONAL_PAGER: string;
+        PERSONAL_STREET: string;
+        PERSONAL_CITY: string;
+        PERSONAL_STATE: string;
+        PERSONAL_ZIP: string;
+        PERSONAL_COUNTRY: string;
+        WORK_COMPANY: string;
+        WORK_POSITION: string;
+        WORK_PHONE: string;
+        UF_DEPARTMENT: Array<number>;
+        UF_INTERESTS: string | null;
+        UF_SKILLS: string | null;
+        UF_WEB_SITES: string | null;
+        UF_XING: string | null;
+        UF_LINKEDIN: string | null;
+        UF_FACEBOOK: string | null;
+        UF_TWITTER: string | null;
+        UF_SKYPE: string | null;
+        UF_DISTRICT: string | null;
+        UF_PHONE_INNER: string;
+        USER_TYPE: string;
+    }[];
+    next: number;
 }
 
 export interface BitrixRegisterCallRequest {
@@ -86,12 +91,14 @@ export interface BitrixRegisterCallRequest {
 }
 
 export interface BitrixRegisterCallResponse {
-    CALL_ID: string;
-    CRM_CREATED_LEAD: number;
-    CRM_ENTITY_ID: number;
-    CRM_ENTITY_TYPE: string;
-    CRM_CREATED_ENTITIES: Array<string>;
-    LEAD_CREATION_ERROR: string;
+    result: {
+        CALL_ID: string;
+        CRM_CREATED_LEAD: number;
+        CRM_ENTITY_ID: number;
+        CRM_ENTITY_TYPE: string;
+        CRM_CREATED_ENTITIES: Array<string>;
+        LEAD_CREATION_ERROR: string;
+    };
 }
 
 export interface ExternalCallShow {
@@ -322,4 +329,18 @@ export interface MissedCallToCrmData {
 export interface SearchContactData {
     filter: { [key: string]: string };
     select?: string[];
+}
+
+export interface CrmCallData {
+    callDireciton: CallDirection;
+    fullCallInfo: FullCallInfo;
+    callId: number;
+    clientId: number;
+}
+
+export interface BitrixAttachRecordResult {
+    result: {
+        uploadUrl: string;
+        fieldName: string;
+    };
 }

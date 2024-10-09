@@ -15,7 +15,7 @@ export class BitrixCallFinishDataAdapter {
 
         this.attachRecordData = {
             CALL_ID: callId,
-            FILENAME: callInfo.recording,
+            FILENAME: callInfo.recording.split('/').pop(),
             RECORD_URL: callInfo.recording,
         };
     }

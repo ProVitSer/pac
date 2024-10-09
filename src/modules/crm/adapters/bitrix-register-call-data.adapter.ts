@@ -9,7 +9,7 @@ export class BitrixRegisterCallDataAdapter {
             PHONE_NUMBER: phoneNumber,
             TYPE: type,
             CALL_START_DATE: callTime,
-            CRM_CREATE: CreateTaskType.NO,
+            CRM_CREATE: CreateTaskType.YES,
             SHOW: Show.NO,
         };
     }

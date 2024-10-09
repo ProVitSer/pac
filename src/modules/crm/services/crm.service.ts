@@ -1,14 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CrmApiService } from './crm-api.service';
-import { BitrixTasksFields, MissedCallToCrmData, RegisterCallInfo } from '../interfaces/crm.interface';
+import { BitrixTasksFields, CrmCallData, MissedCallToCrmData, RegisterCallInfo } from '../interfaces/crm.interface';
 import { CrmConfigService } from './crm-config.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CrmUsers } from '../entities/crm-users.entity';
 import { CrmConfig } from '../entities/crm-config.entity';
 import { format, addMinutes } from 'date-fns';
-import { CallAnaliticsData } from '@app/modules/call-analytics/interfaces/call-analytics.interface';
 import { CallDirection } from '@app/modules/call-event-handler/interfaces/call-event-handler.enum';
+import { BitrixCallStatusType, BitrixCallType } from '../interfaces/crm.enum';
+import { BitrixCallFinishDataAdapter } from '../adapters/bitrix-call-finish-data.adapter';
+import { BitrixRegisterCallDataAdapter } from '../adapters/bitrix-register-call-data.adapter';
+import { parse, formatISO } from 'date-fns';
 
 @Injectable()
 export class CrmService {
@@ -19,16 +22,23 @@ export class CrmService {
         private crmUsersRepository: Repository<CrmUsers>,
     ) {}
 
-    public async addCallToCrm(data: CallAnaliticsData): Promise<void> {
-        switch (data.callDireciton) {
-            case CallDirection.incoming:
-                return await this.sendInfoByIncomingCall(data);
+    public async addCallToCrm(data: CrmCallData): Promise<void> {
+        try {
+            console.log('addCallToCrm', JSON.stringify(data));
 
-            case CallDirection.outgoing:
-                return await this.sendInfoByOutgoingCall(data);
+            switch (data.callDireciton) {
+                case CallDirection.incoming:
+                    return await this.sendInfoByIncomingCall(data);
 
-            default:
-                break;
+                case CallDirection.outgoing:
+                    return await this.sendInfoByOutgoingCall(data);
+
+                default:
+                    break;
+            }
+        } catch (e) {
+            console.log(e);
+            return;
         }
     }
 
@@ -51,14 +61,14 @@ export class CrmService {
 
         if (!crmConfig) return;
 
-        const crmUser = data?.extension ? await this.getBitrixUserID(crmConfig, data?.extension) : crmConfig.adminId;
+        const crmUser = data?.extension ? await this.getBitrixUserID(crmConfig, Number(data?.extension)) : crmConfig.adminId;
 
         const taskData: BitrixTasksFields = {
             fields: {
                 TITLE: 'Пропущенный вызов',
                 RESPONSIBLE_ID: crmUser || crmConfig.adminId,
                 CREATED_BY: crmConfig.userTaskId,
-                DESCRIPTION: `Пропущенный вызов от абонента ${data.externalNumber}`,
+                DESCRIPTION: `Пропущенный вызов от абонента ${data.externalNumber} по номеру ${data.trunkName}`,
                 PRIORITY: '2',
                 GROUP_ID: crmConfig.taskGroup,
                 ...(crmConfig?.daedlineMin
@@ -70,19 +80,76 @@ export class CrmService {
         await this.createTask(crmConfig, taskData);
     }
 
-    private async sendInfoByIncomingCall(data: CallAnaliticsData): Promise<void> {
+    private async sendInfoByIncomingCall(data: CrmCallData): Promise<void> {
         const crmConfig = await this.crmConfigService.getCrmConfig(data.clientId);
+
+        const crmUser = data?.fullCallInfo.isDstInUsers
+            ? await this.getBitrixUserID(crmConfig, Number(data?.fullCallInfo.dstDn))
+            : crmConfig.adminId;
+
+        const callData: RegisterCallInfo = {
+            crmUserId: crmUser,
+            phoneNumber: data.fullCallInfo.srcCallerNumber,
+            calltype: BitrixCallType.incoming,
+            startCall: formatISO(parse(data?.fullCallInfo.startTime, 'yyyy-dd-MM HH:mm:ss', new Date())),
+            billsec: String(data.fullCallInfo.callTime),
+            bitrixCallStatusType: data.fullCallInfo.callAnswered ? BitrixCallStatusType.SuccessfulCall : BitrixCallStatusType.MissedCall,
+            recording: data.fullCallInfo.dstRecordingUrl,
+        };
+
+        await this.registerCall(crmConfig, callData);
     }
 
-    private async sendInfoByOutgoingCall(data: CallAnaliticsData): Promise<void> {}
+    private async sendInfoByOutgoingCall(data: CrmCallData): Promise<void> {
+        const crmConfig = await this.crmConfigService.getCrmConfig(data.clientId);
 
-    private async registerCall(crmConfig: CrmConfig, callInfo: RegisterCallInfo): Promise<void> {}
+        const crmUser = data?.fullCallInfo.isDstInUsers
+            ? await this.getBitrixUserID(crmConfig, Number(data?.fullCallInfo.srcDn))
+            : crmConfig.adminId;
+
+        const callData: RegisterCallInfo = {
+            crmUserId: crmUser,
+            phoneNumber: data.fullCallInfo.dstCallerNumber,
+            calltype: BitrixCallType.outgoing,
+            startCall: formatISO(parse(data?.fullCallInfo.startTime, 'yyyy-dd-MM HH:mm:ss', new Date())),
+            billsec: String(data.fullCallInfo.callTime),
+            bitrixCallStatusType: data.fullCallInfo.callAnswered ? BitrixCallStatusType.SuccessfulCall : BitrixCallStatusType.MissedCall,
+            recording: data.fullCallInfo.dstRecordingUrl,
+        };
+
+        await this.registerCall(crmConfig, callData);
+    }
+
+    private async registerCall(crmConfig: CrmConfig, callInfo: RegisterCallInfo): Promise<void> {
+        const extenralCall = await this.crmApiService.externalCallRegister(
+            crmConfig,
+            new BitrixRegisterCallDataAdapter(String(callInfo.crmUserId), callInfo.phoneNumber, callInfo.calltype, callInfo.startCall),
+        );
+
+        const dataAdapter = new BitrixCallFinishDataAdapter(extenralCall.result.CALL_ID, String(callInfo.crmUserId), callInfo);
+
+        await this.crmApiService.externalCallFinish(crmConfig, dataAdapter);
+
+        if (dataAdapter.attachRecordData.RECORD_URL) {
+            const attachResult = await this.crmApiService.attachCallRecord(
+                crmConfig,
+                dataAdapter.attachRecordData.CALL_ID,
+                dataAdapter.attachRecordData.FILENAME,
+            );
+
+            await this.crmApiService.uploadCallRecord(
+                dataAdapter.attachRecordData.FILENAME,
+                dataAdapter.attachRecordData.RECORD_URL,
+                attachResult.result.uploadUrl,
+            );
+        }
+    }
 
     private async createTask(crmConfig: CrmConfig, taskData: BitrixTasksFields): Promise<void> {
         await this.crmApiService.createTask(crmConfig, taskData);
     }
 
-    private async getBitrixUserID(crmConfig: CrmConfig, pbxExtension: string): Promise<number> {
+    private async getBitrixUserID(crmConfig: CrmConfig, pbxExtension: number): Promise<number> {
         const crmUser = await this.crmUsersRepository.findOne({ where: { pbxExtension } });
 
         if (crmUser) return crmUser.crmUserId;

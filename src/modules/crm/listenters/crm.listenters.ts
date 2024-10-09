@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Exchange, Queues } from '../../../common/constants/amqp';
 import { Nack, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { MissedCallSubHandlerData } from '@app/modules/missed-call/interfaces/missed-call.interface';
-import { CallAnaliticsData } from '@app/modules/call-analytics/interfaces/call-analytics.interface';
 import { CrmService } from '../services/crm.service';
+import { CrmCallData } from '../interfaces/crm.interface';
 
 @Injectable()
 export class CrmListenters {
@@ -21,7 +21,7 @@ export class CrmListenters {
         exchange: Exchange.events,
         queue: Queues.addCallCrm,
     })
-    public async addCallSubHandler(msg: CallAnaliticsData): Promise<void | Nack> {
+    public async addCallSubHandler(msg: CrmCallData): Promise<void | Nack> {
         return await this.crmService.addCallToCrm(msg);
     }
 }

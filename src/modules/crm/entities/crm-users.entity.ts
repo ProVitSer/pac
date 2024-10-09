@@ -5,10 +5,10 @@ export class CrmUsers {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: false, name: 'pbx_extension' })
-    pbxExtension: string;
+    @Column({ nullable: false, unique: true, name: 'pbx_extension' })
+    pbxExtension: number;
 
-    @Column({ nullable: false, name: 'crm_user_id' })
+    @Column({ nullable: false, unique: true, name: 'crm_user_id' })
     crmUserId: number;
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
