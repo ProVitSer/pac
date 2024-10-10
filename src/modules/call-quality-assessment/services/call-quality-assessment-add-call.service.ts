@@ -9,6 +9,7 @@ import { CQS_CDR_SQL } from '@app/common/constants/sql';
 import { DadataApiService } from '@app/modules/dadata-api/services/dadata-api.service';
 import { DaDataPhoneObj } from '@app/modules/dadata-api/interfaces/dadata-api.interface';
 import { DadataTypes, SuggestionsStatus } from '@app/modules/dadata-api/interfaces/dadata-api.enum';
+import AddCqasData from '../dto/add-cqas-data.dto';
 
 @Injectable()
 export class CallQualityAssessmentAddCallService {
@@ -22,14 +23,15 @@ export class CallQualityAssessmentAddCallService {
     ) {}
 
     public async addCqaCallToStatistic(data: EndCallSubHandlerData): Promise<void> {
-        const externalCdrData = await this.getExternalCdrCallData(data);
+        const externalCdrData = await this.getExternalCdrCallData(
+            data.cqac.clientId,
+            data.event.channel.caller.number,
+            data.event.channel.dialplan.exten,
+        );
 
         if (!externalCdrData) return;
 
         const phosneData = await this.getPhoneData(externalCdrData.clientNumber);
-
-        // TODO
-        // Добавить сервис по получению информации по компании и клиенту из внешних источников
 
         await this.cqas.updateStatistic({
             uniqueid: data.event.channel.id,
@@ -43,11 +45,37 @@ export class CallQualityAssessmentAddCallService {
         });
     }
 
-    private async getExternalCdrCallData(data: EndCallSubHandlerData): Promise<ExternalCdrData | undefined> {
-        const client = await this.clientService.getClientById(data.cqac.clientId);
+    public async addCqasDataVox(clientId: number, data: AddCqasData): Promise<void> {
+        const externalCdrData = await this.getExternalCdrCallData(clientId, data.number, data.exten);
+
+        if (!externalCdrData) return;
+
+        await this.cqas.addCqasStatistic({
+            trunkId: '10004-1726243876',
+            uniqueid: data.uniqueid,
+            clientNumber: externalCdrData.clientNumber,
+        });
+
+        const phosneData = await this.getPhoneData(externalCdrData.clientNumber);
+
+        await this.cqas.updateStatistic({
+            uniqueid: data.uniqueid,
+            externalCallId: externalCdrData.externalCallId,
+            clientNumber: externalCdrData.clientNumber,
+            managerData: externalCdrData.managerData,
+            managerNumber: externalCdrData.managerNumber,
+            region: phosneData.region || '',
+            city: phosneData.city || '',
+            country: phosneData.country || '',
+            rating: Number(data.rating),
+        });
+    }
+
+    private async getExternalCdrCallData(clientId: number, dnNumber: string, callerNumber: string): Promise<ExternalCdrData | undefined> {
+        const client = await this.clientService.getClientById(clientId);
 
         const externalCdr = await this.pacSqlService.sqlRequest(client.clientId, {
-            query: `${CQS_CDR_SQL} ai.dn = '${data.event.channel.caller.number}' AND ai.caller_number = '${data.event.channel.dialplan.exten}' ORDER BY s.call_id DESC LIMIT 1;`,
+            query: `${CQS_CDR_SQL} ai.dn = '${dnNumber}' AND ai.caller_number = '${callerNumber}' ORDER BY s.call_id DESC LIMIT 1;`,
         });
 
         if (!externalCdr.error) {
