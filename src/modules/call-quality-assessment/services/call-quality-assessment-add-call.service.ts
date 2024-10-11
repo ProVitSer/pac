@@ -10,6 +10,7 @@ import { DadataApiService } from '@app/modules/dadata-api/services/dadata-api.se
 import { DaDataPhoneObj } from '@app/modules/dadata-api/interfaces/dadata-api.interface';
 import { DadataTypes, SuggestionsStatus } from '@app/modules/dadata-api/interfaces/dadata-api.enum';
 import AddCqasData from '../dto/add-cqas-data.dto';
+import { CHANNEL_NAME_REGEXP } from '@app/modules/voip/modules/asterisk/apis/ari/ari.constants';
 
 @Injectable()
 export class CallQualityAssessmentAddCallService {
@@ -50,8 +51,12 @@ export class CallQualityAssessmentAddCallService {
 
         if (!externalCdrData) return;
 
+        const match = data.channelId.match(CHANNEL_NAME_REGEXP);
+
+        if (!match && !match[1]) return;
+
         await this.cqas.addCqasStatistic({
-            trunkId: '10004-1726243876',
+            trunkId: match[1],
             uniqueid: data.uniqueid,
             clientNumber: externalCdrData.clientNumber,
         });
@@ -68,6 +73,7 @@ export class CallQualityAssessmentAddCallService {
             city: phosneData.city || '',
             country: phosneData.country || '',
             rating: Number(data.rating),
+            callResult: data.callResult,
         });
     }
 

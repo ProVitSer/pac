@@ -5,6 +5,7 @@ import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { CallQualityAssessmentStatisticService } from '../services/call-quality-assessment-statistic.service';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import { CallQualityAssessmentAddCallService } from '../services/call-quality-assessment-add-call.service';
+import { CallResult } from '../interfaces/call-quality-assessment.enum';
 
 @UseGuards(RoleGuard([Role.Admin, Role.Manager]))
 @UseGuards(JwtAuthenticationGuard)
@@ -27,14 +28,18 @@ export class CallQualityAssessmentStatisticController {
         @Query('number') number: string,
         @Query('exten') exten: string,
         @Query('uniqueid') uniqueid: string,
+        @Query('channelId') channelId: string,
         @Query('rating') rating: string,
+        @Query('callResult') callResult: CallResult,
     ) {
         return this.cqaAddCallService.addCqasDataVox(req.user.client.clientId, {
             clientId,
             number,
             exten,
             uniqueid,
+            channelId,
             rating,
+            callResult,
         });
     }
 }

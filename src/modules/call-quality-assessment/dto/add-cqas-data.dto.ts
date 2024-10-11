@@ -1,4 +1,5 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
+import { CallResult } from '../interfaces/call-quality-assessment.enum';
 
 export class AddCqasData {
     @IsNumber()
@@ -9,6 +10,13 @@ export class AddCqasData {
 
     @IsString()
     exten: string;
+
+    @IsString()
+    @IsEnum(CallResult)
+    callResult: CallResult;
+
+    @IsString()
+    channelId: string;
 
     @IsString()
     uniqueid: string;
