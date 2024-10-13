@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import {
     ListVoicesData,
     TTSConvertVoiceFileData,
@@ -14,6 +14,7 @@ import { PROVIDER_ERROR } from '../tts.constants';
 import { TinkoffTTS } from '../providers/tinkoff/tinkoff';
 import { SberTTS } from '../providers/sber/sber';
 import { YandexTTS } from '../providers/yandex/yandex';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class TTSProviderService implements TTSProviderInterface {
@@ -22,6 +23,7 @@ export class TTSProviderService implements TTSProviderInterface {
         private readonly tinkoff: TinkoffTTS,
         private readonly sber: SberTTS,
         private readonly yandex: YandexTTS,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
 
     get provider(): TTSProviders {
@@ -33,15 +35,20 @@ export class TTSProviderService implements TTSProviderInterface {
     }
 
     public async sendTextToTTS(data: TTSData): Promise<TTSConvertVoiceFileData> {
-        const provider = this.getProvider(data.ttsType);
+        try {
+            const provider = this.getProvider(data.ttsType);
 
-        await provider.checkVoiceEmotion(data);
+            await provider.checkVoiceEmotion(data);
 
-        const resultTTS = await provider.convertTextToRawVoiceFile(data);
+            const resultTTS = await provider.convertTextToRawVoiceFile(data);
 
-        const res = await this.convertTTSVoiceFileToWav(data.ttsType, resultTTS);
+            const res = await this.convertTTSVoiceFileToWav(data.ttsType, resultTTS);
 
-        return res;
+            return res;
+        } catch (e) {
+            this.logger.error(e);
+            throw e;
+        }
     }
 
     public async getVoicesList(ttsType: TTSProviderType): Promise<ListVoicesData[]> {

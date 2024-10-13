@@ -11,9 +11,7 @@ export class SmscService {
     constructor(private readonly smscApiService: SmscApiService) {}
 
     public async smsSending(data: SendSmsData): Promise<SmscSendSmsResultAdapter> {
-        console.log(data);
         const sendingData = new SmscSendSmsDataAdapter(data);
-        console.log(sendingData);
 
         const result = await this.smscApiService.sendSms(sendingData.requestData);
 

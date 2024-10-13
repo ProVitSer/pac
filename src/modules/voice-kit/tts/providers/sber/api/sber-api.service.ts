@@ -6,7 +6,8 @@ import { SberApiUrl } from '../interfaces/sber.enum';
 import { catchError, firstValueFrom } from 'rxjs';
 import { Readable } from 'stream';
 import { AxiosError } from 'axios';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class SberApiService {
@@ -15,6 +16,7 @@ export class SberApiService {
     constructor(
         private readonly sberTokenService: SberTTSTokenService,
         private readonly httpService: HttpService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {
         this.httpsAgent = new https.Agent({
             rejectUnauthorized: false,
@@ -35,6 +37,7 @@ export class SberApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),
@@ -45,6 +48,7 @@ export class SberApiService {
     private async getHeader() {
         const token = await this.sberTokenService.getAccessToken();
 
+        this.logger.error('Token not found');
         if (!token) throw new Error('Token not found');
 
         return {

@@ -1,6 +1,6 @@
 import { PacConnectorGrpcServer } from '@app/modules/pac-connector/entities/pac-connector-grpc-server.entity';
 import { Metadata } from '@grpc/grpc-js';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ClientGrpc, ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { PacConnectorTokenService } from './pac-connector-token.service';
@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { RedisService } from '@app/modules/redis/services/redis.service';
 import { PacGrpcConnectorData } from '../interfaces/pac-connector.interface';
 import { PacConnectorService } from './pac-connector.service';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class PacGrpcConnectorService {
@@ -15,16 +16,22 @@ export class PacGrpcConnectorService {
         private readonly pacConnectorTokenService: PacConnectorTokenService,
         private readonly redisService: RedisService,
         private readonly pcs: PacConnectorService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
 
     public async callGrpcMethod<T, D>(data: PacGrpcConnectorData<T>): Promise<Observable<D>> {
-        const pcgs = await this.pcs.getPacConnector(data.clientId);
+        try {
+            const pcgs = await this.pcs.getPacConnector(data.clientId);
 
-        const metadata = await this.getGrpcTokenMetadata(pcgs);
+            const metadata = await this.getGrpcTokenMetadata(pcgs);
 
-        const grpcClient = await this.getGrpcClient<T>(data, pcgs);
+            const grpcClient = await this.getGrpcClient<T>(data, pcgs);
 
-        return grpcClient.getService<D>(data.serviceName)[data.methodName](data.data, metadata);
+            return grpcClient.getService<D>(data.serviceName)[data.methodName](data.data, metadata);
+        } catch (e) {
+            this.logger.error(e);
+            throw e;
+        }
     }
 
     private async getGrpcClient<T>(data: PacGrpcConnectorData<T>, pcgs: PacConnectorGrpcServer): Promise<ClientGrpc> {

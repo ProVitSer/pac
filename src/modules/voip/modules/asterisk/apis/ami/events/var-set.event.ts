@@ -8,7 +8,7 @@ export class VarSetEvent implements AsteriskAmiEventProviderInterface {
 
     async parseEvent(event: VarSetEventData): Promise<void> {
         try {
-            console.log('VarSetEvent', event);
+            this.logger.log('VarSetEvent', event);
         } catch (e) {
             this.logger.error(event);
         }

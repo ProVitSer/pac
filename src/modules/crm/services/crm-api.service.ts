@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { CrmConfig } from '../entities/crm-config.entity';
 import { AxiosError } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
@@ -17,10 +17,14 @@ import {
 import { BitrixRegisterCallDataAdapter } from '../adapters/bitrix-register-call-data.adapter';
 import { BitrixCallFinishDataAdapter } from '../adapters/bitrix-call-finish-data.adapter';
 import * as FormData from 'form-data';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class CrmApiService {
-    constructor(private readonly httpService: HttpService) {}
+    constructor(
+        private readonly httpService: HttpService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+    ) {}
 
     public async checkConnectToCrm(domain: string, hash: string, userId: number): Promise<BitirxUserGet> {
         const data = {
@@ -32,6 +36,7 @@ export class CrmApiService {
         const response = await firstValueFrom(
             this.httpService.post(`${domain}/${hash}/${BitrixMetod.UserGet}?ID=${userId}`, data).pipe(
                 catchError((error: AxiosError) => {
+                    this.logger.error(error);
                     throw error;
                 }),
             ),
@@ -44,6 +49,7 @@ export class CrmApiService {
         const response = await firstValueFrom(
             this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.TaskAdd}`, taskData).pipe(
                 catchError((error: AxiosError) => {
+                    this.logger.error(error);
                     throw error;
                 }),
             ),
@@ -62,6 +68,7 @@ export class CrmApiService {
         const response = await firstValueFrom(
             this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.UserGet}?start=${startPage}`, data).pipe(
                 catchError((error: AxiosError) => {
+                    this.logger.error(error);
                     throw error;
                 }),
             ),
@@ -79,6 +86,7 @@ export class CrmApiService {
                 .post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ExternalCallRegister}`, { ...dataAdapter.registerCallData })
                 .pipe(
                     catchError((error: AxiosError) => {
+                        this.logger.error(error);
                         throw error;
                     }),
                 ),
@@ -93,6 +101,7 @@ export class CrmApiService {
                 .post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ExternalCallFinish}`, { ...dataAdapter.finishData })
                 .pipe(
                     catchError((error: AxiosError) => {
+                        this.logger.error(error);
                         throw error;
                     }),
                 ),
@@ -110,6 +119,7 @@ export class CrmApiService {
                 })
                 .pipe(
                     catchError((error: AxiosError) => {
+                        this.logger.error(error);
                         throw error;
                     }),
                 ),
@@ -141,6 +151,7 @@ export class CrmApiService {
                 })
                 .pipe(
                     catchError((error: AxiosError) => {
+                        this.logger.error(error);
                         throw error;
                     }),
                 ),
@@ -153,6 +164,7 @@ export class CrmApiService {
         const response = await firstValueFrom(
             this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ContactList}`, searchData).pipe(
                 catchError((error: AxiosError) => {
+                    this.logger.error(error);
                     throw error;
                 }),
             ),

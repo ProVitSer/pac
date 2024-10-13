@@ -11,9 +11,10 @@ import { SberSTTTokenService } from '../services/sber.token.service';
 import * as https from 'https';
 import { SberSTTApiUrl } from '../interfaces/sber.enum';
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import * as fs from 'fs';
 import { AxiosError } from 'axios';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class SberSTTApiService {
@@ -22,6 +23,7 @@ export class SberSTTApiService {
     constructor(
         private readonly sberTokenService: SberSTTTokenService,
         private readonly httpService: HttpService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {
         this.httpsAgent = new https.Agent({
             rejectUnauthorized: false,
@@ -32,13 +34,20 @@ export class SberSTTApiService {
         const fileStream = fs.createReadStream(data.fullFilePathName);
 
         const response = await lastValueFrom(
-            this.httpService.post(SberSTTApiUrl.uploadVoice, fileStream, {
-                headers: {
-                    'Content-Type': 'audio/wave',
-                    Authorization: `Bearer ${await this.getToken()}`,
-                },
-                httpsAgent: this.httpsAgent,
-            }),
+            this.httpService
+                .post(SberSTTApiUrl.uploadVoice, fileStream, {
+                    headers: {
+                        'Content-Type': 'audio/wave',
+                        Authorization: `Bearer ${await this.getToken()}`,
+                    },
+                    httpsAgent: this.httpsAgent,
+                })
+                .pipe(
+                    catchError((e: AxiosError) => {
+                        this.logger.error(e);
+                        throw e;
+                    }),
+                ),
         );
         return response.data;
     }
@@ -55,6 +64,7 @@ export class SberSTTApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),
@@ -78,6 +88,7 @@ export class SberSTTApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),
@@ -100,6 +111,7 @@ export class SberSTTApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),
@@ -110,6 +122,7 @@ export class SberSTTApiService {
     private async getToken(): Promise<string> {
         const token = await this.sberTokenService.getAccessToken();
 
+        this.logger.error('Token not found');
         if (!token) throw new Error('Token not found');
 
         return token;

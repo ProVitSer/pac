@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { TTSProviderService } from './tts.provider';
 import { ListVoicesData, TTSConvertVoiceFileData, TTSData } from '../interfaces/tts.interface';
 import { TTSProviderType } from '../interfaces/tts.enum';
@@ -9,6 +9,7 @@ import { Tts } from '../entities/tts.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getUnixTime } from 'date-fns';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class TtsService {
@@ -16,12 +17,14 @@ export class TtsService {
         private readonly ttsProvider: TTSProviderService,
         @InjectRepository(Tts)
         private ttsRepository: Repository<Tts>,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
 
     public async textToSpech(data: TTSData): Promise<TTSConvertVoiceFileData> {
         try {
             return await this.ttsProvider.sendTextToTTS(data);
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -30,6 +33,7 @@ export class TtsService {
         try {
             return await this.ttsProvider.getVoicesList(ttsType);
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -42,6 +46,7 @@ export class TtsService {
 
             return tts;
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -61,6 +66,7 @@ export class TtsService {
 
             return tts;
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }

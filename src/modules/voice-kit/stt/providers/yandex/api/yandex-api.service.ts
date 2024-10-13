@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { AxiosInstance, AxiosError } from 'axios';
@@ -11,6 +11,7 @@ import {
 } from '../interfaces/yandex.interface';
 import { YandexSTTApiUrl } from '../interfaces/yandex.enum';
 import * as https from 'https';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class YandexSTTApiService {
@@ -21,6 +22,7 @@ export class YandexSTTApiService {
     constructor(
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {
         this.httpsAgent = new https.Agent({
             rejectUnauthorized: false,
@@ -38,6 +40,7 @@ export class YandexSTTApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),
@@ -57,6 +60,7 @@ export class YandexSTTApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),
@@ -80,6 +84,7 @@ export class YandexSTTApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),
@@ -91,6 +96,7 @@ export class YandexSTTApiService {
             try {
                 return JSON.parse(jsonStr);
             } catch (e) {
+                this.logger.error(e);
                 return null;
             }
         });

@@ -51,7 +51,7 @@ export class AmqpService extends QueueSenderBaseService {
                 this.logger.log('AMQP initialization successfully');
             });
         } catch (e) {
-            console.log(e);
+            this.logger.error(e);
             process.exit(1);
         }
     }

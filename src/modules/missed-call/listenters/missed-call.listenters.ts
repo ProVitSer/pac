@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { Exchange, Queues } from '../../../common/constants/amqp';
 import { Nack, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { MissedCallSubHandlerData } from '../interfaces/missed-call.interface';
@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { MissedCall } from '../entities/missed-call.entity';
 import { MissedServiceType } from '../interfaces/missed-call.enum';
 import { MISSQD_CALL_EVENT_KEY } from '../missed-call.constants';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class MissedCallListenters {
@@ -15,6 +16,7 @@ export class MissedCallListenters {
         @InjectRepository(MissedCall)
         private missedCallRepository: Repository<MissedCall>,
         private readonly amqpService: AmqpService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
     @RabbitSubscribe({
         exchange: Exchange.events,
@@ -24,6 +26,7 @@ export class MissedCallListenters {
         try {
             return await this.missedCallEvent(msg);
         } catch (e) {
+            this.logger.error(e);
             return;
         }
     }

@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { TTSProviderVoiceFileData, TTSConvertVoiceFileData } from '../interfaces/tts.interface';
 import { TTSProviderType, VoiceFileFormat } from '../interfaces/tts.enum';
 import { exec, ExecException } from 'child_process';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { promises as fsPromises } from 'fs';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class TTSConvertService {
-    constructor(private readonly configService: ConfigService) {}
+    constructor(
+        private readonly configService: ConfigService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+    ) {}
 
     public async convertTTSVoiceFileToWav(ttsType: TTSProviderType, data: TTSProviderVoiceFileData): Promise<TTSConvertVoiceFileData> {
         try {
@@ -25,6 +29,7 @@ export class TTSConvertService {
                 format: VoiceFileFormat.wav,
             };
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -44,6 +49,7 @@ export class TTSConvertService {
                 );
             });
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }

@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, LoggerService, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosError } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
@@ -10,6 +10,7 @@ import { SberTokenResponse } from '../interfaces/sber.interface';
 import { getTime } from 'date-fns';
 import { VoiceKitTtsSberEnvironmentVariables } from '@app/common/config/interfaces/config.interface';
 import * as https from 'https';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class SberTTSTokenService implements OnModuleInit {
@@ -20,6 +21,7 @@ export class SberTTSTokenService implements OnModuleInit {
     constructor(
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {
         this.httpsAgent = new https.Agent({
             rejectUnauthorized: false,
@@ -64,6 +66,7 @@ export class SberTTSTokenService implements OnModuleInit {
                 })
                 .pipe(
                     catchError((error: AxiosError) => {
+                        this.logger.error(error);
                         throw error;
                     }),
                 ),

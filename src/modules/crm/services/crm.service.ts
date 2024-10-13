@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { CrmApiService } from './crm-api.service';
 import {
     BitrixTasksFields,
@@ -18,6 +18,7 @@ import { BitrixCallStatusType, BitrixCallType } from '../interfaces/crm.enum';
 import { BitrixCallFinishDataAdapter } from '../adapters/bitrix-call-finish-data.adapter';
 import { BitrixRegisterCallDataAdapter } from '../adapters/bitrix-register-call-data.adapter';
 import { parse, formatISO } from 'date-fns';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class CrmService {
@@ -26,6 +27,7 @@ export class CrmService {
         private readonly crmApiService: CrmApiService,
         @InjectRepository(CrmUsers)
         private crmUsersRepository: Repository<CrmUsers>,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
 
     public async addCallToCrm(data: CrmCallData): Promise<void> {
@@ -41,6 +43,7 @@ export class CrmService {
                     break;
             }
         } catch (e) {
+            this.logger.error(e);
             return;
         }
     }

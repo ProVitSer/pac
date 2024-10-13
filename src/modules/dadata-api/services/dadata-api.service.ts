@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ApiURL, DADATA_API_MAP } from '../dadata-api.constants';
 import { DadataRequestQuery, DadataRequestQueryParams, DadataResponse } from '../interfaces/dadata-api.interface';
 import { PlainObject } from '@app/common/interfaces/interfaces';
@@ -6,10 +6,14 @@ import { HttpService } from '@nestjs/axios';
 import { DadataAllObj } from '../interfaces/dadata-api.type';
 import { catchError, firstValueFrom } from 'rxjs';
 import { AxiosError } from 'axios';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class DadataApiService {
-    constructor(private readonly dadataAPI: HttpService) {}
+    constructor(
+        private readonly dadataAPI: HttpService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+    ) {}
 
     public async getDadataInfo<T extends DadataAllObj>(requestData: DadataRequestQueryParams): Promise<T> {
         try {
@@ -18,6 +22,7 @@ export class DadataApiService {
             }
             return await this.send<T>(requestData);
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -28,6 +33,7 @@ export class DadataApiService {
         const response = await firstValueFrom(
             this.dadataAPI.post(`${url}${requestData.type}`, this.formarQuery(url, requestData), { baseURL: url }).pipe(
                 catchError((e: AxiosError) => {
+                    this.logger.error(e);
                     throw e;
                 }),
             ),
@@ -46,6 +52,7 @@ export class DadataApiService {
             case ApiURL.cleaner:
                 return [requestData.query];
             default:
+                this.logger.error(`Отсутствует форматирование запроса по данному URL: ${url}`);
                 throw Error(`Отсутствует форматирование запроса по данному URL: ${url}`);
         }
     }
@@ -69,6 +76,7 @@ export class DadataApiService {
         if (requestData.type in DADATA_API_MAP[requestData.suggestions]) {
             return DADATA_API_MAP[requestData.suggestions][requestData.type];
         } else {
+            this.logger.error(`Не найден ${requestData.type} API Dadata`);
             throw Error(`Не найден ${requestData.type} API Dadata`);
         }
     }

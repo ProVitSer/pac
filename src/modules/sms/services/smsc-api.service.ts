@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { catchError, firstValueFrom } from 'rxjs';
 import {
     CheckBalanceParams,
@@ -11,10 +11,14 @@ import {
 } from '../interfaces/sms.interface';
 import { ResponseFormat, SmscApiUrl } from '../interfaces/sms.enum';
 import { AxiosError } from 'axios';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class SmscApiService {
-    constructor(private readonly httpService: HttpService) {}
+    constructor(
+        private readonly httpService: HttpService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+    ) {}
 
     public async sendSms(data: SmscSendSmsData): Promise<SmscSendSmsResponse> {
         const response = await firstValueFrom(
@@ -26,6 +30,7 @@ export class SmscApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),
@@ -44,6 +49,7 @@ export class SmscApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),
@@ -64,6 +70,7 @@ export class SmscApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
+                        this.logger.error(e);
                         throw e;
                     }),
                 ),

@@ -1,15 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DynamicBotModule } from '../tg-dynamic-bot.module';
 import { Telegraf } from 'telegraf';
 import { TgBotService } from './tg-bot.service';
 import { ExtraReplyMessage } from 'telegraf/typings/telegram-types';
 import { Message } from 'telegraf/typings/core/types/typegram';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class BotManagerService {
     private bots = new Map<string, Telegraf<any>>();
-    constructor() {}
+    constructor(@Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService) {}
 
     public async registerBot(token: string) {
         const app = await NestFactory.createApplicationContext(DynamicBotModule.forRoot(token));
@@ -25,6 +26,7 @@ export class BotManagerService {
         if (bot) {
             return await bot.telegram.sendMessage(chatId, message);
         } else {
+            this.logger.error(`Bot with token ${token} not found`);
             throw new Error(`Bot with token ${token} not found`);
         }
     }
@@ -40,6 +42,7 @@ export class BotManagerService {
         if (bot) {
             return await bot.telegram.sendMessage(chatId, message, extra);
         } else {
+            this.logger.error(`Bot with token ${token} not found`);
             throw new Error(`Bot with token ${token} not found`);
         }
     }

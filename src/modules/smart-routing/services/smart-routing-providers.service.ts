@@ -34,24 +34,29 @@ export class SmartRoutingProvidersService {
     }
 
     public async getRoutingInfo(data: RotingInfoData): Promise<GetRotingInfoData | undefined> {
-        const smartRoutingInfo = await this.getSmartRoutingInfo(data);
+        try {
+            const smartRoutingInfo = await this.getSmartRoutingInfo(data);
 
-        if (!smartRoutingInfo) return;
+            if (!smartRoutingInfo) return;
 
-        const smartRoutingProvider = this.getRoutingProvider(smartRoutingInfo.routingService);
+            const smartRoutingProvider = this.getRoutingProvider(smartRoutingInfo.routingService);
 
-        const providerRoutingResult = await smartRoutingProvider.getRoutingInfo({
-            clientId: data.clientId,
-            externalNumber: data.externalNumber,
-        });
+            const providerRoutingResult = await smartRoutingProvider.getRoutingInfo({
+                clientId: data.clientId,
+                externalNumber: data.externalNumber,
+            });
 
-        if (!providerRoutingResult) return;
+            if (!providerRoutingResult) return;
 
-        return {
-            ...providerRoutingResult,
-            aiRouting: smartRoutingInfo.aiRouting,
-            defaultRoutingNumber: smartRoutingInfo.defaultRoutingNumber,
-        };
+            return {
+                ...providerRoutingResult,
+                aiRouting: smartRoutingInfo.aiRouting,
+                defaultRoutingNumber: smartRoutingInfo.defaultRoutingNumber,
+            };
+        } catch (e) {
+            this.logger.error(e);
+            throw e;
+        }
     }
 
     private getRoutingProvider(routingServiceType: RoutingServiceType): SmartRoutingProvider {

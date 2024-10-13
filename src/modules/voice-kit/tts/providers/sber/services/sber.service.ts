@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SberSpeechDataAdapter } from '../adapters/sber.adapter';
 import * as uuid from 'uuid';
@@ -7,6 +7,7 @@ import { FileUtilsService } from '@app/common/utils/file.utils';
 import { VoiceFileFormat } from '../../../interfaces/tts.enum';
 import { SberApiService } from '../api/sber-api.service';
 import { Readable } from 'stream';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class SberTTSService {
@@ -14,6 +15,7 @@ export class SberTTSService {
     constructor(
         private readonly configService: ConfigService,
         private readonly sberApiService: SberApiService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {
         this.voiceTmpDir = this.configService.get('voiceKit.tts.voiceTmpDir');
     }
@@ -34,6 +36,7 @@ export class SberTTSService {
                 sampleRateHertz: dataAdapter.sampleRateHertz,
             };
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }

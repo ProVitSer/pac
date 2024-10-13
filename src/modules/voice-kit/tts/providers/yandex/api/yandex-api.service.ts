@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
@@ -6,6 +6,7 @@ import { firstValueFrom, catchError } from 'rxjs';
 import { YandexSpeechDataAdapter } from '../adapters/yandex.adapter';
 import { YandexSpeech } from '../interfaces/yandex.interface';
 import { YandexTTSIAMTokenService } from '../services/yandex.iam.token.service';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class YandexTTSApiService {
@@ -17,6 +18,7 @@ export class YandexTTSApiService {
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
         private readonly iamToken: YandexTTSIAMTokenService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {
         const axios = this.httpService.axiosRef;
         const iam = this.iamToken;
@@ -59,6 +61,7 @@ export class YandexTTSApiService {
         try {
             return await this._request(dataAdapter);
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -69,6 +72,7 @@ export class YandexTTSApiService {
         return await firstValueFrom(
             this.httpService.post(this.configService.get('voiceKit.tts.yandex.url'), queryString, await this.getHeader()).pipe(
                 catchError((error: AxiosError) => {
+                    this.logger.error(error);
                     throw new HttpException(error.response.statusText, error.response.status);
                 }),
             ),

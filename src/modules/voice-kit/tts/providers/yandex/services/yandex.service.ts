@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as uuid from 'uuid';
 import { YandexSpeechDataAdapter } from '../adapters/yandex.adapter';
@@ -7,6 +7,7 @@ import { FileUtilsService } from '@app/common/utils/file.utils';
 import { VoiceFileFormat } from '../../../interfaces/tts.enum';
 import { TTSProviderVoiceFileData } from '../../../interfaces/tts.interface';
 import { YandexTTSApiService } from '../api/yandex-api.service';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class YandexTTSService {
@@ -15,6 +16,7 @@ export class YandexTTSService {
     constructor(
         private readonly configService: ConfigService,
         private readonly yandexTtsApiService: YandexTTSApiService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {
         this.voiceTmpDir = this.configService.get('voiceKit.tts.voiceTmpDir');
     }
@@ -31,6 +33,7 @@ export class YandexTTSService {
                 sampleRateHertz: Number(dataAdapter.sampleRateHertz),
             };
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -45,6 +48,7 @@ export class YandexTTSService {
 
             return fileName;
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -57,8 +61,12 @@ export class YandexTTSService {
             let error = null;
 
             writer.on('error', (err) => {
+                this.logger.error(err);
+
                 error = err;
+
                 writer.close();
+
                 reject(err);
             });
             writer.on('close', () => {

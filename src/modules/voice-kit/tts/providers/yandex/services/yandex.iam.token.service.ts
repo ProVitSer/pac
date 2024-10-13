@@ -1,12 +1,16 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, LoggerService, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ExecException, exec } from 'child_process';
 import { writeFile, readFile } from 'fs/promises';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { join } from 'path';
 
 @Injectable()
 export class YandexTTSIAMTokenService implements OnModuleInit {
-    constructor(private readonly configService: ConfigService) {}
+    constructor(
+        private readonly configService: ConfigService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+    ) {}
 
     async onModuleInit() {
         const iamToken = await this.refreshIAMToken();
@@ -31,6 +35,7 @@ export class YandexTTSIAMTokenService implements OnModuleInit {
 
             return token;
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -44,6 +49,7 @@ export class YandexTTSIAMTokenService implements OnModuleInit {
             );
             return token.iamToken;
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
@@ -55,6 +61,7 @@ export class YandexTTSIAMTokenService implements OnModuleInit {
                 JSON.stringify({ iamToken: token }),
             );
         } catch (e) {
+            this.logger.error(e);
             throw e;
         }
     }
