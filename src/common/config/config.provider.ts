@@ -16,6 +16,7 @@ export default (): ConfigEnvironment => {
 const DEV_CONF: ConfigEnvironment = {
     appPort: 3000,
     appProtocol: AppProtocol.http,
+    domain: 'localhost',
     certsPathFile: {
         key: `${process.env.CERT_KEY_PATH_FILE}`,
         ca: `${process.env.CERT_CA_PATH_FILE}`,
@@ -184,6 +185,7 @@ const DEV_CONF: ConfigEnvironment = {
 const PROD_CONF: ConfigEnvironment = {
     appPort: Number(`${process.env.APP_PORT}`),
     appProtocol: `${process.env.HTTP_OPTIONS}` as AppProtocol,
+    domain: `${process.env.HTTP_OPTIONS}://${process.env.DOMAIN}:${process.env.APP_PORT}`,
     certsPathFile: {
         key: `${process.env.CERT_KEY_PATH_FILE}`,
         ca: `${process.env.CERT_CA_PATH_FILE}`,

@@ -18,3 +18,8 @@ export interface ChangeTrunkStatusNotification {
     subject: string;
     trunkStatusDescription: string;
 }
+
+export interface ResetPasswordNotification {
+    to: string;
+    url: string;
+}

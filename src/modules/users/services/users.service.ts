@@ -9,7 +9,7 @@ import { UserEmailNotFoundException } from '../exceptions/user-email-not-found.e
 import ChangeUserPasswordDto from '../dto/change-user-password.dto';
 import { ArgonUtilService } from '../../../common/utils/argon.service';
 import { UserPasswordNotMatchesException } from '../exceptions/user-password-not-matches.exeption';
-import { CreateUserData } from '../interfaces/users.interface';
+import { CreateUserData, UpdateUser } from '../interfaces/users.interface';
 import { ClientService } from '../../../modules/client/services/client.service';
 import UpdateUserDto from '../dto/update-user.dto';
 import { CreateUserAdapter } from '../adapters/create-user.adapter';
@@ -84,6 +84,24 @@ export class UsersService {
 
     public async updateLatestActivity(id: number): Promise<void> {
         await this.usersRepository.update({ id }, { latestActivity: new Date() });
+    }
+
+    public async updateValidationToken(id: number, validationToken: string): Promise<void> {
+        await this.usersRepository.update({ id }, { validationToken });
+    }
+
+    public async updateUser(data: UpdateUser): Promise<Users> {
+        const { id, ...updateData } = data;
+
+        await this.getById(id);
+
+        await this.usersRepository.update({ id }, { ...updateData });
+
+        return await this.getById(id);
+    }
+
+    public async getUserByValidationToken(validationToken: string): Promise<Users> {
+        return await this.usersRepository.findOneBy({ validationToken });
     }
 
     public async changePassword(data: ChangeUserPasswordDto) {

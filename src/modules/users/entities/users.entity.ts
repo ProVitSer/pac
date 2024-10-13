@@ -51,6 +51,9 @@ export class Users implements UsersInterface {
     @JoinColumn({ name: 'client_id' })
     client: Client;
 
+    @Column({ nullable: true, name: 'validation_token' })
+    validationToken: string;
+
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
 

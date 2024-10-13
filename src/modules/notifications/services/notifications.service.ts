@@ -5,12 +5,14 @@ import {
     LicenseCreateNotification,
     LicenseDeactivateNotification,
     LicenseExpireNotification,
+    ResetPasswordNotification,
 } from '../interfaces/notifications.interface';
 import {
     ChangeTrunkStatusContext,
     LicenseCreateContext,
     LicenseDeactivateContext,
     LicenseExpireContext,
+    ResetPassword,
     SendMailData,
 } from '@app/modules/mail/interfaces/mail.interface';
 import { Exchange, RoutingKey } from '../../../common/constants/amqp';
@@ -95,6 +97,22 @@ export class NotificationsService {
                 },
                 template: TemplateTypes.ChangeTrunkStatus,
                 subject: data.subject,
+            };
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
+        } catch (e) {
+            this.logger.error(e);
+        }
+    }
+
+    public async forgotPasswordNotification(data: ResetPasswordNotification) {
+        try {
+            const mailData: SendMailData<ResetPassword> = {
+                to: data.to,
+                context: {
+                    url: data.url,
+                },
+                template: TemplateTypes.ResetPassword,
+                subject: 'Восстановление пароля OnVoip',
             };
             this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
         } catch (e) {

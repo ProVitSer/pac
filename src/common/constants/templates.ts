@@ -3,4 +3,5 @@ export enum TemplateTypes {
     LicenseExpire = 'LicenseExpire',
     LicenseDeactivate = 'LicenseDeactivate',
     ChangeTrunkStatus = 'ChangeTrunkStatus',
+    ResetPassword = 'ResetPassword',
 }

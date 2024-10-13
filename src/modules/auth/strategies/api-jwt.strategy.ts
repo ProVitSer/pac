@@ -26,6 +26,8 @@ export class ApiJwtStrategy extends PassportStrategy(Strategy, 'api-jwt') {
 
         if (!user) return new UnauthorizedException();
 
+        if (!user.client.licenses.isActive) return new UnauthorizedException();
+
         return user;
     }
 }

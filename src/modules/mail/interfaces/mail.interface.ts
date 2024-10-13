@@ -5,7 +5,7 @@ interface TemplateVariables {
     [key: string]: string | number | unknown;
 }
 
-export type Contexts = LicenseCreateContext | LicenseDeactivateContext | LicenseExpireContext | ChangeTrunkStatusContext;
+export type Contexts = LicenseCreateContext | LicenseDeactivateContext | LicenseExpireContext | ChangeTrunkStatusContext | ResetPassword;
 
 export interface LicenseCreateContext {
     fio: string;
@@ -37,4 +37,8 @@ export interface ChangeTrunkStatusContext {
     fio: string;
     trinkId: string;
     trunkStatusDescription: string;
+}
+
+export interface ResetPassword {
+    url: string;
 }

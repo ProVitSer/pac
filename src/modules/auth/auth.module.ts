@@ -10,9 +10,10 @@ import { PassportModule } from '@nestjs/passport';
 import { LicensesModule } from '../licenses/licenses.module';
 import { ClientModule } from '../client/client.module';
 import { ApiJwtStrategy } from './strategies/api-jwt.strategy';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
-    imports: [PassportModule, UsersModule, JwtModule.register({}), LicensesModule, ClientModule],
+    imports: [PassportModule, UsersModule, JwtModule.register({}), LicensesModule, ClientModule, NotificationsModule],
     providers: [AuthService, TokenService, LocalStrategy, JwtStrategy, ApiJwtStrategy],
     controllers: [AuthController],
     exports: [AuthService, TokenService],

@@ -5,6 +5,7 @@ export interface UsersInterface {
     name: string;
     password: string;
     isActive: boolean;
+    validationToken: string | null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -24,4 +25,14 @@ export interface CreateUserData {
     name: string;
     password: string;
     phoneNumber: string;
+}
+
+export interface UpdateUser {
+    id: number;
+    email?: string;
+    phoneNumber?: string;
+    name?: string;
+    password?: string;
+    isActive?: boolean;
+    validationToken?: string;
 }

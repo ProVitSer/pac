@@ -3,6 +3,7 @@ import { AppProtocol, LogLevel } from './config.enum';
 export interface ConfigEnvironment {
     appPort: number;
     appProtocol: AppProtocol;
+    domain: string;
     certsPathFile?: CertsPathFileEnvironmentVariables;
     cors: CorsEnvironmentVariables;
     log: LogEnvironmentVariables;
