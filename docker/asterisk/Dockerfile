@@ -37,7 +37,7 @@ RUN mkdir -p /tmp/asterisk && cd /tmp/asterisk && \
     contrib/scripts/get_mp3_source.sh  && \
     ./configure  && \
     make menuselect.makeopts && \
-    for c in WAV; do ./menuselect/menuselect --enable CORE-SOUNDS-EN-${c} menuselect.makeopts; done && \
+    for c in WAV; do ./menuselect/menuselect --enable CORE-SOUNDS-RU-${c} menuselect.makeopts; done && \
     menuselect/menuselect \
     --disable BUILD_NATIVE \
     --enable pbx_ael   \
