@@ -13,13 +13,11 @@ export class DeactivateLicenseSchedule {
 
     @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
     public async checkLicenseToDeactivate() {
-        const licenses = await this.licensesService.getLicenses();
+        const license = await this.licensesService.getLicenses();
 
-        for (const license of licenses) {
-            if (getUnixTime(license.expirationDate) < getUnixTime(new Date())) {
-                await this.licensesService.deactivateLicense({ license: license.license });
-                await this.notificationsService.licenseDeactivateNotification({ client: license.client, license });
-            }
+        if (getUnixTime(license.expirationDate) < getUnixTime(new Date())) {
+            await this.licensesService.deactivateLicense({ license: license.license });
+            await this.notificationsService.licenseDeactivateNotification({ client: license.client, license });
         }
     }
 }

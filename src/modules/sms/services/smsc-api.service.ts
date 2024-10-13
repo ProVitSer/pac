@@ -26,8 +26,6 @@ export class SmscApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
-                        console.log(e);
-
                         throw e;
                     }),
                 ),
@@ -46,12 +44,10 @@ export class SmscApiService {
                 })
                 .pipe(
                     catchError((e: AxiosError) => {
-                        console.log(e);
                         throw e;
                     }),
                 ),
         );
-        console.log(response);
 
         return response.data;
     }

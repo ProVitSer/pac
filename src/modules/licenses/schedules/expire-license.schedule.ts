@@ -14,13 +14,11 @@ export class ExpireLicenseSchedule {
 
     @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
     public async checkLicenseExpire() {
-        const licenses = await this.licensesService.getLicenses();
+        const license = await this.licensesService.getLicenses();
 
-        for (const license of licenses) {
-            const difference = differenceInDays(license.expirationDate, new Date());
-            if (difference == EXPIRE_DAY) {
-                await this.notificationsService.licenseExpireNotification({ client: license.client, license, day: String(difference) });
-            }
+        const difference = differenceInDays(license.expirationDate, new Date());
+        if (difference == EXPIRE_DAY) {
+            await this.notificationsService.licenseExpireNotification({ client: license.client, license, day: String(difference) });
         }
     }
 }

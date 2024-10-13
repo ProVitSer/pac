@@ -4,6 +4,7 @@ export interface ConfigEnvironment {
     appPort: number;
     appProtocol: AppProtocol;
     domain: string;
+    licenseServer: string;
     certsPathFile?: CertsPathFileEnvironmentVariables;
     cors: CorsEnvironmentVariables;
     log: LogEnvironmentVariables;

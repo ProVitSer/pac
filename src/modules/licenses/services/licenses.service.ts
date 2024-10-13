@@ -132,8 +132,8 @@ export class LicensesService {
         return lic;
     }
 
-    public async getLicenses(): Promise<Licenses[]> {
-        return this.licensesRepository.find({
+    public async getLicenses(): Promise<Licenses> {
+        return this.licensesRepository.findOne({
             relations: {
                 client: true,
                 products: true,
