@@ -61,7 +61,7 @@ export interface ExtensionStatusReply {
     lastName: string;
     email: string;
     extension: string;
-    registered: string;
+    registered: boolean;
     forwardingRulesStatus?: ExtensionForwardStatus;
     queuesStatus?: ExtensionQueueStatus;
     groups?: string[];
