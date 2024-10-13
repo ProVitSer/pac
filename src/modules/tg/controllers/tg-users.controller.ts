@@ -6,7 +6,12 @@ import { TgUsers } from '../entities/tg-users.entity';
 import CreatTgUser from '../dto/create-tg-user';
 import DeleteTgUser from '../dto/delete-tg-user';
 import UpdateTgUser from '../dto/update-tg-user';
-
+import { Role } from '@app/common/interfaces/enums';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import RoleGuard from '@app/modules/auth/guards/role.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.telegram))
 @UseGuards(JwtAuthenticationGuard)
 @Controller('users')
 export class TgUsersController {

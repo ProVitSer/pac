@@ -6,8 +6,14 @@ import { CrmConfigService } from '../services/crm-config.service';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import AddCrmConfig from '../dto/add-crm-config.dto';
 import UpdateCrmConfig from '../dto/update-crm-config.dto';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
+import PermissionGuard from '@app/modules/auth/guards/permission.guard';
+import { ADMIN_PERMISSIONS } from '@app/modules/users/users.constants';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(PermissionGuard(ADMIN_PERMISSIONS))
+@UseGuards(ProductGuard(ProductType.bitrix))
 @UseGuards(JwtAuthenticationGuard)
 @Controller('config')
 export class CrmConfigController {

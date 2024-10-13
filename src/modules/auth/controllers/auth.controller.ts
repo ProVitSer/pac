@@ -3,7 +3,6 @@ import { AuthService } from '../services/auth.service';
 import RegisterDto from '../dto/register.dto';
 import { LocalAuthenticationGuard } from '../guards/local-authentication.guard';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
-import { TokenService } from '../services/token.service';
 import LoginDto from '../dto/login.dto';
 import ForgotPassword from '../dto/forgot-password.dto';
 import ResetPassword from '../dto/reset-password.dto';
@@ -11,10 +10,7 @@ import JwtAuthenticationGuard from '../guards/jwt-authentication.guard';
 
 @Controller()
 export class AuthController {
-    constructor(
-        private readonly authService: AuthService,
-        private readonly tokenService: TokenService,
-    ) {}
+    constructor(private readonly authService: AuthService) {}
 
     @Post('register')
     async register(@Body() registrationData: RegisterDto) {

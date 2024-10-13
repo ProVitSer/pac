@@ -12,7 +12,7 @@ export class Products implements ProductInterface {
         type: 'enum',
         enum: ProductType,
         nullable: false,
-        default: ProductType.api,
+        default: ProductType.analitic,
         unique: true,
         name: 'product_type',
     })

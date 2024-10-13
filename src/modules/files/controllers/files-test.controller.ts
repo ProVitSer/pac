@@ -6,7 +6,7 @@ import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin]))
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class FilesController {

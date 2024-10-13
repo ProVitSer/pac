@@ -18,8 +18,11 @@ import ExtensionGlobalQueueStatusDto from '../dto/extension-global-queue-status.
 import ExtensionQueueStatusDto from '../dto/extension-queue-status.dto';
 import ExtensionCallForwardStatusDto from '../dto/extension-call-forward-status.dto';
 import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
-@UseGuards(RoleGuard([Role.API]))
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.api))
 @UseGuards(ApiJwtAuthenticationGuard)
 @Controller('extension')
 export class ApiExtensionController {

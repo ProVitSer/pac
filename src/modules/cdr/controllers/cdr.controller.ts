@@ -5,7 +5,7 @@ import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.
 import { ApplicationServiceType, Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin]))
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class CdrController {

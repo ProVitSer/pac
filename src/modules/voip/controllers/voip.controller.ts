@@ -9,7 +9,7 @@ import { TrunkStatusResult } from '../interfaces/voip.interface';
 import { Voip } from '../entities/voip.entity';
 import UpdateTrunkDto from '../dto/update-trunk.dto';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin]))
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class VoipController {

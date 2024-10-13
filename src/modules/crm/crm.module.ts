@@ -1,6 +1,5 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { CrmController } from './controllers/crm.controller';
 import { CrmListenters } from './listenters/crm.listenters';
 import { CrmSyncUsersSchedule } from './schedules/crm-sync-users.schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +12,7 @@ import { CrmConfigController } from './controllers/crm-config.controller';
 
 @Module({
     imports: [TypeOrmModule.forFeature([CrmConfig, CrmUsers]), HttpModule],
-    controllers: [CrmController, CrmConfigController],
+    controllers: [CrmConfigController],
     providers: [CrmListenters, CrmSyncUsersSchedule, CrmService, CrmApiService, CrmConfigService],
     exports: [CrmService, CrmConfigService],
 })

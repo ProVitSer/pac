@@ -1,6 +1,7 @@
 import { UtilsService } from '@app/common/utils/utils.service';
 import { ClientService } from '@app/modules/client/services/client.service';
 import { PacConnectorService } from '@app/modules/pac-connector/services/pac-connector.service';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 import { CanActivate, ExecutionContext, Injectable, ForbiddenException } from '@nestjs/common';
 
 @Injectable()
@@ -24,9 +25,10 @@ export class PacCheckGuard implements CanActivate {
 
         const client = await this.clientService.getClientById(connector.clientId);
 
-        if (!client) {
-            throw new ForbiddenException();
-        }
+        const pacProduct = client.licenses.products.some((prod) => prod.productType == ProductType.api);
+
+        if (!pacProduct) throw new ForbiddenException();
+        if (!client) throw new ForbiddenException();
 
         request['connector'] = connector;
         request['client'] = client;

@@ -7,8 +7,11 @@ import GetContactListDto from '../dto/get-contact-list.dto';
 import { ContactInfoDataReply, ContactListReply } from '@app/modules/pac-connector/modules/pac-contact/interfaces/pac-contact.interface';
 import UpdateContactDto from '../dto/update-contact.dto';
 import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
-@UseGuards(RoleGuard([Role.API]))
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.api))
 @UseGuards(ApiJwtAuthenticationGuard)
 @Controller('contact')
 export class ApiContactController {

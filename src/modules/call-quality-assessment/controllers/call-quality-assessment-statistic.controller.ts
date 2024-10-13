@@ -1,13 +1,17 @@
 import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
-import { Role } from '@app/common/interfaces/enums';
+import { Permission, Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { CallQualityAssessmentStatisticService } from '../services/call-quality-assessment-statistic.service';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import { CallQualityAssessmentAddCallService } from '../services/call-quality-assessment-add-call.service';
 import { CallResult } from '../interfaces/call-quality-assessment.enum';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
+import PermissionGuard from '@app/modules/auth/guards/permission.guard';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin, Role.User]))
+@UseGuards(ProductGuard(ProductType.cqa))
 @UseGuards(JwtAuthenticationGuard)
 @Controller('statistic')
 export class CallQualityAssessmentStatisticController {
@@ -16,6 +20,7 @@ export class CallQualityAssessmentStatisticController {
         private readonly cqaAddCallService: CallQualityAssessmentAddCallService,
     ) {}
 
+    @UseGuards(PermissionGuard([Permission.Read]))
     @Get()
     async getCqaStatistic(@Req() req: RequestWithUser) {
         return this.cqas.getCqaStatistic(req.user.client.clientId);

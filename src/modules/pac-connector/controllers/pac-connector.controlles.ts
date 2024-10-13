@@ -7,8 +7,11 @@ import { PacConnectorService } from '../services/pac-connector.service';
 import CreatePacConnectorDto from '../dto/create-pac-connector.dto';
 import { PacConnectorGrpcServer } from '../entities/pac-connector-grpc-server.entity';
 import UpdatePacConnectorDto from '../dto/update-pac-connector.dto';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.api))
 @UseGuards(JwtAuthenticationGuard)
 @Controller('pac-connector')
 export class PacConnectorController {

@@ -12,6 +12,7 @@ import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { Role } from '@app/common/interfaces/enums';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 
+@UseGuards(RoleGuard([Role.Admin]))
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class LicensesController {
@@ -24,37 +25,31 @@ export class LicensesController {
         return this.licensesService.getLicenseInfo(user.client.licenses.license);
     }
 
-    @UseGuards(RoleGuard([Role.Admin]))
     @Post()
     async createLicense(@Body() data: CreateLicenseDto): Promise<Licenses> {
         return this.licensesService.createLicense(data);
     }
 
-    @UseGuards(RoleGuard([Role.Admin]))
     @Post('active')
     async isLicenseActive(@Req() request: RequestWithUser): Promise<ActiveLicenseResponse> {
         return this.licensesService.isLicenseActive(request.user.client.licenses);
     }
 
-    @UseGuards(RoleGuard([Role.Admin]))
     @Put('activate')
     async activateLicense(@Body() data: ActivateLicenseDto): Promise<void> {
         return this.licensesService.activateLicense(data);
     }
 
-    @UseGuards(RoleGuard([Role.Admin]))
     @Put('deactivate')
     async deactivateLicense(@Body() data: DeactivateLicenseDto): Promise<void> {
         return this.licensesService.deactivateLicense(data);
     }
 
-    @UseGuards(RoleGuard([Role.Admin, Role.Manager]))
     @Put('commercial')
     async setLicenseCommercial(@Body() data: LicenseCommercialDto): Promise<void> {
         return this.licensesService.setLicenseCommercial(data);
     }
 
-    @UseGuards(RoleGuard([Role.Admin]))
     @Put()
     async updateLicense(@Body() data: UpdateLicenseDto): Promise<Licenses> {
         return this.licensesService.updateLicense(data);

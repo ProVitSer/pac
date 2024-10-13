@@ -62,6 +62,7 @@ export class UsersService {
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.client', 'client')
             .leftJoinAndSelect('client.licenses', 'licenses')
+            .leftJoinAndSelect('licenses.products', 'products')
             .leftJoinAndSelect('client.voip', 'voip')
             .where('user.id = :id', { id })
             .getOne();

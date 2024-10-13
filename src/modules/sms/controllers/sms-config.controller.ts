@@ -7,8 +7,11 @@ import CreateSmsConfig from '../dto/create-sms-config.dto';
 import { SmsConfigService } from '../services/sms-config.service';
 import { SmsConfig } from '../entities/sms-config.entity';
 import UpdateSmsConfig from '../dto/update-sms-config.dto';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.sms))
 @UseGuards(JwtAuthenticationGuard)
 @Controller('config')
 export class SmsConfigController {

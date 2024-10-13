@@ -7,4 +7,10 @@ export enum ProductType {
     customcrm = 'crm-custom',
     callingTts = 'calling-tts',
     telegram = 'telegram',
+    sm = 'smart-routing',
+    tts = 'tts',
+    stt = 'stt',
+    analitic = 'analitic',
+    cqa = 'cqa',
+    missedCall = 'missed-call',
 }

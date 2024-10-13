@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { LicensesService } from './services/licenses.service';
-import { LicensesController } from './controllers/licenses.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Licenses } from './entities/licenses.entity';
 import { ClientModule } from '../client/client.module';
@@ -13,7 +12,6 @@ import { DeactivateLicenseSchedule } from './schedules/deactivate-license.schedu
 @Module({
     imports: [TypeOrmModule.forFeature([Licenses]), ScheduleModule.forRoot(), ClientModule, ProductsModule, NotificationsModule],
     providers: [LicensesService, ExpireLicenseSchedule, DeactivateLicenseSchedule],
-    controllers: [LicensesController],
     exports: [LicensesService],
 })
 export class LicensesModule {}

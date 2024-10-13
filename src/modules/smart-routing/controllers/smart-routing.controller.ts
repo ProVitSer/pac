@@ -8,8 +8,11 @@ import DeleteSmartRouting from '../dto/delete-smart-routing.dto';
 import AddSmartRouting from '../dto/add-smart-routing.dto';
 import UpdateSmartRouting from '../dto/update-smart-routing.dto';
 import { SmartRoutingProvidersService } from '../services/smart-routing-providers.service';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.sm))
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class SmartRoutingController {

@@ -5,8 +5,11 @@ import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { SmsService } from '../services/sms.service';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import SendSmsDto from '../dto/send-sms.dto';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin, Role.User]))
+@UseGuards(ProductGuard(ProductType.sms))
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class SmsController {

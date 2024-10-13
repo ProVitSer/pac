@@ -8,7 +8,10 @@ import MakeLocalCallDto from '../dto/make-local-call.dto';
 import HangupCallDto from '../dto/hangup-call.dto';
 import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
 import MakeExternalCallDto from '../dto/make-external-call.dto';
-@UseGuards(RoleGuard([Role.API]))
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.api))
 @UseGuards(ApiJwtAuthenticationGuard)
 @Controller('call')
 export class ApiCallController {

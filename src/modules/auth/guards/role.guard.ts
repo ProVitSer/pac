@@ -9,7 +9,7 @@ const RoleGuard = (roles: Role[]): Type<CanActivate> => {
             const request = context.switchToHttp().getRequest<RequestWithUser>();
 
             const user = request.user;
-
+            console.log('user', JSON.stringify(user));
             return user?.roles.some((role) => roles.includes(role));
         }
     }

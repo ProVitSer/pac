@@ -36,7 +36,6 @@ import { PacPbxSubscribeEventModule } from '../pac-connector/modules/pac-pbx-sub
 import { SmartRoutingModule } from '../smart-routing/smart-routing.module';
 import { PacIvrModule } from '../pac-connector/modules/pac-ivr/pac-ivr.module';
 import { DadataApiModule } from '../dadata-api/dadata-api.module';
-import { ClientInfoModule } from '../client-info/client-info.module';
 import { CrmModule } from '../crm/crm.module';
 import { CallEventHandlerModule } from '../call-event-handler/call-event-handler.module';
 import { MissedCallModule } from '../missed-call/missed-call.module';
@@ -87,7 +86,6 @@ import { SmsModule } from '../sms/sms.module';
         PacPbxSubscribeEventModule,
         SmartRoutingModule,
         DadataApiModule,
-        ClientInfoModule,
         CrmModule,
         CallEventHandlerModule,
         MissedCallModule,
@@ -95,33 +93,6 @@ import { SmsModule } from '../sms/sms.module';
         VoiceKitModule,
         SmsModule,
         RouterModule.register([
-            {
-                path: 'api',
-                children: [
-                    {
-                        path: 'client',
-                        module: ClientModule,
-                    },
-                ],
-            },
-            {
-                path: 'api',
-                children: [
-                    {
-                        path: 'licenses',
-                        module: LicensesModule,
-                    },
-                ],
-            },
-            {
-                path: 'api',
-                children: [
-                    {
-                        path: 'products',
-                        module: ProductsModule,
-                    },
-                ],
-            },
             {
                 path: 'api',
                 children: [
@@ -137,15 +108,6 @@ import { SmsModule } from '../sms/sms.module';
                     {
                         path: 'auth',
                         module: AuthModule,
-                    },
-                ],
-            },
-            {
-                path: 'api',
-                children: [
-                    {
-                        path: 'cdr',
-                        module: CdrModule,
                     },
                 ],
             },

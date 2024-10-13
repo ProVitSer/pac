@@ -7,8 +7,11 @@ import { ApiAgentsQueue, QueueList } from '../interfaces/api-queue.interface';
 import ModifyQueueDto from '../dto/modify-queue.dto';
 import { QueueModifyReply } from '@app/modules/pac-connector/modules/pac-queue/interfaces/pac-queue.interface';
 import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
-@UseGuards(RoleGuard([Role.API]))
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.api))
 @UseGuards(ApiJwtAuthenticationGuard)
 @Controller('queue')
 export class ApiQueueController {

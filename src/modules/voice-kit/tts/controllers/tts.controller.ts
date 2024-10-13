@@ -8,8 +8,11 @@ import { ListVoicesData } from '../interfaces/tts.interface';
 import { TtsVoicesDTO } from '../dto/tts-voices.dto';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
-@UseGuards(RoleGuard([Role.Admin, Role.Manager]))
+@UseGuards(RoleGuard([Role.Admin, Role.User]))
+@UseGuards(ProductGuard(ProductType.tts))
 @UseGuards(JwtAuthenticationGuard)
 @Controller('tts')
 export class TtsController {

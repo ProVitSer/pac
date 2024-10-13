@@ -6,7 +6,12 @@ import { TgConfig } from '../entities/tg-config.entity';
 import CreatTgConfig from '../dto/create-tg-config';
 import DeleteTgConfig from '../dto/delete-tg-config';
 import UpdateTgConfig from '../dto/update-tg-config';
-
+import { Role } from '@app/common/interfaces/enums';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import RoleGuard from '@app/modules/auth/guards/role.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.telegram))
 @UseGuards(JwtAuthenticationGuard)
 @Controller('config')
 export class TgConfigController {

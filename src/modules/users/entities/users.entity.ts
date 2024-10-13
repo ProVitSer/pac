@@ -3,6 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { UsersInterface } from '../interfaces/users.interface';
 import { Permission, Role } from '../../../common/interfaces/enums';
 import { Client } from '../../../modules/client/entities/client.entity';
+import { ADMIN_PERMISSIONS } from '../users.constants';
 
 @Entity()
 export class Users implements UsersInterface {
@@ -35,7 +36,7 @@ export class Users implements UsersInterface {
         type: 'enum',
         enum: Permission,
         array: true,
-        default: [Permission.Read],
+        default: ADMIN_PERMISSIONS,
     })
     permissions: Permission[];
 

@@ -7,8 +7,11 @@ import { RingGroupListReply } from '@app/modules/pac-connector/modules/pac-ring-
 import { RingGroupMembers } from '../interfaces/api-ring-group.interface';
 import ModifyRingGroupDto from '../dto/modify-ring-group.dto';
 import ApiJwtAuthenticationGuard from '@app/modules/auth/guards/api-jwt-authentication.guard';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
-@UseGuards(RoleGuard([Role.API]))
+@UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.api))
 @UseGuards(ApiJwtAuthenticationGuard)
 @Controller('ring-group')
 export class ApiRingGroupController {
