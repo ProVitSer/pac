@@ -35,7 +35,7 @@ export interface ExtensionStatus {
     lastName: string;
     email: string;
     extension: string;
-    registered: string;
+    registered: boolean;
     forwardingRulesStatus: ApiExtensionForwardStatus;
     queuesStatus: ApiExtensionQueueStatus;
     groups: string[];

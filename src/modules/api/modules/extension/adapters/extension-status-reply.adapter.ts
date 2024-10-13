@@ -7,7 +7,7 @@ export class ExtensionStatusReplyAdapter {
     public lastName: string;
     public email: string;
     public extension: string;
-    public registered: string;
+    public registered: boolean;
     public forwardingRulesStatus: ApiExtensionForwardStatus;
     public queuesStatus: ApiExtensionQueueStatus;
     public groups: string[];
@@ -19,7 +19,7 @@ export class ExtensionStatusReplyAdapter {
         this.lastName = data.lastName;
         this.email = data.email;
         this.extension = data.extension;
-        this.registered = data.registered;
+        this.registered = data.registered || false;
         this.forwardingRulesStatus = data.forwardingRulesStatus
             ? EXTENSION_FW_TO_API_FW[data.forwardingRulesStatus]
             : ApiExtensionForwardStatus.Available;
