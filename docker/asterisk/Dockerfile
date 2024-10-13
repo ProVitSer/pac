@@ -57,7 +57,7 @@ RUN mkdir -p /tmp/asterisk && cd /tmp/asterisk && \
     --disable chan_mgcp  \
     --disable chan_skinny  \
     --disable chan_unistim  \
-    --disable chan_sip  \
+    --enable chan_sip  \
     --disable cdr_custom  \
     --disable cdr_manager  \
     --disable cdr_csv  \
