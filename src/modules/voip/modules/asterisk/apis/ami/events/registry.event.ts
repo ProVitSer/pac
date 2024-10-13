@@ -35,6 +35,8 @@ export class RegistryEvent implements AsteriskAmiEventProviderInterface {
 
                 const voip = await this.voipRepository.findOne({ where: { trunkId: psRegistrations.id }, relations: { client: true } });
 
+                if (!voip) return;
+
                 await this.updateStatus(event, psRegistrations);
 
                 await this.sendNotification(event, voip);
