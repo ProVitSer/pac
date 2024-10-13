@@ -316,7 +316,7 @@ export interface RegisterCallInfo {
     startCall: string;
     billsec: string;
     bitrixCallStatusType: BitrixCallStatusType;
-    recording: string;
+    recording?: string | null;
 }
 
 export interface MissedCallToCrmData {
@@ -343,4 +343,15 @@ export interface BitrixAttachRecordResult {
         uploadUrl: string;
         fieldName: string;
     };
+}
+
+export interface SearchClientByPhoneResult {
+    result: SearchClientByPhoneData[];
+}
+
+export interface SearchClientByPhoneData {
+    ID: string;
+    NAME: string | null;
+    LAST_NAME: string | null;
+    ASSIGNED_BY_ID: string | null;
 }

@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CrmApiService } from './crm-api.service';
-import { BitrixTasksFields, CrmCallData, MissedCallToCrmData, RegisterCallInfo } from '../interfaces/crm.interface';
+import {
+    BitrixTasksFields,
+    CrmCallData,
+    MissedCallToCrmData,
+    RegisterCallInfo,
+    SearchClientByPhoneResult,
+} from '../interfaces/crm.interface';
 import { CrmConfigService } from './crm-config.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -24,8 +30,6 @@ export class CrmService {
 
     public async addCallToCrm(data: CrmCallData): Promise<void> {
         try {
-            console.log('addCallToCrm', JSON.stringify(data));
-
             switch (data.callDireciton) {
                 case CallDirection.incoming:
                     return await this.sendInfoByIncomingCall(data);
@@ -37,17 +41,17 @@ export class CrmService {
                     break;
             }
         } catch (e) {
-            console.log(e);
             return;
         }
     }
 
-    public async searchClientByPhone(clientId: number, phone: string): Promise<any> {
+    public async searchClientByPhone(clientId: number, phone: string): Promise<SearchClientByPhoneResult> {
         const crmConfig = await this.crmConfigService.getCrmConfig(clientId);
 
         if (!crmConfig) return;
 
         const searchData = {
+            select: ['ID', 'NAME', 'LAST_NAME', 'ASSIGNED_BY_ID'],
             filter: {
                 PHONE: phone,
             },
@@ -155,5 +159,9 @@ export class CrmService {
         if (crmUser) return crmUser.crmUserId;
 
         return crmConfig.adminId;
+    }
+
+    public async getPbxExtensionByCrmId(crmUserId: number): Promise<CrmUsers> {
+        return await this.crmUsersRepository.findOne({ where: { crmUserId } });
     }
 }

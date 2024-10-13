@@ -11,6 +11,7 @@ import {
     BitrixRegisterCallResponse,
     BitrixTasksFields,
     CreateTaskResponse,
+    SearchClientByPhoneResult,
     SearchContactData,
 } from '../interfaces/crm.interface';
 import { BitrixRegisterCallDataAdapter } from '../adapters/bitrix-register-call-data.adapter';
@@ -148,7 +149,7 @@ export class CrmApiService {
         return response.data;
     }
 
-    public async searchContact(crmConfig: CrmConfig, searchData: SearchContactData): Promise<any> {
+    public async searchContact(crmConfig: CrmConfig, searchData: SearchContactData): Promise<SearchClientByPhoneResult> {
         const response = await firstValueFrom(
             this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ContactList}`, searchData).pipe(
                 catchError((error: AxiosError) => {

@@ -5,7 +5,7 @@ export type SmartRoutingProviders = {
 };
 
 export interface SmartRoutingProvider {
-    getRoutingInfo(data: IncomingCallData): Promise<GetRotingInfoData>;
+    getRoutingInfo(data: IncomingCallData): Promise<GetRotingInfoProviderData>;
 }
 
 export interface RotingInfoData {
@@ -14,8 +14,16 @@ export interface RotingInfoData {
     externalNumber: string;
 }
 
-export interface GetRotingInfoData {
+export interface GetRotingInfoProviderData {
+    firstname?: string;
     extension?: string;
+}
+
+export interface GetRotingInfoData {
+    firstname?: string;
+    extension?: string;
+    aiRouting?: boolean;
+    defaultRoutingNumber?: string;
 }
 
 export interface IncomingCallData {

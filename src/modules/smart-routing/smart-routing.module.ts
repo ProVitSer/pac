@@ -10,9 +10,11 @@ import { PacContactModule } from '../pac-connector/modules/pac-contact/pac-conta
 import { PacSqlModule } from '../pac-connector/modules/pac-sql/pac-sql.module';
 import { PacIvrModule } from '../pac-connector/modules/pac-ivr/pac-ivr.module';
 import { SmartRoutingService } from './services/smart-routing.service';
+import { CrmModule } from '../crm/crm.module';
+import { RedisModule } from '../redis/redis.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([SmartRouting]), PacContactModule, PacSqlModule, PacIvrModule],
+    imports: [TypeOrmModule.forFeature([SmartRouting]), PacContactModule, PacSqlModule, PacIvrModule, CrmModule, RedisModule],
     controllers: [SmartRoutingController],
     providers: [
         SmartRoutingProvidersService,

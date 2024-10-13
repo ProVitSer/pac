@@ -11,6 +11,7 @@ import { Exchange, RoutingKey } from '@app/common/constants/amqp';
 import { ApiActiveConnectionsInfo, ConnectionsData } from '@app/modules/api/modules/call/interfaces/api-call.interface';
 import { GetRotingInfoData } from '@app/modules/smart-routing/interfaces/smart-routing.interface';
 import { MIN_EXTERNAL_NUMBER_LENGTH, MIN_TRUNK_UNIQUE_NUMBER_LENGTH } from '../pac-pbx-subscribe-event.config';
+import { RedisService } from '@app/modules/redis/services/redis.service';
 
 @Injectable()
 export class PacPbxSubscribeEventNotificationService {
@@ -19,6 +20,7 @@ export class PacPbxSubscribeEventNotificationService {
         private readonly pacCallService: PacCallService,
         private readonly amqpService: AmqpService,
         private readonly smartRoutingProvidersService: SmartRoutingProvidersService,
+        private readonly redisService: RedisService,
     ) {}
 
     public async insertEventProcess(request: RequestWithPacInfo, data: PbxEvenetActiveConnectionsInfo): Promise<void> {
@@ -51,15 +53,30 @@ export class PacPbxSubscribeEventNotificationService {
         if (filteredConnections.length) {
             const smartRouting = await this.getSmartRouting(request, filteredConnections[0]);
 
+            await this.saveRoutingData(filteredConnections[0]);
+
             if (smartRouting?.extension) {
                 await this.transferCall(
                     request,
                     activeConnectionsInfo[0].callId,
                     filteredConnections[0].destinationNumber,
-                    smartRouting?.extension,
+                    smartRouting.aiRouting ? `555${filteredConnections[0].externalParty}` : smartRouting?.extension,
                 );
             }
         }
+    }
+
+    private async saveRoutingData(connection: ConnectionsData): Promise<void> {
+        await this.redisService.expire(`externalNumber:${connection.externalParty}`, 60);
+
+        await this.redisService.hset(
+            `externalNumber:${connection.externalParty}`,
+            'routingData',
+            JSON.stringify({
+                externalNumber: connection.externalParty,
+                pbxExtension: connection.destinationNumber,
+            }),
+        );
     }
 
     public async deleteEventProcess(request: RequestWithPacInfo, data: PbxEvenetActiveConnectionsInfo): Promise<void> {
@@ -82,7 +99,7 @@ export class PacPbxSubscribeEventNotificationService {
             );
     }
 
-    private async getSmartRouting(request: RequestWithPacInfo, connection: ConnectionsData): Promise<GetRotingInfoData> {
+    private async getSmartRouting(request: RequestWithPacInfo, connection: ConnectionsData): Promise<GetRotingInfoData | undefined> {
         return this.smartRoutingProvidersService.getRoutingInfo({
             clientId: request.client.clientId,
             pbxExtension: connection.destinationNumber,

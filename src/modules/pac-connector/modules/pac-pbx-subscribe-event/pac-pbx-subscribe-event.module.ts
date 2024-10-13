@@ -8,9 +8,10 @@ import { ClientModule } from '@app/modules/client/client.module';
 import { PacCallModule } from '../pac-call/pac-call.module';
 import { AmqpModule } from '@app/modules/amqp/amqp.module';
 import { SmartRoutingModule } from '@app/modules/smart-routing/smart-routing.module';
+import { RedisModule } from '@app/modules/redis/redis.module';
 
 @Module({
-    imports: [PacConnectorModule, PacSqlModule, ClientModule, PacCallModule, AmqpModule, SmartRoutingModule],
+    imports: [PacConnectorModule, PacSqlModule, ClientModule, PacCallModule, AmqpModule, SmartRoutingModule, RedisModule],
     providers: [PacPbxSubscribeEventService, PacPbxSubscribeEventNotificationService],
     exports: [PacPbxSubscribeEventService],
     controllers: [PacPbxSubscribeEventController],

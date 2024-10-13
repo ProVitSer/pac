@@ -1,18 +1,22 @@
 import { Role } from '@app/common/interfaces/enums';
 import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
-import { Body, Controller, Delete, Get, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { SmartRoutingService } from '../services/smart-routing.service';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import DeleteSmartRouting from '../dto/delete-smart-routing.dto';
 import AddSmartRouting from '../dto/add-smart-routing.dto';
 import UpdateSmartRouting from '../dto/update-smart-routing.dto';
+import { SmartRoutingProvidersService } from '../services/smart-routing-providers.service';
 
 @UseGuards(RoleGuard([Role.Admin, Role.Manager]))
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class SmartRoutingController {
-    constructor(private readonly smartRoutingService: SmartRoutingService) {}
+    constructor(
+        private readonly smartRoutingService: SmartRoutingService,
+        private readonly smartRoutingProvidersService: SmartRoutingProvidersService,
+    ) {}
 
     @Get('pbx-extension')
     async getPbxExtension(@Req() req: RequestWithUser) {
@@ -37,5 +41,10 @@ export class SmartRoutingController {
     @Put()
     async updateSmartRouting(@Req() req: RequestWithUser, @Body() data: UpdateSmartRouting) {
         return this.smartRoutingService.updateSmartRouting(req.user.client.clientId, data);
+    }
+
+    @Get('vox-provider')
+    async getProviderSmartRouting(@Req() req: RequestWithUser, @Query('externalNumber') externalNumber: string) {
+        return await this.smartRoutingProvidersService.voxGetRoutingInfo(req.user.client.clientId, externalNumber);
     }
 }

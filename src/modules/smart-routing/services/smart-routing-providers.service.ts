@@ -8,6 +8,7 @@ import { SmartRouting } from '../entities/smart-routing.entity';
 import { BitrixSmartRoutingProvider } from '../providers/bitrix-smart-routing.provider';
 import { CustomSmartRoutingProvider } from '../providers/custom-smart-routing.provider';
 import { PhonebookSmartRoutingProvider } from '../providers/phonebook-smart-routing.provider';
+import { RedisService } from '@app/modules/redis/services/redis.service';
 
 @Injectable()
 export class SmartRoutingProvidersService {
@@ -18,6 +19,7 @@ export class SmartRoutingProvidersService {
         private readonly phonebook: PhonebookSmartRoutingProvider,
         private readonly custom: CustomSmartRoutingProvider,
         private readonly bitrix: BitrixSmartRoutingProvider,
+        private readonly redisService: RedisService,
     ) {}
 
     private get providers(): SmartRoutingProviders {
@@ -31,14 +33,25 @@ export class SmartRoutingProvidersService {
         };
     }
 
-    public async getRoutingInfo(data: RotingInfoData): Promise<GetRotingInfoData> {
+    public async getRoutingInfo(data: RotingInfoData): Promise<GetRotingInfoData | undefined> {
         const smartRoutingInfo = await this.getSmartRoutingInfo(data);
 
         if (!smartRoutingInfo) return;
 
         const smartRoutingProvider = this.getRoutingProvider(smartRoutingInfo.routingService);
 
-        return await smartRoutingProvider.getRoutingInfo({ clientId: data.clientId, externalNumber: data.externalNumber });
+        const providerRoutingResult = await smartRoutingProvider.getRoutingInfo({
+            clientId: data.clientId,
+            externalNumber: data.externalNumber,
+        });
+
+        if (!providerRoutingResult) return;
+
+        return {
+            ...providerRoutingResult,
+            aiRouting: smartRoutingInfo.aiRouting,
+            defaultRoutingNumber: smartRoutingInfo.defaultRoutingNumber,
+        };
     }
 
     private getRoutingProvider(routingServiceType: RoutingServiceType): SmartRoutingProvider {
@@ -51,5 +64,21 @@ export class SmartRoutingProvidersService {
         });
 
         return smartRoutingInfo;
+    }
+
+    public async voxGetRoutingInfo(clientId: number, externalNumber: string): Promise<GetRotingInfoData | undefined> {
+        const routingData = await this.redisService.hget(`externalNumber:${externalNumber}`, 'routingData');
+
+        if (!routingData) return;
+
+        const parseRoutingData = JSON.parse(routingData);
+
+        const result = await this.getRoutingInfo({
+            clientId,
+            pbxExtension: parseRoutingData.pbxExtension,
+            externalNumber,
+        });
+
+        return result;
     }
 }

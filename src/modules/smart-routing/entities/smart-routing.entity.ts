@@ -23,6 +23,12 @@ export class SmartRouting {
     @Column({ name: 'client_id' })
     clientId: number;
 
+    @Column({ default: false, name: 'ai_routing' })
+    aiRouting: boolean;
+
+    @Column({ default: null, nullable: true, name: 'default_routing_number' })
+    defaultRoutingNumber: string;
+
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
 
