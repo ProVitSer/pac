@@ -43,6 +43,8 @@ export class CallEventHandlerService {
 
             callEventHandler.callDirection = determineCallDirection[0].callDireciton;
 
+            callEventHandler.originalFullCallInfo = data.activeConnectionsInfo[0];
+
             await this.callEventHandlerRepository.save(callEventHandler);
 
             await queryRunner.commitTransaction();
