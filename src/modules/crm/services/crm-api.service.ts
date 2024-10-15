@@ -33,6 +33,8 @@ export class CrmApiService {
             },
         };
 
+        this.logger.log(JSON.stringify(data));
+
         const response = await firstValueFrom(
             this.httpService.post(`${domain}/${hash}/${BitrixMetod.UserGet}?ID=${userId}`, data).pipe(
                 catchError((error: AxiosError) => {
@@ -46,6 +48,8 @@ export class CrmApiService {
     }
 
     public async createTask(crmConfig: CrmConfig, taskData: BitrixTasksFields): Promise<CreateTaskResponse> {
+        this.logger.log(JSON.stringify(taskData));
+
         const response = await firstValueFrom(
             this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.TaskAdd}`, taskData).pipe(
                 catchError((error: AxiosError) => {
@@ -65,6 +69,8 @@ export class CrmApiService {
             },
         };
 
+        this.logger.log(JSON.stringify(data));
+
         const response = await firstValueFrom(
             this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.UserGet}?start=${startPage}`, data).pipe(
                 catchError((error: AxiosError) => {
@@ -81,11 +87,14 @@ export class CrmApiService {
         crmConfig: CrmConfig,
         dataAdapter: BitrixRegisterCallDataAdapter,
     ): Promise<BitrixRegisterCallResponse> {
+        this.logger.log(JSON.stringify(dataAdapter.registerCallData));
+
         const response = await firstValueFrom(
             this.httpService
                 .post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ExternalCallRegister}`, { ...dataAdapter.registerCallData })
                 .pipe(
                     catchError((error: AxiosError) => {
+                        console.log(error);
                         this.logger.error(error);
                         throw error;
                     }),
@@ -96,6 +105,8 @@ export class CrmApiService {
     }
 
     public async externalCallFinish(crmConfig: CrmConfig, dataAdapter: BitrixCallFinishDataAdapter): Promise<BitrixFinishCallFields> {
+        this.logger.log(JSON.stringify(dataAdapter.finishData));
+
         const response = await firstValueFrom(
             this.httpService
                 .post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ExternalCallFinish}`, { ...dataAdapter.finishData })
@@ -111,6 +122,8 @@ export class CrmApiService {
     }
 
     public async attachCallRecord(crmConfig: CrmConfig, crmCallId: string, filename: string): Promise<BitrixAttachRecordResult> {
+        this.logger.log(JSON.stringify({ CALL_ID: crmCallId, FILENAME: filename }));
+
         const response = await firstValueFrom(
             this.httpService
                 .post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ExternalCallAttachRecord}`, {
@@ -129,6 +142,8 @@ export class CrmApiService {
     }
 
     public async uploadCallRecord(filename: string, fileUrl: string, uploadUrl: string): Promise<BitrixAttachRecordResult> {
+        this.logger.log(JSON.stringify({ fileUrl, uploadUrl }));
+
         const fileResponse = await firstValueFrom(
             this.httpService.get(fileUrl, {
                 responseType: 'stream',
@@ -161,6 +176,8 @@ export class CrmApiService {
     }
 
     public async searchContact(crmConfig: CrmConfig, searchData: SearchContactData): Promise<SearchClientByPhoneResult> {
+        this.logger.log(JSON.stringify({ searchData }));
+
         const response = await firstValueFrom(
             this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ContactList}`, searchData).pipe(
                 catchError((error: AxiosError) => {
