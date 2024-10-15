@@ -8,7 +8,7 @@ export class HangupEvent implements AsteriskAmiEventProviderInterface {
 
     async parseEvent(event: HangupEventData): Promise<void> {
         try {
-            this.logger.log('HangupEvent', event);
+            return;
         } catch (e) {
             this.logger.error(event);
         }
