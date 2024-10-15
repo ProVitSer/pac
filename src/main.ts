@@ -25,7 +25,7 @@ async function bootstrap() {
 
         app.enableCors(loadCorsConfiguration(configService.get('cors')));
 
-        app.useGlobalInterceptors(new ErrorsInterceptor(), new PostInterceptor());
+        app.useGlobalInterceptors(new ErrorsInterceptor(app.get(WINSTON_MODULE_NEST_PROVIDER)), new PostInterceptor());
 
         const httpAdapter = app.get(HttpAdapterHost);
 
