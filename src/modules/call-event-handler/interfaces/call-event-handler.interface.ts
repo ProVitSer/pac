@@ -38,3 +38,8 @@ export interface FullCallInfo {
     isDstInUsers: boolean;
     callAnswered: boolean;
 }
+
+export interface EndCallData {
+    callId: string;
+    originalCallHistoryId: string;
+}

@@ -1,7 +1,7 @@
 import { Processor, Process, InjectQueue } from '@nestjs/bull';
 import { Job, Queue } from 'bull';
 import { Injectable } from '@nestjs/common';
-import { CallRingingData } from '../../interfaces/call-event-handler.interface';
+import { CallRingingData, EndCallData } from '../../interfaces/call-event-handler.interface';
 import configuration from '@app/common/config/config.provider';
 import { PacSqlService } from '@app/modules/pac-connector/modules/pac-sql/services/pac-sql.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,27 +30,37 @@ export class CallProcessor {
     async handleCallCheck(job: Job) {
         const callRingiingData = job.data.data as CallRingingData;
 
-        const callId = await this.getEndCallId(callRingiingData);
+        const endCallData = await this.getEndCallData(callRingiingData);
 
-        if (callId) {
-            await job.moveToCompleted();
-            await this.callEventHandlerRepository.update(
-                { callHistoryId: callRingiingData.callHistoryId },
-                { callId: callId, callProcess: CallProcess.callEnd },
-            );
-            return this.checkCallInfo(callRingiingData, Number(callId));
+        if (endCallData?.callId) {
+            const callHandlerInfo = await this.callEventHandlerRepository.findOne({
+                where: { originalCallHistoryId: endCallData.originalCallHistoryId },
+            });
+
+            if (!callHandlerInfo) {
+                await job.moveToCompleted();
+                await this.callEventHandlerRepository.update(
+                    { callHistoryId: callRingiingData.callHistoryId },
+                    {
+                        callId: endCallData?.callId,
+                        callProcess: CallProcess.callEnd,
+                        originalCallHistoryId: endCallData.originalCallHistoryId,
+                    },
+                );
+                return this.checkCallInfo(callRingiingData, Number(endCallData?.callId));
+            }
         }
         await this.callQueue.add({ data: callRingiingData }, { delay: 5000 });
     }
 
-    private async getEndCallId(callRingiingData: CallRingingData): Promise<string | undefined> {
+    private async getEndCallData(callRingiingData: CallRingingData): Promise<EndCallData | undefined> {
         const externalCdr = await this.pacSqlService.sqlRequest(callRingiingData.clientId, {
-            query: `${END_CALL_SQL} '%_${callRingiingData.callHistoryId}' ORDER BY id DESC`,
+            query: `${END_CALL_SQL} '%\\_${callRingiingData.callHistoryId}'  ESCAPE '\\' ORDER BY id DESC`,
         });
 
         const parseResult = JSON.parse(externalCdr.result);
 
-        return parseResult.length > 0 ? parseResult[0][0] : undefined;
+        return parseResult.length > 0 ? { callId: parseResult[0][0], originalCallHistoryId: parseResult[0][1] } : undefined;
     }
 
     private async checkCallInfo(callRingiingData: CallRingingData, callId: number): Promise<void> {
