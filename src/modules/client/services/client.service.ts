@@ -57,12 +57,13 @@ export class ClientService {
     }
 
     public async getClientById(clientId: number): Promise<Client> {
-        const client = await this.clientRepository.findOne({
-            where: { clientId, deleted: false },
-            relations: {
-                licenses: true,
-            },
-        });
+        const client = await this.clientRepository
+            .createQueryBuilder('client')
+            .leftJoinAndSelect('client.licenses', 'licenses')
+            .leftJoinAndSelect('licenses.products', 'products')
+            .where('client.clientId = :clientId ', { clientId })
+            .andWhere('deleted = false')
+            .getOne();
 
         if (!client) {
             throw new ClientNotFoundException(clientId);
