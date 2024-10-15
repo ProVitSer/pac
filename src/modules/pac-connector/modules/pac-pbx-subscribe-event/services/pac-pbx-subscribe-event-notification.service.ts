@@ -15,7 +15,7 @@ import { RedisService } from '@app/modules/redis/services/redis.service';
 
 @Injectable()
 export class PacPbxSubscribeEventNotificationService {
-    private calls = new Map<string, PbxEventActiveConnectionsInfo>();
+    private readonly magicAIPrefix = '555';
     constructor(
         private readonly pacCallService: PacCallService,
         private readonly amqpService: AmqpService,
@@ -60,7 +60,7 @@ export class PacPbxSubscribeEventNotificationService {
                     request,
                     activeConnectionsInfo[0].callId,
                     filteredConnections[0].destinationNumber,
-                    smartRouting.aiRouting ? `555${filteredConnections[0].externalParty}` : smartRouting?.extension,
+                    smartRouting.aiRouting ? `${this.magicAIPrefix}${filteredConnections[0].externalParty}` : smartRouting?.extension,
                 );
             }
         }
