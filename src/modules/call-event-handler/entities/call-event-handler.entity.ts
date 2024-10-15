@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column } from 'typeorm';
 import { CallProcess, CallDirection } from '../interfaces/call-event-handler.enum';
 import { FullCallInfo } from '../interfaces/call-event-handler.interface';
+import { ApiActiveConnectionsInfo } from '@app/modules/api/modules/call/interfaces/api-call.interface';
 
 @Entity()
 export class CallEventHandler {
@@ -12,6 +13,9 @@ export class CallEventHandler {
 
     @Column({ nullable: false, unique: true, name: 'call_history_id' })
     callHistoryId: string;
+
+    @Column({ nullable: true, unique: true, name: 'original_call_history_id' })
+    originalCallHistoryId: string;
 
     @Column({
         type: 'enum',
@@ -29,7 +33,7 @@ export class CallEventHandler {
     callProcess: CallProcess;
 
     @Column('json', { nullable: true, name: 'original_full_call_info' })
-    originalFullCallInfo: string[][];
+    originalFullCallInfo: ApiActiveConnectionsInfo;
 
     @Column('json', { nullable: true, name: 'full_call_info' })
     fullCallInfo: FullCallInfo[];
