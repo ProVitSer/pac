@@ -37,14 +37,23 @@ export class IncomingCallHandlerService {
 
         await this.addCallData(callRingiingData, fullCallInfo);
 
-        //Проверить первый объект и отправить, если callAnswered равно false, неотвеченный входящий
-        if (sortedFullCallInfo.length > 0 && !sortedFullCallInfo[0].callAnswered) {
+        if (sortedFullCallInfo.length > 0 && this.isMissedCall(sortedFullCallInfo)) {
             const { operatorName, srcCallerNumber } = sortedFullCallInfo[0];
             this.sendMissedCall(callRingiingData.clientId, operatorName, srcCallerNumber);
         }
 
         this.sendCallToAnalitics(callRingiingData, sortedFullCallInfo, callId);
         this.sendCallToCrm(callRingiingData, sortedFullCallInfo, callId);
+    }
+
+    private isMissedCall(calls: FullCallInfo[]): boolean {
+        // Проверяем, есть ли хотя бы один вызов с isDstInUsers: true и callAnswered: true
+        const isAnswerUser = calls.some((call) => call.isDstInUsers && call.callAnswered);
+        if (isAnswerUser) {
+            return false;
+        }
+
+        return true;
     }
 
     private async sendCallToAnalitics(callRingiingData: CallOnProcessEvent, fullCallInfo: FullCallInfo[], callId: number): Promise<void> {
