@@ -13,12 +13,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CrmUsers } from '../entities/crm-users.entity';
 import { CrmConfig } from '../entities/crm-config.entity';
-import { format, addMinutes } from 'date-fns';
+import { format, addMinutes, formatISO, parseISO, addHours } from 'date-fns';
 import { CallDirection } from '@app/modules/call-event-handler/interfaces/call-event-handler.enum';
 import { BitrixCallStatusType, BitrixCallType } from '../interfaces/crm.enum';
 import { BitrixCallFinishDataAdapter } from '../adapters/bitrix-call-finish-data.adapter';
 import { BitrixRegisterCallDataAdapter } from '../adapters/bitrix-register-call-data.adapter';
-import { parse, formatISO } from 'date-fns';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { VoipService } from '@app/modules/voip/services/voip.service';
 
@@ -103,7 +102,7 @@ export class CrmService {
             crmUserId: crmUser,
             phoneNumber: data.fullCallInfo.srcCallerNumber,
             calltype: BitrixCallType.incoming,
-            startCall: formatISO(parse(data?.fullCallInfo.startTime, 'yyyy-dd-MM HH:mm:ss', new Date())),
+            startCall: formatISO(addHours(parseISO(data?.fullCallInfo.startTime), 12)),
             billsec: String(data.fullCallInfo.callTime),
             bitrixCallStatusType: data.fullCallInfo.callAnswered ? BitrixCallStatusType.SuccessfulCall : BitrixCallStatusType.MissedCall,
             recording: data.fullCallInfo.dstRecordingUrl,
@@ -123,7 +122,7 @@ export class CrmService {
             crmUserId: crmUser,
             phoneNumber: data.fullCallInfo.dstCallerNumber,
             calltype: BitrixCallType.outgoing,
-            startCall: formatISO(parse(data?.fullCallInfo.startTime, 'yyyy-dd-MM HH:mm:ss', new Date())),
+            startCall: formatISO(addHours(parseISO(data?.fullCallInfo.startTime), 12)),
             billsec: String(data.fullCallInfo.callTime),
             bitrixCallStatusType: data.fullCallInfo.callAnswered ? BitrixCallStatusType.SuccessfulCall : BitrixCallStatusType.MissedCall,
             recording: data.fullCallInfo.dstRecordingUrl,
