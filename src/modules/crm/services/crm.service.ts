@@ -4,6 +4,7 @@ import {
     BitrixTasksFields,
     CrmCallData,
     MissedCallToCrmData,
+    OnExternalCallStart,
     RegisterCallInfo,
     SearchClientByPhoneResult,
 } from '../interfaces/crm.interface';
@@ -19,6 +20,7 @@ import { BitrixCallFinishDataAdapter } from '../adapters/bitrix-call-finish-data
 import { BitrixRegisterCallDataAdapter } from '../adapters/bitrix-register-call-data.adapter';
 import { parse, formatISO } from 'date-fns';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { VoipService } from '@app/modules/voip/services/voip.service';
 
 @Injectable()
 export class CrmService {
@@ -28,6 +30,9 @@ export class CrmService {
         @InjectRepository(CrmUsers)
         private crmUsersRepository: Repository<CrmUsers>,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+        private readonly voipService: VoipService,
+        @InjectRepository(CrmConfig)
+        private crmConfigRepository: Repository<CrmConfig>,
     ) {}
 
     public async addCallToCrm(data: CrmCallData): Promise<void> {
@@ -166,5 +171,21 @@ export class CrmService {
 
     public async getPbxExtensionByCrmId(crmUserId: number): Promise<CrmUsers> {
         return await this.crmUsersRepository.findOne({ where: { crmUserId } });
+    }
+
+    public async crmInitCall(data: OnExternalCallStart): Promise<void> {
+        const crmConfig = await this.crmConfigRepository.findOne({
+            where: {
+                token: data.auth.application_token,
+            },
+        });
+
+        if (crmConfig.token !== data.auth.application_token) return;
+
+        const crmUser = await this.getPbxExtensionByCrmId(Number(data.data.USER_ID));
+
+        if (!crmUser) return;
+
+        await this.voipService.makeExternalCall(crmConfig.clientId, data.data.PHONE_NUMBER, String(crmUser.pbxExtension));
     }
 }

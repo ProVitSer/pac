@@ -26,6 +26,9 @@ export class CrmConfig {
     @Column({ nullable: false, name: 'hash' })
     hash: string;
 
+    @Column({ nullable: false, name: 'token' })
+    token: string;
+
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
 

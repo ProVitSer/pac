@@ -355,3 +355,28 @@ export interface SearchClientByPhoneData {
     LAST_NAME: string | null;
     ASSIGNED_BY_ID: string | null;
 }
+
+export interface OnExternalCallStart {
+    event: string;
+    event_handler_id: string;
+    data: {
+        PHONE_NUMBER: string;
+        PHONE_NUMBER_INTERNATIONAL: string;
+        EXTENSION: string;
+        USER_ID: string;
+        CALL_LIST_ID: string;
+        LINE_NUMBER: string;
+        IS_MOBILE: string;
+        CALL_ID: string;
+        CRM_ENTITY_TYPE: string;
+        CRM_ENTITY_ID: string;
+    };
+    ts: string;
+    auth: {
+        domain: string;
+        client_endpoint: string;
+        server_endpoint: string;
+        member_id: string;
+        application_token: string;
+    };
+}

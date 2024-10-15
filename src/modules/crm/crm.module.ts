@@ -9,10 +9,12 @@ import { CrmApiService } from './services/crm-api.service';
 import { CrmConfigService } from './services/crm-config.service';
 import { CrmService } from './services/crm.service';
 import { CrmConfigController } from './controllers/crm-config.controller';
+import { CrmController } from './controllers/crm.controller';
+import { VoipModule } from '../voip/voip.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([CrmConfig, CrmUsers]), HttpModule],
-    controllers: [CrmConfigController],
+    imports: [TypeOrmModule.forFeature([CrmConfig, CrmUsers]), HttpModule, VoipModule],
+    controllers: [CrmConfigController, CrmController],
     providers: [CrmListenters, CrmSyncUsersSchedule, CrmService, CrmApiService, CrmConfigService],
     exports: [CrmService, CrmConfigService],
 })
