@@ -1,0 +1,24 @@
+[general]
+enabled = yes
+pretty=no
+websocket_write_timeout=100
+allowed_origins=*
+
+
+[${ASTERISK_ARI_CALL_USER}]
+type=user
+password=${ASTERISK_ARI_CALL_PASSWORD}
+password_format=plain
+read_only=no
+
+[${ASTERISK_ARI_INFO}]
+type=user
+password=${ASTERISK_ARI_INFO_PASSWORD}
+password_format=plain
+read_only=no
+
+[${ASTERISK_ARI_CQA}]
+type=user
+password=${ASTERISK_ARI_CQA_PASSWORD}
+password_format=plain
+read_only=no

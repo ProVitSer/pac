@@ -12,7 +12,7 @@ import { databaseConfig } from '@app/common/config/database.config';
 import { ClientModule } from '../client/client.module';
 import { LicensesModule } from '../licenses/licenses.module';
 import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core';
-import { ProductModule } from '../product/product.module';
+import { ProductsModule } from '../products/products.module';
 import { PostInterceptor } from '@app/common/interceptors/post.interceptor';
 import { ErrorsInterceptor } from '@app/common/interceptors/errors.interceptor';
 import { MailModule } from '../mail/mail.module';
@@ -22,6 +22,26 @@ import { SoftwareDistributionModule } from '../software-distribution/software-di
 import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
+import { VoipModule } from '../voip/voip.module';
+import { FilesModule } from '../files/files.module';
+import { CdrModule } from '../cdr/cdr.module';
+import { CallQualityAssessmentModule } from '../call-quality-assessment/call-quality-assessment.module';
+import { PacConnectorModule } from '../pac-connector/pac-connector.module';
+import { RedisModule } from '../redis/redis.module';
+import { PacSqlModule } from '../pac-connector/modules/pac-sql/pac-sql.module';
+import { PacCallModule } from '../pac-connector/modules/pac-call/pac-call.module';
+import { ApiModule } from '../api/api.module';
+import { TgModule } from '../tg/tg.module';
+import { PacPbxSubscribeEventModule } from '../pac-connector/modules/pac-pbx-subscribe-event/pac-pbx-subscribe-event.module';
+import { SmartRoutingModule } from '../smart-routing/smart-routing.module';
+import { PacIvrModule } from '../pac-connector/modules/pac-ivr/pac-ivr.module';
+import { DadataApiModule } from '../dadata-api/dadata-api.module';
+import { CrmModule } from '../crm/crm.module';
+import { CallEventHandlerModule } from '../call-event-handler/call-event-handler.module';
+import { MissedCallModule } from '../missed-call/missed-call.module';
+import { CallAnalyticsModule } from '../call-analytics/call-analytics.module';
+import { VoiceKitModule } from '../voice-kit/voice-kit.module';
+import { SmsModule } from '../sms/sms.module';
 
 @Module({
     imports: [
@@ -45,41 +65,34 @@ import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
         }),
         ClientModule,
         LicensesModule,
-        ProductModule,
+        ProductsModule,
         MailModule,
         AmqpModule,
         NotificationsModule,
         SoftwareDistributionModule,
         UsersModule,
         AuthModule,
+        VoipModule,
+        FilesModule,
+        CdrModule,
+        CallQualityAssessmentModule,
+        PacConnectorModule,
+        RedisModule,
+        PacSqlModule,
+        PacCallModule,
+        PacIvrModule,
+        ApiModule,
+        TgModule,
+        PacPbxSubscribeEventModule,
+        SmartRoutingModule,
+        DadataApiModule,
+        CrmModule,
+        CallEventHandlerModule,
+        MissedCallModule,
+        CallAnalyticsModule,
+        VoiceKitModule,
+        SmsModule,
         RouterModule.register([
-            {
-                path: 'api',
-                children: [
-                    {
-                        path: 'client',
-                        module: ClientModule,
-                    },
-                ],
-            },
-            {
-                path: 'api',
-                children: [
-                    {
-                        path: 'licenses',
-                        module: LicensesModule,
-                    },
-                ],
-            },
-            {
-                path: 'api',
-                children: [
-                    {
-                        path: 'product',
-                        module: ProductModule,
-                    },
-                ],
-            },
             {
                 path: 'api',
                 children: [
@@ -95,6 +108,114 @@ import { LoggerMiddleware } from '@app/common/middlewares/logger.middleware';
                     {
                         path: 'auth',
                         module: AuthModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'voip',
+                        module: VoipModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'files',
+                        module: FilesModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'cqa',
+                        module: CallQualityAssessmentModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'pac',
+                        module: PacConnectorModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'pac',
+                        module: ApiModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'tg',
+                        module: TgModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'smart-routing',
+                        module: SmartRoutingModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'crm',
+                        module: CrmModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'missed-call',
+                        module: MissedCallModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'call-analytics',
+                        module: CallAnalyticsModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'voice-kit',
+                        module: VoiceKitModule,
+                    },
+                ],
+            },
+            {
+                path: 'api',
+                children: [
+                    {
+                        path: 'sms',
+                        module: SmsModule,
                     },
                 ],
             },

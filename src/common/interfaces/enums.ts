@@ -11,3 +11,8 @@ export enum Permission {
     Update = 'Update',
     Read = 'Read',
 }
+
+export enum ApplicationServiceType {
+    cqa = 'cqa',
+    dialer = 'dialer',
+}

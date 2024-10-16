@@ -1,15 +1,17 @@
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { AttachmentsData, Contexts, SendMailData } from '../interfaces/mail.interface';
 import { Attachment } from 'nodemailer/lib/mailer';
 import { ConfigService } from '@nestjs/config';
 import { MailEnvironmentVariables } from '@app/common/config/interfaces/config.interface';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class MailService {
     constructor(
         private readonly configService: ConfigService,
         private readonly mailerService: MailerService,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
     ) {}
 
     public async sendMail(data: SendMailData<Contexts>): Promise<void> {
@@ -18,7 +20,7 @@ export class MailService {
 
             await this.mailerService.sendMail(mailData);
         } catch (e) {
-            console.log(e);
+            this.logger.error(e);
         }
     }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { GetTokensResult, TokenPayload } from '../interfaces/auth.interface';
 import { ConfigService } from '@nestjs/config';
-import { JwtEnvironmentVariables } from '@app/common/config/interfaces/config.interface';
+import { ApiEnvironmentVariables, JwtEnvironmentVariables } from '@app/common/config/interfaces/config.interface';
 
 @Injectable()
 export class TokenService {
@@ -30,6 +30,14 @@ export class TokenService {
     public async getAccessToken(userId: number) {
         return {
             accessToken: await this.getToken({ userId }),
+        };
+    }
+
+    public async getApioken(userId: number) {
+        const { secret, exp, algorithm } = this.configService.get<JwtEnvironmentVariables>('api') as ApiEnvironmentVariables;
+
+        return {
+            token: await this.jwtService.signAsync({ userId }, { secret, expiresIn: exp, algorithm }),
         };
     }
 }

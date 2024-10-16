@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package tinkoff.cloud.tts.v1;
+
+// import "google/protobuf/duration.proto";
+// import "google/api/annotations.proto";
+
+service TextToSpeech { // Синтез речи.
+  rpc ListVoices(ListVoicesRequest) returns (ListVoicesResponses) { 
+    option (google.api.http) = {
+      get: "/v1/tts:list_voices"
+    };
+  }
+  rpc Synthesize(SynthesizeSpeechRequest) returns (SynthesizeSpeechResponse) { 
+    option (google.api.http) = {
+      post: "/v1/tts:synthesize"
+      body: "*"
+    };
+  }
+  rpc StreamingSynthesize(SynthesizeSpeechRequest) returns (stream StreamingSynthesizeSpeechResponse); 
+}
+
+enum AudioEncoding { 
+  ENCODING_UNSPECIFIED = 0; // <i>Недопустимое значение.</i>
+  LINEAR16 = 1; // PCM без заголовков с целыми знаковыми 16-битными семплами в линейном распределении.
+  reserved "FLAC"; reserved 2;
+  reserved "MULAW"; reserved 3;
+  reserved "AMR"; reserved 4;
+  reserved "AMR_WB"; reserved 5;
+  reserved "OGG_OPUS"; reserved 6;
+  reserved "SPEEX_WITH_HEADER_BYTE"; reserved 7;
+  ALAW = 8; // PCM без заголовков с 8-битными семплами в распределении A-law (aka PCMA).
+  reserved "LINEAR32F"; reserved 9;
+  reserved "OGG_VORBIS"; reserved 10;
+  RAW_OPUS = 11; 
+  reserved "MPEG_AUDIO"; reserved 12;
+}
+
+message Voice { 
+  reserved "language_codes"; reserved 1;
+  string name = 2; 
+  reserved "ssml_gender"; reserved 3;
+  reserved "natural_sample_rate_hertz"; reserved 4;
+}
+
+message ListVoicesRequest {
+  reserved "language_code"; reserved 1;
+}
+
+message ListVoicesResponses {
+  repeated Voice voices = 1; 
+}
+
+message SynthesisInput {
+  string text = 1;
+  string ssml = 2;
+}
+
+message VoiceSelectionParams {
+  reserved "language_code"; reserved 1;
+  string name = 2; 
+  reserved "ssml_gender"; reserved 3;
+}
+
+message AudioConfig { 
+  AudioEncoding audio_encoding = 1;
+  float speaking_rate = 2; 
+  float pitch = 3; 
+  reserved "volume_gain_db"; reserved 4;
+  int32 sample_rate_hertz = 5;  
+}
+
+message SynthesizeSpeechRequest {  
+  SynthesisInput input = 1;  
+  VoiceSelectionParams voice = 2;  
+  AudioConfig audio_config = 3; 
+}
+
+message SynthesizeSpeechResponse {  
+  bytes audio_content = 1;  
+}
+
+message StreamingSynthesizeSpeechResponse {  
+  bytes audio_chunk = 1; 
+}

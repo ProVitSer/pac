@@ -7,11 +7,13 @@ import { Repository } from 'typeorm';
 import { instance, mock } from 'ts-mockito';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { ClientService } from '../../../modules/client/services/client.service';
 
 describe('UsersService', () => {
     let service: UsersService;
     let repository: Repository<Users>;
     let logger: LoggerService;
+    let clientService: ClientService;
 
     beforeEach(async () => {
         const mockedRepository = mock<Repository<Users>>(Repository);
@@ -29,12 +31,19 @@ describe('UsersService', () => {
                         warn: jest.fn(),
                     },
                 },
+                {
+                    provide: ClientService,
+                    useValue: {
+                        getClientByClientId: jest.fn(),
+                    },
+                },
             ],
         }).compile();
 
         service = module.get<UsersService>(UsersService);
         repository = module.get<Repository<Users>>(getRepositoryToken(Users));
         logger = module.get<LoggerService>(WINSTON_MODULE_NEST_PROVIDER);
+        clientService = module.get<ClientService>(ClientService);
     });
     it('should be defined', () => {
         expect(service).toBeDefined();

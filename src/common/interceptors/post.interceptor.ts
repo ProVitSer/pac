@@ -8,7 +8,7 @@ export class PostInterceptor implements NestInterceptor {
         const request = context.switchToHttp().getRequest<Request>();
         const response = context.switchToHttp().getResponse<Response>();
         if (request.method === 'POST') {
-            if (response.statusCode === 201) context.switchToHttp().getResponse().status(HttpStatus.OK);
+            if (response.statusCode === HttpStatus.CREATED) context.switchToHttp().getResponse().status(HttpStatus.OK);
         }
 
         return next.handle();

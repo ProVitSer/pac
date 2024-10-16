@@ -11,7 +11,7 @@ const config = {
     username: `${process.env.DATABASE_USERNAME}`,
     password: `${process.env.DATABASE_PASSWORD}`,
     database: `${process.env.DATABASE_NAME}`,
-    entities: ['dist/src/modules/**/entities/*.entity{.ts,.js}'],
+    entities: ['dist/src/modules/**/entities/*.entity{.ts,.js}', 'dist/src/modules/**/**/*.entities/*.entity{.ts,.js}'],
     migrations: ['src/database/migrations/*{.ts,.js}'],
     migrationsTableName: 'migrations',
     migrationsRun: true,

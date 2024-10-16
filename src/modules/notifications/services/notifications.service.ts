@@ -1,10 +1,18 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { LicenseCreateNotification, LicenseDeactivateNotification, LicenseExpireNotification } from '../interfaces/notifications.interface';
 import {
+    ChangeTrunkStatusNotification,
+    LicenseCreateNotification,
+    LicenseDeactivateNotification,
+    LicenseExpireNotification,
+    ResetPasswordNotification,
+} from '../interfaces/notifications.interface';
+import {
+    ChangeTrunkStatusContext,
     LicenseCreateContext,
     LicenseDeactivateContext,
     LicenseExpireContext,
+    ResetPassword,
     SendMailData,
 } from '@app/modules/mail/interfaces/mail.interface';
 import { Exchange, RoutingKey } from '../../../common/constants/amqp';
@@ -26,14 +34,14 @@ export class NotificationsService {
                 to: data.client.email,
                 context: {
                     license: data.license.license,
-                    fio: `${data.client.contact_person_name}`,
-                    expiration_date: format(data.license.expiration_date, 'dd.MM.yyyy'),
+                    fio: `${data.client.contactPersonName}`,
+                    expiration_date: format(data.license.expirationDate, 'dd.MM.yyyy'),
                 },
                 template: TemplateTypes.LicenseCreate,
                 subject: LICENSE_CREATE,
             };
 
-            this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
         } catch (e) {
             this.logger.error(e);
         }
@@ -45,15 +53,15 @@ export class NotificationsService {
                 to: data.client.email,
                 context: {
                     license: data.license.license,
-                    fio: `${data.client.contact_person_name}`,
-                    expiration_date: format(data.license.expiration_date, 'dd.MM.yyyy'),
+                    fio: `${data.client.contactPersonName}`,
+                    expiration_date: format(data.license.expirationDate, 'dd.MM.yyyy'),
                     expiration_day: data.day,
                 },
                 template: TemplateTypes.LicenseExpire,
                 subject: LICENSE_EXPIRE,
             };
 
-            this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
         } catch (e) {
             this.logger.error(e);
         }
@@ -65,14 +73,48 @@ export class NotificationsService {
                 to: data.client.email,
                 context: {
                     license: data.license.license,
-                    fio: `${data.client.contact_person_name}`,
-                    expiration_date: format(data.license.expiration_date, 'dd.MM.yyyy'),
+                    fio: `${data.client.contactPersonName}`,
+                    expiration_date: format(data.license.expirationDate, 'dd.MM.yyyy'),
                 },
                 template: TemplateTypes.LicenseDeactivate,
                 subject: LICENSE_DEACTIVATE,
             };
 
-            this.amqpService.sendMessage(Exchange.events, RoutingKey.mail, mailData);
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
+        } catch (e) {
+            this.logger.error(e);
+        }
+    }
+
+    public async changeTrunkStatusNotification(data: ChangeTrunkStatusNotification) {
+        try {
+            const mailData: SendMailData<ChangeTrunkStatusContext> = {
+                to: data.client.email,
+                context: {
+                    fio: `${data.client.contactPersonName}`,
+                    trinkId: data.trinkId,
+                    trunkStatusDescription: data.trunkStatusDescription,
+                },
+                template: TemplateTypes.ChangeTrunkStatus,
+                subject: data.subject,
+            };
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
+        } catch (e) {
+            this.logger.error(e);
+        }
+    }
+
+    public async forgotPasswordNotification(data: ResetPasswordNotification) {
+        try {
+            const mailData: SendMailData<ResetPassword> = {
+                to: data.to,
+                context: {
+                    url: data.url,
+                },
+                template: TemplateTypes.ResetPassword,
+                subject: 'Восстановление пароля OnVoip',
+            };
+            this.amqpService.sendMessage(Exchange.events, RoutingKey.sendMail, mailData);
         } catch (e) {
             this.logger.error(e);
         }

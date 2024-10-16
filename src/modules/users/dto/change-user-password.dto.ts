@@ -7,11 +7,11 @@ export class ChangeUserPasswordDto {
 
     @IsString()
     @IsNotEmpty()
-    old_password: string;
+    oldPassword: string;
 
     @IsString()
     @IsNotEmpty()
-    new_password: string;
+    newPassword: string;
 }
 
 export default ChangeUserPasswordDto;

@@ -1,18 +1,18 @@
-import { Client } from '@app/modules/client/entities/client.entity';
-import { Product } from '@app/modules/product/entities/product.entity';
+import { Client } from '../../../modules/client/entities/client.entity';
+import { Products } from '@app/modules/products/entities/products.entity';
 
 export interface LicensesInterface {
     id: number;
     client: Client;
-    products: Product[];
-    expiration_date: Date;
-    is_active: boolean;
-    is_test: boolean;
+    products: Products[];
+    expirationDate: Date;
+    isActive: boolean;
+    isTest: boolean;
     order?: Date;
-    created_at: Date;
-    updated_at: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface ActiveLicenseResponse {
-    is_active: boolean;
+    isActive: boolean;
 }

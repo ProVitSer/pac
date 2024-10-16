@@ -1,10 +1,24 @@
-import { IsEmail, IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsString, Matches, MinLength } from 'class-validator';
+import { IsPhoneNumber } from '@app/common/validators/Ii-phone-number-constraint';
 
 export class RegisterDto {
     @IsString()
+    @IsNotEmpty()
+    companyName: string;
+
+    @IsString()
     @IsEmail()
     @IsNotEmpty()
-    email: string;
+    companyEmail: string;
+
+    @IsString()
+    @IsNotEmpty()
+    contactPersonName: string;
+
+    @IsString()
+    @IsPhoneNumber({ message: 'Phone number must be in the format 79134567891' })
+    @IsNotEmpty()
+    companyPhone: string;
 
     @IsString()
     @IsNotEmpty()
@@ -19,8 +33,17 @@ export class RegisterDto {
     password: string;
 
     @IsString()
+    @IsEmail()
     @IsNotEmpty()
-    phone_number: string;
+    userEmail: string;
+
+    @IsString()
+    @IsNotEmpty()
+    userPhoneNumber: string;
+
+    @IsNumber({}, { each: true })
+    @IsNotEmpty()
+    productsId: number[];
 }
 
 export default RegisterDto;

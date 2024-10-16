@@ -1,0 +1,8 @@
+[general]
+dbhost= ${DATABASE_CONTAINER_NAME}
+dbport=${DATABASE_PORT}
+dbname=${DATABASE_NAME}
+dbuser= ${DATABASE_USERNAME}
+dbpass=${DATABASE_PASSWORD}
+requirements=warn
+dbsock = /var/run/postgresql

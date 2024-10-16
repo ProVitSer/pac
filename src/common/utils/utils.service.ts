@@ -61,4 +61,34 @@ export class UtilsService {
             };
         });
     }
+
+    static getRandomDelay(delays: number[]): number {
+        const randomIndex = Math.floor(Math.random() * delays.length);
+        return delays[randomIndex];
+    }
+
+    static async randomDelayTimer(delays: number[]): Promise<void> {
+        const delay = this.getRandomDelay(delays);
+        return new Promise((resolve) => setTimeout(resolve, delay));
+    }
+
+    static convertToIPv4(ip: string): string {
+        if (ip.startsWith('::ffff:')) {
+            return ip.replace('::ffff:', '');
+        }
+        return ip;
+    }
+
+    static formatNumber(number: string): string {
+        return number.replace(/\D/g, '');
+    }
+
+    static base64Encode(string: string): string {
+        const encoded = Buffer.from(string).toString('base64');
+        return encoded.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    static base64Decode(base64: string) {
+        return Buffer.from(base64, 'base64');
+    }
 }

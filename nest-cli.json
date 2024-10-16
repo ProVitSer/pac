@@ -12,7 +12,17 @@
         {
           "include": "../src/modules/mail/templates/*",
           "outDir": "./dist/src"
-        }
+        },
+        {
+            "include": "../src/modules/pac-connector/modules/**/**/*.proto",
+            "outDir": "./dist/src"
+        },
+        {
+            "include": "../src/modules/voice-kit/tts/providers/tinkoff/proto/**/**/*.proto",
+            "outDir": "./dist/src"
+        },
+        {"include": "../src/modules/voice-kit/tts/providers/yandex/config/*.json", "outDir": "./dist/src"},
+        {"include": "../src/modules/voice-kit/stt/providers/yandex/config/*.json", "outDir": "./dist/src"}
       ]
   
   }

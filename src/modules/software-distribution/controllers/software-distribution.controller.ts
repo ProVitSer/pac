@@ -4,8 +4,11 @@ import { SoftwareDistributionService } from '../services/software-distribution.s
 import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
+import ProductGuard from '@app/modules/auth/guards/product.guard';
+import { ProductType } from '@app/modules/products/interfaces/products.enum';
 
 @UseGuards(RoleGuard([Role.Admin]))
+@UseGuards(ProductGuard(ProductType.api))
 @UseGuards(JwtAuthenticationGuard)
 @Controller()
 export class SoftwareDistributionController {

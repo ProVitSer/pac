@@ -1,28 +1,25 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 import { Client } from '../entities/client.entity';
 import { IsPhoneNumber } from '@app/common/validators/Ii-phone-number-constraint';
 
 export class UpdateClientDto implements Partial<Client> {
-    @IsNumber()
+    @IsString()
     @IsOptional()
-    id: number;
+    companyName?: string;
 
     @IsString()
     @IsOptional()
-    company_name: string;
-
-    @IsString()
-    @IsOptional()
-    contact_person_name: string;
+    contactPersonName?: string;
 
     @IsString()
     @IsPhoneNumber({ message: 'Phone number must be in the format 79134567891' })
     @IsOptional()
-    phone: string;
+    phone?: string;
 
     @IsString()
     @IsOptional()
-    email: string;
+    @IsEmail()
+    email?: string;
 }
 
 export default UpdateClientDto;

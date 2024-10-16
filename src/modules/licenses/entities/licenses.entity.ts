@@ -1,4 +1,4 @@
-import { Product } from '../../product/entities/product.entity';
+import { Products } from '../../products/entities/products.entity';
 import { Client } from '../../client/entities/client.entity';
 import {
     Entity,
@@ -19,24 +19,24 @@ export class Licenses implements LicensesInterface {
     id: number;
 
     @OneToOne(() => Client, (client) => client.licenses, { cascade: true })
-    @JoinColumn()
+    @JoinColumn({ name: 'client_id' })
     client: Client;
 
     @Column({ nullable: false, unique: true })
     license: string;
 
-    @ManyToMany(() => Product, (product) => product.licenses, { cascade: true })
+    @ManyToMany(() => Products, (product) => product.licenses, { cascade: true })
     @JoinTable()
-    products: Product[];
+    products: Products[];
 
-    @Column({ nullable: false })
-    expiration_date: Date;
+    @Column({ nullable: false, name: 'expiration_date' })
+    expirationDate: Date;
 
-    @Column({ default: false })
-    is_active: boolean;
+    @Column({ default: false, name: 'is_active' })
+    isActive: boolean;
 
-    @Column({ default: true })
-    is_test: boolean;
+    @Column({ default: true, name: 'is_test' })
+    isTest: boolean;
 
     @Column({ nullable: true })
     order?: Date;
@@ -44,9 +44,9 @@ export class Licenses implements LicensesInterface {
     @Column({ nullable: true })
     activate?: Date;
 
-    @CreateDateColumn()
-    created_at: Date;
+    @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
 
-    @UpdateDateColumn()
-    updated_at: Date;
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 }

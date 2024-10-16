@@ -12,18 +12,38 @@ describe('NotificationsService', () => {
     let logger: LoggerService;
 
     beforeEach(async () => {
+        const mockChannel = {
+            assertExchange: jest.fn().mockResolvedValue(true),
+            assertQueue: jest.fn().mockResolvedValue(true),
+            bindQueue: jest.fn().mockResolvedValue(true),
+        };
+
+        // Мокирование AmqpConnection
+        const mockAmqpConnection = {
+            managedChannel: {
+                on: jest.fn((event, callback) => {
+                    if (event === 'connect') {
+                        callback();
+                    }
+                }),
+            },
+            channel: mockChannel,
+            publish: jest.fn(),
+        };
+
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 NotificationsService,
-                AmqpService,
+                {
+                    provide: AmqpService,
+                    useValue: {
+                        sendMessage: jest.fn(),
+                        sendMessageWithId: jest.fn(),
+                    },
+                },
                 {
                     provide: AmqpConnection,
-                    useValue: {
-                        managedChannel: {
-                            on: jest.fn((event, callback) => callback()),
-                        },
-                        publish: jest.fn(),
-                    },
+                    useValue: mockAmqpConnection, // Мок AmqpConnection
                 },
                 {
                     provide: WINSTON_MODULE_NEST_PROVIDER,

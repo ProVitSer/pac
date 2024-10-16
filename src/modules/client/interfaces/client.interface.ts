@@ -5,14 +5,14 @@ export interface UniqueClientFields {
 
 export interface ClientInterface {
     id: number;
-    client_id: number;
-    company_name: string;
-    contact_person_name: string;
+    clientId: number;
+    companyName: string;
+    contactPersonName: string;
     phone: string;
     email: string;
-    buh_id?: string | null;
+    buhId?: string | null;
     balance: number;
     deleted: boolean;
-    created_at: Date;
-    updated_at: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }

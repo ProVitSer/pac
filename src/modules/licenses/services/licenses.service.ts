@@ -14,9 +14,9 @@ import ActivateLicenseDto from '../dto/activate-license.dto';
 import { addMonths } from 'date-fns';
 import LicenseNotFoundException from '../exceptions/license-not-found.exeption';
 import { ClientService } from '../../../modules/client/services/client.service';
-import { Client } from '@app/modules/client/entities/client.entity';
-import { Product } from '@app/modules/product/entities/product.entity';
-import { ProductService } from '../../../modules/product/services/product.service';
+import { Client } from '../../../modules/client/entities/client.entity';
+import { Products } from '@app/modules/products/entities/products.entity';
+import { ProductsService } from '../../products/services/products.service';
 import { ActiveLicenseResponse } from '../interfaces/licenses.interface';
 import { NotificationsService } from '../../../modules/notifications/services/notifications.service';
 
@@ -27,7 +27,7 @@ export class LicensesService {
         private readonly licensesRepository: Repository<Licenses>,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
         private readonly clientService: ClientService,
-        private readonly productService: ProductService,
+        private readonly productService: ProductsService,
         private readonly notificationsService: NotificationsService,
     ) {}
 
@@ -35,18 +35,18 @@ export class LicensesService {
         const license = await this.licensesRepository.findOne({
             where: {
                 client: {
-                    client_id: data.client_id,
+                    clientId: data.clientId,
                 },
             },
         });
 
         if (license) {
-            throw new LicenseExistsException(data.client_id);
+            throw new LicenseExistsException(data.clientId);
         }
 
-        const client = await this.clientService.getClientByClientId(data.client_id);
+        const client = await this.clientService.getClientByClientId(data.clientId);
 
-        const products = await this.getProducts(data.products_id);
+        const products = await this.getProducts(data.productsId);
 
         const newLicense = await this.licensesRepository.create(await this.createLicenseData(data, client, products));
 
@@ -61,7 +61,7 @@ export class LicensesService {
         const lic = await this.licensesRepository.findOne({
             where: { license: data.license },
         });
-        return { is_active: lic.is_active };
+        return { isActive: lic.isActive };
     }
 
     public async activateLicense(data: ActivateLicenseDto): Promise<void> {
@@ -74,7 +74,7 @@ export class LicensesService {
         await this.licensesRepository.update(
             { license: data.license },
             {
-                is_active: true,
+                isActive: true,
                 activate: new Date(),
             },
         );
@@ -83,22 +83,22 @@ export class LicensesService {
     public async deactivateLicense(data: DeactivateLicenseDto): Promise<void> {
         const license = await this.getLicenseInfo(data.license);
 
-        await this.licensesRepository.update({ id: license.id }, { is_active: false });
+        await this.licensesRepository.update({ id: license.id }, { isActive: false });
     }
 
     public async setLicenseCommercial(data: LicenseCommercialDto): Promise<void> {
         const license = await this.getLicenseInfo(data.license);
 
-        await this.licensesRepository.update({ id: license.id }, { is_test: false, is_active: true });
+        await this.licensesRepository.update({ id: license.id }, { isTest: false, isActive: true });
     }
 
     public async updateLicense(data: UpdateLicenseDto): Promise<Licenses> {
-        const { products_id, license, ...updateData } = data;
+        const { productsId, license, ...updateData } = data;
 
         const lic = await this.getLicenseInfo(license);
 
-        if (products_id) {
-            const products = await this.getProducts(data.products_id);
+        if (productsId) {
+            const products = await this.getProducts(data.productsId);
 
             const existingProductIds = new Set(lic.products.map((product) => product.id));
 
@@ -132,8 +132,8 @@ export class LicensesService {
         return lic;
     }
 
-    public async getLicenses(): Promise<Licenses[]> {
-        return this.licensesRepository.find({
+    public async getLicenses(): Promise<Licenses> {
+        return this.licensesRepository.findOne({
             relations: {
                 client: true,
                 products: true,
@@ -141,19 +141,19 @@ export class LicensesService {
         });
     }
 
-    private async getProducts(products_id: number[]): Promise<Product[]> {
+    private async getProducts(productsId: number[]): Promise<Products[]> {
         return await Promise.all(
-            products_id.map(async (id: number) => {
+            productsId.map(async (id: number) => {
                 return await this.productService.getProductById(id);
             }),
         );
     }
 
-    private async createLicenseData(data: CreateLicenseDto, client: Client, products: Product[]): Promise<Partial<Licenses>> {
+    private async createLicenseData(data: CreateLicenseDto, client: Client, products: Products[]): Promise<Partial<Licenses>> {
         return {
             license: this.generateLicense(),
             products,
-            expiration_date: addMonths(new Date(), 1),
+            expirationDate: addMonths(new Date(), 1),
             client,
         };
     }

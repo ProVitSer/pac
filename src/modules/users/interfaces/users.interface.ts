@@ -4,9 +4,10 @@ export interface UsersInterface {
     phoneNumber?: string;
     name: string;
     password: string;
-    is_active: boolean;
-    created_at: Date;
-    updated_at: Date;
+    isActive: boolean;
+    validationToken: string | null;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface UserDataAdapter {
@@ -14,13 +15,24 @@ export interface UserDataAdapter {
     phoneNumber?: string;
     name: string;
     password: string;
-    is_active: boolean;
-    registered_date: Date;
+    isActive: boolean;
+    registeredDate: Date;
 }
 
 export interface CreateUserData {
+    clientId: number;
     email: string;
     name: string;
     password: string;
-    phone_number: string;
+    phoneNumber: string;
+}
+
+export interface UpdateUser {
+    id: number;
+    email?: string;
+    phoneNumber?: string;
+    name?: string;
+    password?: string;
+    isActive?: boolean;
+    validationToken?: string;
 }

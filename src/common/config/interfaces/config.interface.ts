@@ -3,6 +3,8 @@ import { AppProtocol, LogLevel } from './config.enum';
 export interface ConfigEnvironment {
     appPort: number;
     appProtocol: AppProtocol;
+    domain: string;
+    licenseServer: string;
     certsPathFile?: CertsPathFileEnvironmentVariables;
     cors: CorsEnvironmentVariables;
     log: LogEnvironmentVariables;
@@ -10,6 +12,124 @@ export interface ConfigEnvironment {
     mail: MailEnvironmentVariables;
     amqp: AmqpEnvironmentVariables;
     jwt: JwtEnvironmentVariables;
+    voip: VoipEnvironmentVariables;
+    files: FileEnvironmentVariables;
+    pacConnectorJwt: PacConnectorJwtEnvironmentVariables;
+    redis: RedisEnvironmentVariables;
+    api: ApiEnvironmentVariables;
+    dadata: DadataEnvironmentVariables;
+    bull: BullEnvironmentVariables;
+    pbx: PbxEnvironmentVariables;
+    voiceKit: {
+        tts: {
+            voiceFileDir: string;
+            voiceTmpDir: string;
+            tinkoff: VoiceKitTtsTinkoffEnvironmentVariables;
+            sber: VoiceKitTtsSberEnvironmentVariables;
+            yandex: VoiceKitTtsYandexEnvironmentVariables;
+        };
+        stt: {
+            voiceFileDir: string;
+            voiceTmpDir: string;
+            sber: VoiceKitSttSberEnvironmentVariables;
+            yandex: VoiceKitSttYandexEnvironmentVariables;
+        };
+    };
+}
+
+export interface VoiceKitSttYandexEnvironmentVariables {
+    apiKey: string;
+    tokenFolder: string;
+    s3: VoiceKitSttS3YandexEnvironmentVariables;
+}
+export interface VoiceKitSttS3YandexEnvironmentVariables {
+    backetPath: string;
+    accessKeyId: string;
+    secretAccessKey: string;
+    region: string;
+    endpoint: string;
+}
+
+export interface VoiceKitSttSberEnvironmentVariables {
+    url: string;
+    accessToken: string;
+}
+
+export interface VoiceKitTtsYandexEnvironmentVariables {
+    url: string;
+    folderId: string;
+    tokenFolder: string;
+}
+
+export interface VoiceKitTtsSberEnvironmentVariables {
+    url: string;
+    accessToken: string;
+}
+
+export interface VoiceKitTtsTinkoffEnvironmentVariables {
+    url: string;
+    apiKey: string;
+    secretKey: string;
+}
+export interface PbxEnvironmentVariables {
+    extensionLength: number;
+    fqdn: string;
+    recordingPath: string;
+}
+export interface BullEnvironmentVariables {
+    queueName: string;
+    username: string;
+    password: string;
+    db: number;
+}
+export interface DadataEnvironmentVariables {
+    secret: string;
+    apiKey: string;
+}
+
+export interface ApiEnvironmentVariables {
+    secret: string;
+    exp: number;
+    algorithm: any;
+}
+export interface RedisEnvironmentVariables {
+    host: string;
+    port: string;
+    username: string;
+    password: string;
+}
+export interface PacConnectorJwtEnvironmentVariables {
+    key: string;
+    issuer: string;
+    audience: string;
+}
+export interface FileEnvironmentVariables {
+    tmpDir: string;
+    audioDir: string;
+}
+export interface VoipEnvironmentVariables {
+    asterisk: AsteriskEnvironmentVariables;
+}
+
+export interface AsteriskEnvironmentVariables {
+    ami: {
+        providerName: string;
+        host: string;
+        port: number;
+        username: string;
+        secret: string;
+        logLevel?: number;
+    };
+    ari: AsteriskAriEnvironmentVariables[];
+}
+
+export interface AsteriskAriEnvironmentVariables {
+    providerName: string;
+    host: string;
+    port: number;
+    stasis: string;
+    user: string;
+    password: string;
 }
 
 export interface JwtEnvironmentVariables {

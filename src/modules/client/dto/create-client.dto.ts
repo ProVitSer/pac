@@ -1,25 +1,24 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { Client } from '../entities/client.entity';
 import { IsPhoneNumber } from '@app/common/validators/Ii-phone-number-constraint';
 
-export class CreateClientDto implements Partial<Client> {
+export class CreateClientDto {
     @IsString()
     @IsNotEmpty()
-    company_name: string;
+    companyName: string;
 
     @IsString()
     @IsNotEmpty()
-    contact_person_name: string;
+    contactPersonName: string;
 
     @IsString()
     @IsPhoneNumber({ message: 'Phone number must be in the format 79134567891' })
     @IsNotEmpty()
-    phone: string;
+    companyPhone: string;
 
     @IsString()
     @IsEmail()
     @IsNotEmpty()
-    email: string;
+    companyEmail: string;
 }
 
 export default CreateClientDto;

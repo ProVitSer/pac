@@ -3,11 +3,11 @@ import { IsNotEmpty, IsNumber } from 'class-validator';
 export class CreateLicenseDto {
     @IsNumber()
     @IsNotEmpty()
-    client_id: number;
+    clientId: number;
 
     @IsNumber({}, { each: true })
     @IsNotEmpty()
-    products_id: number[];
+    productsId: number[];
 }
 
 export default CreateLicenseDto;
