@@ -55,7 +55,13 @@ export class AuthService {
 
         await this.verifyPassword(data.password, user.password);
 
-        const tokens = await this.tokenService.getTokens(user.id);
+        const tokens = await this.tokenService.getAccessToken({
+            userId: user.id,
+            clientId: user.client.clientId,
+            permissions: user.permissions,
+            products: user.client.licenses.products,
+            roles: user.roles,
+        });
 
         await this.usersService.updateLatestActivity(user.id);
 

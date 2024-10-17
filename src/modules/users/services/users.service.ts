@@ -44,7 +44,15 @@ export class UsersService {
     }
 
     async getByEmail(email: string): Promise<Users> {
-        const user = await this.usersRepository.findOneBy({ email });
+        const user = await this.usersRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.client', 'client')
+            .leftJoinAndSelect('client.licenses', 'licenses')
+            .leftJoinAndSelect('licenses.products', 'products')
+            .leftJoinAndSelect('client.voip', 'voip')
+            .where('user.email = :email', { email })
+            .getOne();
+
         if (user) {
             return user;
         }
