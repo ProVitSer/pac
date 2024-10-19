@@ -4,7 +4,7 @@ import { Users } from '../entities/users.entity';
 export class UpdateUserDto implements Partial<Users> {
     @IsNumber()
     @IsNotEmpty()
-    id: number;
+    userId: number;
 
     @IsString()
     @IsOptional()

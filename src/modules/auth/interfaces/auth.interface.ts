@@ -7,6 +7,9 @@ export interface LoginResponse {
 
 export interface TokenPayload {
     userId: number;
+    firstname: string;
+    lastname: string;
+    company: string;
     clientId: number;
     permissions: Permission[];
     roles: Role[];

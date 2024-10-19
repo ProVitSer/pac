@@ -100,7 +100,7 @@ export class UsersService {
                 phoneNumber: user.phoneNumber,
                 company: user.client.companyName,
                 license: user.client.licenses.license,
-                product: user.client.licenses.products.map((p: Products) => p.productType),
+                products: user.client.licenses.products.map((p: Products) => p.productType),
                 permissions: user.permissions,
                 roles: user.roles,
             };
@@ -126,14 +126,16 @@ export class UsersService {
         await this.usersRepository.update({ id }, { validationToken });
     }
 
-    public async updateUser(data: UpdateUser): Promise<UserInfoData> {
-        const { id, ...updateData } = data;
+    public async updateUser(user: Users, data: UpdateUser): Promise<UserInfoData> {
+        if (user.id !== data.userId) throw new Error('Некорректный пользователь');
 
-        await this.getById(id);
+        const { userId, ...updateData } = data;
 
-        await this.usersRepository.update({ id }, { ...updateData });
+        await this.getById(userId);
 
-        return await this.getUserInfo(id);
+        await this.usersRepository.update({ id: userId }, { ...updateData });
+
+        return await this.getUserInfo(userId);
     }
 
     public async getUserByValidationToken(validationToken: string): Promise<Users> {
@@ -141,9 +143,9 @@ export class UsersService {
     }
 
     public async changePassword(data: ChangeUserPasswordDto) {
-        const { id, oldPassword, newPassword } = data;
+        const { userId, oldPassword, newPassword } = data;
 
-        const user = await this.getById(id);
+        const user = await this.getById(userId);
 
         const passwordMatches = await ArgonUtilService.verify(user.password, oldPassword);
 
@@ -153,7 +155,7 @@ export class UsersService {
 
         const hash = await ArgonUtilService.hashData(newPassword);
 
-        await this.usersRepository.update({ id }, { password: hash });
+        await this.usersRepository.update({ id: userId }, { password: hash });
     }
 
     public async forgotPassword(data: ForgotPassword): Promise<ForgotPasswordResponse> {
@@ -180,10 +182,16 @@ export class UsersService {
 
         const hash = await ArgonUtilService.hashData(data.password);
 
-        await this.updateUser({ id: user.id, password: hash, validationToken: null });
+        await this.updateUser(user, { userId: user.id, password: hash, validationToken: null });
 
         return {
             message: RESET_PASSWORD_MESSAGE,
         };
+    }
+
+    public async checkVerificationCode(verificationCode: string) {
+        const user = await this.getUserByValidationToken(verificationCode);
+
+        return { isValid: !!user };
     }
 }

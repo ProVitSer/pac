@@ -51,6 +51,9 @@ export class AuthService {
 
         const tokens = await this.tokenService.getAccessToken({
             userId: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            company: user.client.companyName,
             clientId: user.client.clientId,
             permissions: user.permissions,
             products: user.client.licenses.products,

@@ -34,7 +34,7 @@ export interface CreateUserData {
 }
 
 export interface UpdateUser {
-    id: number;
+    userId: number;
     email?: string;
     phoneNumber?: string;
     firstname?: string;
@@ -65,7 +65,7 @@ export interface UserInfoData {
     phoneNumber: string;
     company: string;
     license: string;
-    product: ProductType[];
+    products: ProductType[];
     permissions: Permission[];
     roles: Role[];
 }
