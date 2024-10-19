@@ -16,7 +16,3 @@ export interface TokenPayload {
 export interface GetTokensResult {
     accessToken: string;
 }
-
-export interface ForgotPasswordResponse {
-    message: string;
-}

@@ -219,6 +219,15 @@ import { SmsModule } from '../sms/sms.module';
                     },
                 ],
             },
+            {
+                path: '',
+                children: [
+                    {
+                        path: 'user',
+                        module: UsersModule,
+                    },
+                ],
+            },
         ]),
     ],
     controllers: [AppController],

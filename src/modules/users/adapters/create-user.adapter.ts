@@ -5,7 +5,8 @@ import { CreateUserData } from '../interfaces/users.interface';
 export class CreateUserAdapter implements Partial<Users> {
     email: string;
     phoneNumber: string;
-    name: string;
+    firstname: string;
+    lastname: string;
     password: string;
     isActive: boolean;
     registeredDate: Date;
@@ -13,7 +14,8 @@ export class CreateUserAdapter implements Partial<Users> {
     constructor(userData: CreateUserData, client: Client) {
         this.email = userData.email;
         this.phoneNumber = userData.phoneNumber;
-        this.name = userData.name;
+        this.firstname = userData.firstname;
+        this.lastname = userData.lastname;
         this.password = userData.password;
         this.isActive = true;
         this.registeredDate = new Date();

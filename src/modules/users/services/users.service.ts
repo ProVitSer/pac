@@ -1,4 +1,4 @@
-import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { Inject, Injectable, LoggerService, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from '../entities/users.entity';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -9,10 +9,16 @@ import { UserEmailNotFoundException } from '../exceptions/user-email-not-found.e
 import ChangeUserPasswordDto from '../dto/change-user-password.dto';
 import { ArgonUtilService } from '../../../common/utils/argon.service';
 import { UserPasswordNotMatchesException } from '../exceptions/user-password-not-matches.exeption';
-import { CreateUserData, UpdateUser } from '../interfaces/users.interface';
+import { CreateUserData, ForgotPasswordResponse, UpdateUser, UpdateUserData, UserInfoData } from '../interfaces/users.interface';
 import { ClientService } from '../../../modules/client/services/client.service';
-import UpdateUserDto from '../dto/update-user.dto';
 import { CreateUserAdapter } from '../adapters/create-user.adapter';
+import ResetPassword from '../dto/reset-password.dto';
+import ForgotPassword from '../dto/forgot-password.dto';
+import { ConfigService } from '@nestjs/config';
+import { NotificationsService } from '@app/modules/notifications/services/notifications.service';
+import { v4 as uuidv4 } from 'uuid';
+import { FORGOT_PASSWORD_MESSAGE, RESET_PASSWORD_MESSAGE } from '../users.constants';
+import { Products } from '@app/modules/products/entities/products.entity';
 
 @Injectable()
 export class UsersService {
@@ -21,6 +27,8 @@ export class UsersService {
         private readonly usersRepository: Repository<Users>,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
         private readonly clientService: ClientService,
+        private readonly configService: ConfigService,
+        private readonly notificationsService: NotificationsService,
     ) {}
 
     public async create(userData: CreateUserData): Promise<Users> {
@@ -43,7 +51,7 @@ export class UsersService {
         return newUser;
     }
 
-    async getByEmail(email: string): Promise<Users> {
+    public async getByEmail(email: string): Promise<Users> {
         const user = await this.usersRepository
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.client', 'client')
@@ -59,13 +67,13 @@ export class UsersService {
         throw new UserEmailNotFoundException(email);
     }
 
-    async getByIds(ids: number[]): Promise<Users[]> {
+    public async getByIds(ids: number[]): Promise<Users[]> {
         return this.usersRepository.find({
             where: { id: In(ids) },
         });
     }
 
-    async getById(id: number): Promise<Users> {
+    public async getById(id: number): Promise<Users> {
         const user = await this.usersRepository
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.client', 'client')
@@ -81,7 +89,26 @@ export class UsersService {
         throw new UserNotFoundException(id);
     }
 
-    public async updateById(data: UpdateUserDto): Promise<Users> {
+    public async getUserInfo(id: number): Promise<UserInfoData> {
+        const user = await this.getById(id);
+
+        if (user) {
+            return {
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                company: user.client.companyName,
+                license: user.client.licenses.license,
+                product: user.client.licenses.products.map((p: Products) => p.productType),
+                permissions: user.permissions,
+                roles: user.roles,
+            };
+        }
+        throw new UserNotFoundException(id);
+    }
+
+    public async updateUserById(data: UpdateUserData): Promise<Users> {
         const { id, ...updateData } = data;
 
         await this.getById(id);
@@ -99,14 +126,14 @@ export class UsersService {
         await this.usersRepository.update({ id }, { validationToken });
     }
 
-    public async updateUser(data: UpdateUser): Promise<Users> {
+    public async updateUser(data: UpdateUser): Promise<UserInfoData> {
         const { id, ...updateData } = data;
 
         await this.getById(id);
 
         await this.usersRepository.update({ id }, { ...updateData });
 
-        return await this.getById(id);
+        return await this.getUserInfo(id);
     }
 
     public async getUserByValidationToken(validationToken: string): Promise<Users> {
@@ -127,5 +154,36 @@ export class UsersService {
         const hash = await ArgonUtilService.hashData(newPassword);
 
         await this.usersRepository.update({ id }, { password: hash });
+    }
+
+    public async forgotPassword(data: ForgotPassword): Promise<ForgotPasswordResponse> {
+        const user = await this.getByEmail(data.email);
+
+        const validationToken = uuidv4();
+
+        await this.updateValidationToken(user.id, validationToken);
+
+        await this.notificationsService.forgotPasswordNotification({
+            to: data.email,
+            url: `${this.configService.get('domain')}/resetPassword/${validationToken}`,
+        });
+
+        return {
+            message: FORGOT_PASSWORD_MESSAGE,
+        };
+    }
+
+    public async resetPassword(data: ResetPassword) {
+        const user = await this.getUserByValidationToken(data.verificationCode);
+
+        if (!user) throw new UnauthorizedException();
+
+        const hash = await ArgonUtilService.hashData(data.password);
+
+        await this.updateUser({ id: user.id, password: hash, validationToken: null });
+
+        return {
+            message: RESET_PASSWORD_MESSAGE,
+        };
     }
 }
