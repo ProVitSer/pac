@@ -13,7 +13,6 @@ import { catchError } from 'rxjs/operators';
 import { DatabaseException } from '../exceptions/database.exception';
 import { every, partial, has, includes } from 'lodash';
 import { RpcException } from '../exceptions/rpc.exeption';
-import e from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
@@ -22,7 +21,7 @@ export class ErrorsInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler) {
         return next.handle().pipe(
             catchError((err: any) => {
-                this.logger.error(e);
+                this.logger.error(err);
 
                 const error = every(['table', 'query'], partial(has, err))
                     ? new DatabaseException(err)
