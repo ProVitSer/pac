@@ -167,7 +167,7 @@ export class UsersService {
 
         await this.notificationsService.forgotPasswordNotification({
             to: data.email,
-            url: `${this.configService.get('domain')}/resetPassword/${validationToken}`,
+            url: `${this.configService.get('domain')}/#/reset-password/${validationToken}`,
         });
 
         return {
