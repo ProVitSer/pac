@@ -8,7 +8,7 @@ import { PacGrpcConnectorService } from './pac-grpc-connector.service';
 import { firstValueFrom } from 'rxjs';
 import { SqlServiceMethods, SqlServiceName } from '../modules/pac-sql/interfaces/pac-sql.enum';
 import { SQLPACKAGE, SQLPROTO_PATH } from '../modules/pac-sql/pac-sql.config';
-import { PHONEBOOK_SQL } from '@app/common/constants/sql';
+import { TEST_CINNECT_SQL } from '@app/common/constants/sql';
 import PacInitConnectExeption from '../exceptions/package-not-found.exeption';
 
 @Injectable()
@@ -70,7 +70,7 @@ export class PacConnectorService {
                 clientId,
                 serviceName: SqlServiceName.SqlServicePbxService,
                 methodName: SqlServiceMethods.ExecuteSql,
-                data: { query: PHONEBOOK_SQL },
+                data: { query: TEST_CINNECT_SQL },
                 package: SQLPACKAGE,
                 protoPath: SQLPROTO_PATH,
             };
