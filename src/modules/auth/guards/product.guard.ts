@@ -6,8 +6,6 @@ import { ProductType } from '@app/modules/products/interfaces/products.enum';
 const ProductGuard = (product: ProductType): Type<CanActivate> => {
     class ProductGuardMixin extends JwtAuthenticationGuard {
         async canActivate(context: ExecutionContext) {
-            await super.canActivate(context);
-
             const request = context.switchToHttp().getRequest<RequestWithUser>();
 
             const user = request.user;
