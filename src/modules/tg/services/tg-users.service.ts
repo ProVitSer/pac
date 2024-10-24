@@ -33,6 +33,7 @@ export class TgUsersService {
         const tgConfig = await this.tgConfigService.getTgConfigs(client.clientId);
 
         const config = this.tgUsersRepository.create();
+        config.name = data.name;
         config.userName = data.userName;
         config.extension = data.extension;
         config.tgConfig = tgConfig;

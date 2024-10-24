@@ -6,6 +6,9 @@ export class TgConfig {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ nullable: true, name: 'name' })
+    name: string;
+
     @Column({ unique: true, nullable: false, name: 'token' })
     token: string;
 

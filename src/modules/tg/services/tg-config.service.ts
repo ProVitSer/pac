@@ -26,6 +26,7 @@ export class TgConfigService {
 
     public async createTgConfig(client: Client, data: CreatTgConfig): Promise<void> {
         const config = this.tgConfigRepository.create();
+        config.name = data.name;
         config.token = data.token;
         config.chatId = data.chatId;
         config.clientId = client.clientId;

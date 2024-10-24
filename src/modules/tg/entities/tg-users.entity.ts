@@ -6,6 +6,9 @@ export class TgUsers {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ nullable: true, default: null, name: 'name' })
+    name: string;
+
     @Column({ nullable: false, name: 'user_name' })
     userName: string;
 
