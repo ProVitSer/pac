@@ -12,11 +12,13 @@ import { TgMissedCallListenters } from './listenters/tg-missed-call.listenters';
 import { TgMessages } from './entities/tg-messages.entity';
 import { VoipModule } from '../voip/voip.module';
 import { PacExtensionModule } from '../pac-connector/modules/pac-extension/pac-extension.module';
+import { TgMessagesService } from './services/tg-messages.service';
+import { TgMessagesController } from './controllers/tg-messages.controller';
 
 @Module({
     imports: [TypeOrmModule.forFeature([TgConfig, TgUsers, TgMessages]), VoipModule, PacExtensionModule],
-    providers: [TgMissedCallService, BotManagerService, TgConfigService, TgUsersService, TgMissedCallListenters],
-    controllers: [TgConfigController, TgUsersController],
+    providers: [TgMissedCallService, BotManagerService, TgConfigService, TgUsersService, TgMissedCallListenters, TgMessagesService],
+    controllers: [TgConfigController, TgUsersController, TgMessagesController],
     exports: [TgMissedCallService],
 })
 export class TgModule {}
