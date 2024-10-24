@@ -14,7 +14,7 @@ export interface GetTgMessagesResult {
 export interface TgMessagesData {
     messageId: string;
     name: string;
-    userName: string;
+    tgUserName: string;
     externalNumber: string;
     localExtension: string;
     message: string;
@@ -27,4 +27,23 @@ export interface GetTgMessagesQuery {
     pageSize: string;
     dateString?: string;
     phoneNumber?: string;
+}
+
+export interface GetTgUsersQuery {
+    page: string;
+    pageSize: string;
+    name?: string;
+}
+
+export interface GetTgUsersResult {
+    data: TgUsersData[];
+    totalRecords: number;
+}
+
+export interface TgUsersData {
+    id: number;
+    name: string;
+    tgUserName: string;
+    extension: string;
+    date: string;
 }

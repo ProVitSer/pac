@@ -60,7 +60,7 @@ export class TgMissedCallService implements OnModuleInit {
         const bot = this.botManagerService.getBot(token);
 
         bot.action(callbackAction, async (ctx) => {
-            const user = await this.tgUsersService.getTgUserByUsername(ctx.update.callback_query.from.username);
+            const user = await this.tgUsersService.getTgUserByTgUserName(ctx.update.callback_query.from.username);
 
             const { messageId, number } = this.getMessageInfo(ctx.match[0]);
 

@@ -47,7 +47,7 @@ export class TgMessagesService {
             formattedMessages.push({
                 messageId: message.messageId,
                 name: message?.tgUser?.name || '',
-                userName: message?.tgUser?.userName || '',
+                tgUserName: message?.tgUser?.tgUserName || '',
                 externalNumber: message.externalNumber || '',
                 localExtension: message?.tgUser?.extension || '',
                 message: message.message,

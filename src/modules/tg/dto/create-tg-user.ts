@@ -5,7 +5,7 @@ export class CreatTgUser {
     name: string;
 
     @IsString()
-    userName: string;
+    tgUserName: string;
 
     @IsString()
     extension: string;
