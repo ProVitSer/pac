@@ -20,3 +20,7 @@ export interface RequestWithPacInfo extends Request {
     client: Client;
     connector: PacConnectorGrpcServer;
 }
+
+export interface CheckConnectionResult {
+    online: boolean;
+}

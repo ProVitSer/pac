@@ -36,4 +36,9 @@ export class PacConnectorController {
     async updatePacConnector(@Req() request: RequestWithUser, @Body() pacData: UpdatePacConnectorDto): Promise<PacConnectorGrpcServer> {
         return this.pacConnectorService.updatePacConnector(request.user.client.clientId, pacData);
     }
+
+    @Get('check-connection')
+    async checkConnection(@Req() request: RequestWithUser) {
+        return this.pacConnectorService.checkConnection(request.user.client.clientId);
+    }
 }

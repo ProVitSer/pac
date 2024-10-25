@@ -10,6 +10,7 @@ import { SqlServiceMethods, SqlServiceName } from '../modules/pac-sql/interfaces
 import { SQLPACKAGE, SQLPROTO_PATH } from '../modules/pac-sql/pac-sql.config';
 import { TEST_CINNECT_SQL } from '@app/common/constants/sql';
 import PacInitConnectExeption from '../exceptions/package-not-found.exeption';
+import { CheckConnectionResult } from '../interfaces/pac-connector.interface';
 
 @Injectable()
 export class PacConnectorService {
@@ -62,6 +63,12 @@ export class PacConnectorService {
         return await this.pcgsRepository.findOne({
             where: { ip },
         });
+    }
+
+    public async checkConnection(clientId: number): Promise<CheckConnectionResult> {
+        return {
+            online: await this.checkPacConnection(clientId),
+        };
     }
 
     private async checkPacConnection(clientId: number): Promise<boolean> {
