@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToMany, Column } from 'typeorm';
-import { TgConfig } from './tg-config.entity';
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column } from 'typeorm';
 
 @Entity()
 export class TgUsers {
@@ -15,8 +14,8 @@ export class TgUsers {
     @Column({ nullable: false, unique: true })
     extension: string;
 
-    @ManyToMany(() => TgConfig, (tgConfig) => tgConfig.tgUsers, { onDelete: 'CASCADE' })
-    tgConfig: TgConfig[];
+    @Column({ nullable: true, name: 'client_id' })
+    clientId: number;
 
     @Column({ nullable: true, default: false })
     deleted: boolean;

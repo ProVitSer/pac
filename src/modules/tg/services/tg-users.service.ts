@@ -7,7 +7,6 @@ import { TgConfigService } from './tg-config.service';
 import CreatTgUser from '../dto/create-tg-user';
 import DeleteTgUser from '../dto/delete-tg-user';
 import UpdateTgUser from '../dto/update-tg-user';
-import { TgConfig } from '../entities/tg-config.entity';
 import { GetTgUsersQuery, GetTgUsersResult, TgUsersData } from '../interfaces/tg.interface';
 import { format } from 'date-fns';
 
@@ -20,18 +19,13 @@ export class TgUsersService {
     ) {}
 
     public async getTgUsers(client: Client, query: GetTgUsersQuery): Promise<GetTgUsersResult> {
-        const tgConfig = await this.tgConfigService.getTgConfigs(client.clientId);
-
         const parsePage = parseInt(query.page || '1');
 
         const parsePageSize = parseInt(query.pageSize || '10');
 
-        const ids = tgConfig.map((t: TgConfig) => t.id);
-
         const queryBuilder = this.tgUsersRepository
             .createQueryBuilder('tgUsers')
-            .innerJoin('tgUsers.tgConfig', 'tgConfig')
-            .where('tgConfig.id IN (:...ids)', { ids })
+            .where('tgUsers.clientId IN (:...clientIds)', { clientIds: [client.clientId] })
             .andWhere('tgUsers.deleted = false')
             .orderBy('tgUsers.id', 'DESC');
 
@@ -65,13 +59,13 @@ export class TgUsersService {
     }
 
     public async createTgUser(client: Client, data: CreatTgUser): Promise<void> {
-        const tgConfig = await this.tgConfigService.getTgConfigs(client.clientId);
+        await this.tgConfigService.getTgConfigs(client.clientId);
 
         const config = this.tgUsersRepository.create();
         config.name = data.name;
         config.tgUserName = data.tgUserName;
         config.extension = data.extension;
-        config.tgConfig = tgConfig;
+        config.clientId = client.clientId;
         await this.tgUsersRepository.save(config);
     }
 
@@ -100,14 +94,9 @@ export class TgUsersService {
     }
 
     private async _getTgUsers(client: Client): Promise<TgUsers[]> {
-        const tgConfig = await this.tgConfigService.getTgConfigs(client.clientId);
-
-        const ids = tgConfig.map((t: TgConfig) => t.id);
-
         return this.tgUsersRepository
             .createQueryBuilder('tgUsers')
-            .innerJoin('tgUsers.tgConfig', 'tgConfig')
-            .where('tgConfig.id IN (:...ids)', { ids })
+            .where('tgUsers.clientId = :clientId', { clientId: client.clientId })
             .getMany();
     }
 }
