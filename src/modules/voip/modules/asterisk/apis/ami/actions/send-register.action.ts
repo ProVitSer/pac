@@ -7,11 +7,17 @@ import { SendResiterData } from '../interfaces/ami.interface';
 export class SendResiterAction extends BaseAction {
     public async sendRegisterToTrunk(data: SendResiterData): Promise<void> {
         try {
-            const action = new namiLib.Actions.Command();
+            const reload = new namiLib.Actions.Command();
 
-            action.Command = `pjsip send register ${data.trunkId}`;
+            reload.Command = `module reload res_pjsip.so`;
 
-            this.sendAction(action);
+            this.sendAction(reload);
+
+            const pjsipRegister = new namiLib.Actions.Command();
+
+            pjsipRegister.Command = `pjsip send register ${data.trunkId}`;
+
+            this.sendAction(pjsipRegister);
         } catch (e) {
             throw e;
         }
