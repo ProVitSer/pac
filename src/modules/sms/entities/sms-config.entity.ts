@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column } from 'typeorm';
+import { DEFAULTMISSED_CALL_SMS_TEXT } from '../sms.constants';
 
 @Entity()
 export class SmsConfig {
@@ -16,6 +17,9 @@ export class SmsConfig {
 
     @Column({ nullable: false, name: 'client_id' })
     clientId: number;
+
+    @Column({ default: DEFAULTMISSED_CALL_SMS_TEXT, name: 'sms_text' })
+    smsText: string;
 
     @Column({ default: false })
     deleted: boolean;

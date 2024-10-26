@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SmsConfig } from '../entities/sms-config.entity';
@@ -18,27 +18,29 @@ export class SmsConfigService {
     public async addSmsConfig(clientId: number, data: CreateSmsConfig): Promise<void> {
         const smsConfig = await this.smsConfigRepository.findOne({ where: { clientId, deleted: false } });
 
-        if (smsConfig) throw new Error('Sms config exists');
+        if (smsConfig) throw new HttpException('Настройки уже существуют', 400);
 
         const checkConfigResult = await this.smscService.checkAuthorisation({ login: data.login, psw: data.psw });
 
-        if (!checkConfigResult.result) throw new Error('Smsc login pass error');
+        if (!checkConfigResult.result)
+            throw new HttpException('Ошибка в логине или пароле, смс сервис не принял авторизационные данные', 400);
 
         const config = this.smsConfigRepository.create();
 
         config.clientId = clientId;
         config.login = data.login;
         config.psw = data.psw;
+        config.smsText = data.smsText;
 
         await this.smsConfigRepository.save(config);
     }
 
     public async getSmsConfig(clientId: number): Promise<SmsConfig> {
-        const smsConfig = await this.smsConfigRepository.findOne({ where: { clientId, deleted: false } });
+        return await this.smsConfigRepository.findOne({ where: { clientId, deleted: false } });
 
-        if (!smsConfig) throw new SmsConfigNotFoundException(clientId);
+        // if (!smsConfig) throw new SmsConfigNotFoundException(clientId);
 
-        return smsConfig;
+        // return smsConfig;
     }
 
     public async deleteSmsConfig(clientId: number): Promise<void> {
