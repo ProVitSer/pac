@@ -44,6 +44,14 @@ export class PacConnectorService {
     }
 
     public async getPacConnector(clientId: number): Promise<PacConnectorGrpcServer> {
+        await this.checkConnection(clientId);
+
+        return await this.pcgsRepository.findOne({
+            where: { clientId },
+        });
+    }
+
+    public async _getPacConnector(clientId: number): Promise<PacConnectorGrpcServer> {
         return await this.pcgsRepository.findOne({
             where: { clientId },
         });
