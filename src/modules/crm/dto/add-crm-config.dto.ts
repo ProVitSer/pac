@@ -18,7 +18,10 @@ export class AddCrmConfig {
 
     @IsOptional()
     @IsNumber()
-    daedlineMin?: number;
+    deadlineMin?: number;
+
+    @IsString()
+    token: string;
 }
 
 export default AddCrmConfig;

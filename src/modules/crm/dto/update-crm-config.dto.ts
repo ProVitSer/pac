@@ -23,7 +23,7 @@ export class UpdateCrmConfig {
 
     @IsOptional()
     @IsNumber()
-    daedlineMin?: number;
+    deadlineMin?: number;
 }
 
 export default UpdateCrmConfig;

@@ -82,8 +82,8 @@ export class CrmService {
                 DESCRIPTION: `Пропущенный вызов от абонента ${data.externalNumber} по номеру ${data.trunkName}`,
                 PRIORITY: '2',
                 GROUP_ID: crmConfig.taskGroup,
-                ...(crmConfig?.daedlineMin
-                    ? { DEADLINE: format(addMinutes(new Date(), crmConfig.daedlineMin), 'yyyy-MM-dd H:mm:ss') }
+                ...(crmConfig?.deadlineMin
+                    ? { DEADLINE: format(addMinutes(new Date(), crmConfig.deadlineMin), 'yyyy-MM-dd H:mm:ss') }
                     : {}),
             },
         };
