@@ -22,7 +22,14 @@ export class SmartRoutingService {
     public async getPbxExtension(clientId: number): Promise<PbxExtensionList[]> {
         const pbxExtension = await this.pacIvrService.getIvrList(clientId);
 
-        return await this.getFreePbxExtension(clientId, pbxExtension.ivrs);
+        const data = await this.getFreePbxExtension(clientId, pbxExtension.ivrs);
+
+        const filteredData = data.filter((item) => {
+            const number = item.number;
+            return /^\d+$/.test(number) && !number.startsWith('7');
+        });
+
+        return filteredData;
     }
 
     public async getSmartRouting(clientId: number): Promise<SmartRouting[]> {
@@ -50,10 +57,19 @@ export class SmartRoutingService {
         if (!existsNumber.includes(data.pbxExtension)) throw new PbxExtensionNotExists(data.pbxExtension);
 
         const smartRouting = this.smartRoutingRepository.create();
+
         smartRouting.name = data.name || '';
+
         smartRouting.pbxExtension = data.pbxExtension;
+
         smartRouting.routingService = data.routingService;
+
         smartRouting.clientId = clientId;
+
+        smartRouting.aiRouting = data.aiRouting;
+
+        smartRouting.defaultRoutingNumber = data.defaultRoutingNumber;
+
         await this.smartRoutingRepository.save(smartRouting);
     }
 

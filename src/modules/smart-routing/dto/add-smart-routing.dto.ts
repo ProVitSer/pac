@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { RoutingServiceType } from '../interfaces/smart-routing.enum';
 
 export class AddSmartRouting {
@@ -11,6 +11,12 @@ export class AddSmartRouting {
 
     @IsEnum(RoutingServiceType)
     routingService: RoutingServiceType;
+
+    @IsBoolean()
+    aiRouting: boolean;
+
+    @IsString()
+    defaultRoutingNumber: string;
 }
 
 export default AddSmartRouting;
