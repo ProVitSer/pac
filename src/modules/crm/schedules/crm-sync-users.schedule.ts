@@ -23,7 +23,7 @@ export class CrmSyncUsersSchedule {
     async syncCrmUserID() {
         const crmConfig = await this.crmConfigRepository.find();
 
-        if (!crmConfig) return;
+        if (!!crmConfig) return;
 
         await this.updateOrAddCrmUsersInfo(crmConfig[0], this.startPage);
     }
