@@ -46,7 +46,7 @@ export class CrmConfigService {
     public async updateCrmConfig(clientId: number, updateData: UpdateCrmConfig): Promise<void> {
         const crmConfig = await this.crmConfigRepository.findOne({ where: { clientId } });
 
-        if (!crmConfig) throw new Error('Crm config not found');
+        if (!crmConfig) throw new HttpException('Настройки CRM не найдены', 400);
 
         if (updateData?.domain && updateData?.hash) {
             const domain = updateData?.domain ? updateData.domain : crmConfig.domain;
@@ -56,7 +56,7 @@ export class CrmConfigService {
             try {
                 await this.crmApiService.checkConnectToCrm(domain, hash, crmConfig.adminId);
             } catch (e) {
-                throw new Error('Connect to Crm error');
+                throw new HttpException('Ошибка подключения к CRM', 400);
             }
         }
 
