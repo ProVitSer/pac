@@ -23,11 +23,11 @@ export class MissedCallController {
         return this.missedCallService.getMissedCallConfigList(req.user.client.clientId);
     }
 
-    @UseGuards(PermissionGuard([Permission.Read]))
-    @Get(':id')
-    async getMissedCallConfigById(@Req() req: RequestWithUser, @Param('id') id: number) {
-        return this.missedCallService.getMissedCallConfigById(req.user.client.clientId, id);
-    }
+    // @UseGuards(PermissionGuard([Permission.Read]))
+    // @Get(':id')
+    // async getMissedCallConfigById(@Req() req: RequestWithUser, @Param('id') id: number) {
+    //     return this.missedCallService.getMissedCallConfigById(req.user.client.clientId, id);
+    // }
 
     @UseGuards(PermissionGuard([Permission.Create]))
     @Post()
