@@ -39,7 +39,11 @@ export class MissedCallService {
     }
 
     public async getTrunkName(clientId: number): Promise<string[]> {
-        return await this.getTrunks(clientId);
+        const mcConfig = await this.getMissedCallConfigList(clientId);
+
+        const trunks = await this.getTrunks(clientId);
+
+        return trunks.filter((t: string) => !mcConfig.map((m: MissedCall) => m.trunkName).includes(t));
     }
 
     public async updateMissedCall(clientId: number, data: UpdateMissedCall): Promise<MissedCall[]> {
