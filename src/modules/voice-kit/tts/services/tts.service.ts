@@ -18,6 +18,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { getUnixTime } from 'date-fns';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { format } from 'date-fns';
+import * as fs from 'fs';
 
 @Injectable()
 export class TtsService {
@@ -132,5 +133,13 @@ export class TtsService {
             data: formattedTtsFiless,
             totalRecords: totalRecords || 0,
         };
+    }
+
+    public async deleteTtsFile(ttsId: string) {
+        const tts = await this.getTTSVoiceFile(ttsId);
+
+        fs.unlinkSync(`${tts.fullFilePath}${tts.fileName}`);
+
+        await this.ttsRepository.remove(tts);
     }
 }
