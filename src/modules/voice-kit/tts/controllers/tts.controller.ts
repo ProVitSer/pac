@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Param, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Res, UseGuards } from '@nestjs/common';
 import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { FileUtilsService } from '@app/common/utils/file.utils';
 import { Response } from 'express';
 import { TtsService } from '../services/tts.service';
 import { TtsConvertDto } from '../dto/tts-convert.dto';
-import { ListVoicesData } from '../interfaces/tts.interface';
+import { GetTtsFilesQuery, ListVoicesData } from '../interfaces/tts.interface';
 import { TtsVoicesDTO } from '../dto/tts-voices.dto';
 import { Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
@@ -38,7 +38,14 @@ export class TtsController {
 
         const file = await FileUtilsService.readStreamVoiceFile(`${ttsFile.fullFilePath}${ttsFile.fileName}`);
 
+        res.setHeader('Content-Type', 'audio/wav');
+
         file.pipe(res);
+    }
+
+    @Get()
+    async getTTSFiles(@Query() query: GetTtsFilesQuery) {
+        return await this.ttsService.getTTSFiles(query);
     }
 
     @Post('voices')

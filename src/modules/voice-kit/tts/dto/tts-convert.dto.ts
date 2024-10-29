@@ -3,6 +3,10 @@ import { TTSProviderType } from '../interfaces/tts.enum';
 
 export class TtsConvertDto {
     @IsString()
+    @IsOptional()
+    name: string;
+
+    @IsString()
     @IsNotEmpty()
     text: string;
 

@@ -1,6 +1,7 @@
 import { TTSProviderType, VoiceFileFormat } from './tts.enum';
 
 export interface TTSData {
+    name?: string;
     ttsType: TTSProviderType;
     text: string;
     voice?: string;
@@ -42,4 +43,24 @@ export type TTSProviders = {
 export class ListVoicesData {
     name: string;
     emotions: string[];
+}
+
+export interface GetTtsFilesQuery {
+    page: string;
+    pageSize: string;
+    dateString?: string;
+    name?: string;
+}
+
+export interface GetTtsFilesResult {
+    data: TtsFilesData[];
+    totalRecords: number;
+}
+
+export interface TtsFilesData {
+    name: string;
+    ttsId: number;
+    ttsProviderType: TTSProviderType;
+    text: string;
+    date: string;
 }
