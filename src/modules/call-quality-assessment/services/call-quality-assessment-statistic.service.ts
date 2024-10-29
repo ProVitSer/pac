@@ -5,8 +5,15 @@ import { CallQualityAssessmentStatistic } from '../entities/call-quality-assessm
 import { Voip } from '@app/modules/voip/entities/voip.entity';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { CallQualityAssessmentConfigService } from './call-quality-assessment-config.service';
-import { AddInitStaticInfo, UpdateStatisticInfoData } from '../interfaces/call-quality-assessment.interface';
+import {
+    AddInitStaticInfo,
+    CqaStatisticData,
+    GetCqaStatisticQuery,
+    GetCqaStatisticResult,
+    UpdateStatisticInfoData,
+} from '../interfaces/call-quality-assessment.interface';
 import { CallQualityAssessmentConfig } from '../entities/call-quality-assessment.-config.entity';
+import { format } from 'date-fns';
 
 @Injectable()
 export class CallQualityAssessmentStatisticService {
@@ -63,11 +70,53 @@ export class CallQualityAssessmentStatisticService {
         return cqac;
     }
 
-    public async getCqaStatistic(clientId: number): Promise<CallQualityAssessmentStatistic[]> {
-        const cqas = await this.cqas.find({
-            where: { clientId },
-        });
+    public async getCqaStatistic(query: GetCqaStatisticQuery): Promise<GetCqaStatisticResult> {
+        const parsePage = parseInt(query.page || '1');
 
-        return cqas;
+        const parsePageSize = parseInt(query.pageSize || '10');
+
+        const searchDate = query.dateString || null; //format(new Date(), 'yyyy-MM-dd');
+
+        const queryBuilder = this.cqas
+            .createQueryBuilder('call_quality_assessment_statistic')
+            .orderBy('call_quality_assessment_statistic.id', 'DESC');
+
+        if (searchDate) {
+            queryBuilder.where('DATE(call_quality_assessment_statistic.createdAt) = :searchDate', { searchDate });
+        }
+
+        if (query.managerNumber) {
+            queryBuilder.andWhere('call_quality_assessment_statistic.managerNumber LIKE :managerNumber', {
+                managerNumber: `%${query.managerNumber}%`,
+            });
+        }
+
+        const totalRecords = await queryBuilder.getCount();
+
+        const cqaStatistic = await queryBuilder
+            .skip((parsePage - 1) * parsePageSize)
+            .take(parsePageSize)
+            .getMany();
+
+        const formattedCqaStatistic: CqaStatisticData[] = [];
+
+        cqaStatistic.map((cqa: CallQualityAssessmentStatistic) =>
+            formattedCqaStatistic.push({
+                rating: String(cqa.rating) || '',
+                callResult: cqa.callResult,
+                clientNumber: cqa.clientNumber || '',
+                managerData: cqa.managerData || '',
+                managerNumber: cqa.managerNumber || '',
+                country: cqa.country || '',
+                region: cqa.region || '',
+                city: cqa.city || '',
+                date: format(new Date(cqa.createdAt), 'yyyy-MM-dd'),
+            }),
+        );
+
+        return {
+            data: formattedCqaStatistic,
+            totalRecords: totalRecords || 0,
+        };
     }
 }

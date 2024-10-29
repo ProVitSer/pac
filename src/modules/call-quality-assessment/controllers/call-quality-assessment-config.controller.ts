@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Post, Put, Req, UploadedFiles, UseGuards
 import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { Permission, Role } from '@app/common/interfaces/enums';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
-import CreateCqaConfigkDto from '../dto/create-cqa-config.dto';
+// import CreateCqaConfigkDto from '../dto/create-cqa-config.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { CallQualityAssessmentConfigService } from '../services/call-quality-assessment-config.service';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
@@ -22,15 +22,11 @@ export class CallQualityAssessmentConfigController {
     @UseInterceptors(AnyFilesInterceptor())
     @UseGuards(PermissionGuard([Permission.Create]))
     @Post()
-    async createCqaConfig(
-        @Req() req: RequestWithUser,
-        @Body() data: CreateCqaConfigkDto,
-        @UploadedFiles() files: Array<Express.Multer.File>,
-    ): Promise<void> {
+    async createCqaConfig(@Req() req: RequestWithUser, @UploadedFiles() files: Array<Express.Multer.File>): Promise<void> {
         const soundMain = files.find((file) => file.fieldname === CqaFileType.cqaMain);
         const soundGoodbye = files.find((file) => file.fieldname === CqaFileType.cqaGoodbye);
 
-        await this.cqac.addCqacConfig({ ...data, client: req.user.client, soundMain, soundGoodbye });
+        await this.cqac.addCqacConfig({ client: req.user.client, soundMain, soundGoodbye });
     }
 
     @UseGuards(PermissionGuard([Permission.Read]))
