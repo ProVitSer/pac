@@ -87,7 +87,7 @@ export class CallQualityAssessmentConfigService {
     }
 
     public async updateCqacAudioFiles(data: UpdateCqacAudioFiles) {
-        const cqac = await this.getCqaConfig(data.client.id);
+        const cqac = await this.getCqaConfig(data.client.clientId);
 
         const originAudioFiles: AudioFilesData[] = [...cqac.audioFiles];
 
@@ -143,5 +143,19 @@ export class CallQualityAssessmentConfigService {
 
     private async addSoundFile(file: Express.Multer.File, clientId: number): Promise<Files> {
         return await this.audioFilesService.saveAudioFile(clientId, file, ApplicationServiceType.cqa);
+    }
+
+    public async getCqaVoiceFile(fileId: string): Promise<Files> {
+        return await this.filesService.getFile(Number(fileId));
+    }
+
+    public async updateAi(client: Client, isAiEnabled: boolean): Promise<void> {
+        const cqac = await this.getCqaConfig(client.clientId);
+
+        if (isAiEnabled) {
+            await this.cqac.update(cqac.id, { aiEnabled: isAiEnabled, audioFiles: [] });
+        } else {
+            await this.cqac.update(cqac.id, { aiEnabled: isAiEnabled });
+        }
     }
 }

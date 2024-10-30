@@ -1,7 +1,5 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { CallResult } from '../interfaces/call-quality-assessment.enum';
-import { CallQualityAssessmentConfig } from './call-quality-assessment.-config.entity';
-
 @Entity()
 export class CallQualityAssessmentStatistic {
     @PrimaryGeneratedColumn()
@@ -42,10 +40,6 @@ export class CallQualityAssessmentStatistic {
 
     @Column({ nullable: false, type: 'enum', enum: CallResult, name: 'call_result', default: CallResult.unknown })
     callResult: CallResult;
-
-    @ManyToOne(() => CallQualityAssessmentConfig, (cqac) => cqac.callQualityAssessmentStatistic)
-    @JoinColumn({ name: 'cqac_id' })
-    callQualityAssessmentConfig: CallQualityAssessmentConfig;
 
     @Column({ name: 'client_id' })
     clientId: number;

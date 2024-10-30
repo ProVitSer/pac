@@ -12,7 +12,6 @@ import {
     GetCqaStatisticResult,
     UpdateStatisticInfoData,
 } from '../interfaces/call-quality-assessment.interface';
-import { CallQualityAssessmentConfig } from '../entities/call-quality-assessment.-config.entity';
 import { format } from 'date-fns';
 
 @Injectable()
@@ -30,15 +29,11 @@ export class CallQualityAssessmentStatisticService {
         try {
             const voip = await this.getTrunkData(data.trunkId);
 
-            const cqac = await this.getCqacConfig(voip.client.clientId);
-
             const cqas = this.cqas.create();
 
             cqas.uniqueid = data.uniqueid;
 
             cqas.clientId = voip.client.clientId;
-
-            cqas.callQualityAssessmentConfig = cqac;
 
             await this.cqas.save(cqas);
         } catch (e) {
@@ -60,14 +55,6 @@ export class CallQualityAssessmentStatisticService {
         if (!trunk) throw new Error('Trunk not found');
 
         return trunk;
-    }
-
-    private async getCqacConfig(clientId: number): Promise<CallQualityAssessmentConfig> {
-        const cqac = await this.cqac.getCqaConfig(clientId);
-
-        if (!cqac) throw new Error('Cqac not found');
-
-        return cqac;
     }
 
     public async getCqaStatistic(query: GetCqaStatisticQuery): Promise<GetCqaStatisticResult> {
