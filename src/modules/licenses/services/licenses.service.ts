@@ -2,7 +2,7 @@ import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Licenses } from '../entities/licenses.entity';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { randomBytes } from 'crypto';
 import CreateLicenseDto from '../dto/create-license.dto';
 import CheckLicenseDto from '../dto/check-license.dto';
@@ -134,6 +134,9 @@ export class LicensesService {
 
     public async getLicenses(): Promise<Licenses> {
         return this.licensesRepository.findOne({
+            where: {
+                id: Not(IsNull()),
+            },
             relations: {
                 client: true,
                 products: true,
