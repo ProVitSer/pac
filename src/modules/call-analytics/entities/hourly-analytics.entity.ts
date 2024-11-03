@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { HourlyAnalicsData } from '../interfaces/call-analytics.interface';
 
 @Entity('hourly_analitics')
 export class HourlyAnalitics {
@@ -15,32 +16,7 @@ export class HourlyAnalitics {
     callIds: number[];
 
     @Column('json')
-    data: {
-        local: {
-            totalCalls: number;
-            extensions: Record<string, { callCount: number; totalTalkingDuration: number }>;
-        };
-        incoming: {
-            totalCalls: number;
-            cities: Record<string, number>;
-            regions: Record<string, number>;
-            totalDuration: number;
-            totalRingingDuration: number;
-            totalAnsweredCalls: number;
-            totalUnansweredCalls: number;
-            callsById: Record<string, { answered: boolean; talkingDuration: number; ringingDuration: number }>;
-        };
-        outgoing: {
-            totalCalls: number;
-            cities: Record<string, number>;
-            regions: Record<string, number>;
-            totalDuration: number;
-            totalRingingDuration: number;
-            totalAnsweredCalls: number;
-            totalUnansweredCalls: number;
-            callsById: Record<string, { answered: boolean; talkingDuration: number; ringingDuration: number }>;
-        };
-    };
+    data: HourlyAnalicsData;
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;

@@ -14,10 +14,11 @@ import { PbxCallStatistics } from './entities/pbx-call-statistics.entity';
 import { SyncPbxCallStatisticsSchedule } from './schedules/sync-pbx-call-statistics.schedule';
 import { SyncAnaliticsSchedule } from './schedules/sync-analytics.schedule';
 import { HourlyAnalitics } from './entities/hourly-analytics.entity';
+import { DailyAnalitics } from './entities/daily-analytics.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([HourlyAnalitics, CallAnalytics, ExtensionAnalitics, PbxCallStatistics]),
+        TypeOrmModule.forFeature([HourlyAnalitics, CallAnalytics, ExtensionAnalitics, PbxCallStatistics, DailyAnalitics]),
         DadataApiModule,
         PacSqlModule,
         LicensesModule,

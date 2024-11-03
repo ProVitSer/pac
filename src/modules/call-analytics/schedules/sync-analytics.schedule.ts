@@ -3,12 +3,13 @@ import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { PbxCallStatistics } from '../entities/pbx-call-statistics.entity';
-import { HOURLY_CALL_ANALITICS_DEFAULT_STR } from '../call-analitics.constants';
+import { DAILY_CALL_ANALITICS_DEFAULT_STR, HOURLY_CALL_ANALITICS_DEFAULT_STR } from '../call-analitics.constants';
 import { addHours, format, startOfHour, subDays, subHours } from 'date-fns';
 import { HourlyAnalitics } from '../entities/hourly-analytics.entity';
-import { HourlyAnalicsData } from '../interfaces/call-analytics.interface';
+import { DailyAnalicsData, HourlyAnalicsData } from '../interfaces/call-analytics.interface';
 import { CallDirection } from '../interfaces/call-analytics.enum';
 import { _ } from 'lodash';
+import { DailyAnalitics } from '../entities/daily-analytics.entity';
 
 @Injectable()
 export class SyncAnaliticsSchedule {
@@ -17,12 +18,14 @@ export class SyncAnaliticsSchedule {
         private pbxCallStatisticsRepository: Repository<PbxCallStatistics>,
         @InjectRepository(HourlyAnalitics)
         private hourlyAnaliticsRepository: Repository<HourlyAnalitics>,
+        @InjectRepository(DailyAnalitics)
+        private dailyAnaliticsRepository: Repository<DailyAnalitics>,
     ) {}
 
-    @Cron(CronExpression.EVERY_HOUR)
-    async syncHourlyAnalitic() {
-        await this._syncHourlyAnalitic(new Date(Date.now() - 60 * 60 * 1000), new Date());
-    }
+    // @Cron(CronExpression.EVERY_HOUR)
+    // async syncHourlyAnalitic() {
+    //     await this._syncHourlyAnalitic(new Date(Date.now() - 60 * 60 * 1000), new Date());
+    // }
 
     // @Timeout(5000)
     // async initProjSyncHourlyAnalitic() {
@@ -47,7 +50,7 @@ export class SyncAnaliticsSchedule {
         const reportHour = end.getUTCHours();
 
         if (callIds.length === 0) {
-            await this.addHourlyStatistics(callIds, HOURLY_CALL_ANALITICS_DEFAULT_STR, reportDate, reportHour);
+            await this.addHourlyAnalitic(callIds, HOURLY_CALL_ANALITICS_DEFAULT_STR, reportDate, reportHour);
             return;
         }
 
@@ -55,15 +58,18 @@ export class SyncAnaliticsSchedule {
 
         const analitics = this.generateAnalytics(statistics);
 
-        await this.addHourlyStatistics(callIds, analitics, reportDate, reportHour);
+        await this.addHourlyAnalitic(callIds, analitics, reportDate, reportHour);
     }
 
     private async getHourlyStatisticByInterval(interval: { startDateTime: Date; endDateTime: Date }) {
         const uniqueCallIds = await this.getUniqueCallIdsForLastHour(interval.startDateTime, interval.endDateTime);
+
+        const filterCallIds = uniqueCallIds.length !== 0 ? await this.filterCallIds(uniqueCallIds) : uniqueCallIds;
+
         return {
             start: interval.startDateTime,
             end: interval.endDateTime,
-            callIds: uniqueCallIds,
+            callIds: filterCallIds,
         };
     }
 
@@ -78,13 +84,27 @@ export class SyncAnaliticsSchedule {
 
         const reportHour = lastHour.getUTCHours();
 
-        const analiticsData =
-            callIds.length === 0 ? HOURLY_CALL_ANALITICS_DEFAULT_STR : this.generateAnalytics(await this.getStatisticsByCallIds(callIds));
+        const filterCallIds = callIds.length !== 0 ? await this.filterCallIds(callIds) : callIds;
 
-        await this.addHourlyStatistics(callIds, analiticsData, reportDate, reportHour);
+        const analiticsData =
+            filterCallIds.length === 0
+                ? HOURLY_CALL_ANALITICS_DEFAULT_STR
+                : this.generateAnalytics(await this.getStatisticsByCallIds(filterCallIds));
+
+        await this.addHourlyAnalitic(filterCallIds, analiticsData, reportDate, reportHour);
     }
 
-    private async addHourlyStatistics(uniqueCallIds: number[], analiticsData: HourlyAnalicsData, reportDate: string, reportHour: number) {
+    private async filterCallIds(callIds: number[]) {
+        console.log(callIds);
+        const lastHourlyAnalitics = await this.hourlyAnaliticsRepository
+            .createQueryBuilder('hourly_analitics')
+            .orderBy('hourly_analitics.id', 'DESC')
+            .getOne();
+
+        return lastHourlyAnalitics ? callIds.filter((c) => !lastHourlyAnalitics.callIds.includes(c)) : callIds;
+    }
+
+    private async addHourlyAnalitic(uniqueCallIds: number[], analiticsData: HourlyAnalicsData, reportDate: string, reportHour: number) {
         const report = this.hourlyAnaliticsRepository.create({
             reportDate: reportDate,
             reportHour: reportHour,
@@ -93,6 +113,50 @@ export class SyncAnaliticsSchedule {
         });
 
         await this.hourlyAnaliticsRepository.save(report);
+
+        await this.addDailyAnalitic(reportDate, analiticsData);
+    }
+
+    private async addDailyAnalitic(reportDate: string, analiticsData: HourlyAnalicsData) {
+        const existingAnalitic = await this.dailyAnaliticsRepository.findOne({ where: { reportDate } });
+        const dailyStats = existingAnalitic ? existingAnalitic.data : (_.cloneDeep(DAILY_CALL_ANALITICS_DEFAULT_STR) as DailyAnalicsData);
+
+        this.updateLocalTotals(dailyStats.local, analiticsData.local);
+        this.updateTotals(dailyStats.incoming, analiticsData.incoming);
+        this.updateTotals(dailyStats.outgoing, analiticsData.outgoing);
+
+        this.updateLocations(dailyStats.incoming.cities, analiticsData.incoming.cities);
+        this.updateLocations(dailyStats.incoming.regions, analiticsData.incoming.regions);
+        this.updateLocations(dailyStats.outgoing.cities, analiticsData.outgoing.cities);
+        this.updateLocations(dailyStats.outgoing.regions, analiticsData.outgoing.regions);
+
+        if (!existingAnalitic) {
+            const dailyAnalitics = this.dailyAnaliticsRepository.create({
+                reportDate,
+                data: dailyStats,
+            });
+            await this.dailyAnaliticsRepository.save(dailyAnalitics);
+        } else {
+            await this.dailyAnaliticsRepository.update({ id: existingAnalitic.id }, { data: dailyStats });
+        }
+    }
+
+    private updateLocalTotals(target: any, source: any) {
+        target.totalCalls += source.totalCalls;
+    }
+
+    private updateTotals(target: any, source: any) {
+        target.totalCalls += source.totalCalls;
+        target.totalDuration += source.totalDuration;
+        target.totalRingingDuration += source.totalRingingDuration;
+        target.totalAnsweredCalls += source.totalAnsweredCalls;
+        target.totalUnansweredCalls += source.totalUnansweredCalls;
+    }
+
+    private updateLocations(target: Record<string, number>, source: Record<string, number>) {
+        for (const key in source) {
+            target[key] = (target[key] || 0) + source[key];
+        }
     }
 
     private async getUniqueCallIdsForLastHour(startDateTime: Date, endDateTime: Date): Promise<number[]> {
@@ -114,7 +178,7 @@ export class SyncAnaliticsSchedule {
     private generateAnalytics(callData: PbxCallStatistics[]): HourlyAnalicsData {
         const filteredCalls = this.filterCallsBySegment(this.aggregateCallDurations(callData));
 
-        const hourlyStats = _.cloneDeep(HOURLY_CALL_ANALITICS_DEFAULT_STR);
+        const hourlyStats = _.cloneDeep(HOURLY_CALL_ANALITICS_DEFAULT_STR) as HourlyAnalicsData;
 
         for (const call of filteredCalls) {
             switch (call.callDirection) {
@@ -174,10 +238,6 @@ export class SyncAnaliticsSchedule {
                 ringingDuration: call.totalRingingDuration,
             };
         }
-    }
-    private getHourFromDate(dateString: string): string {
-        const date = new Date(dateString);
-        return date.toISOString().split(':')[0];
     }
 
     private convertDurationToSeconds(duration: string): number {

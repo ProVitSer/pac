@@ -118,3 +118,84 @@ export interface HourlyAnalicsData {
         callsById: Record<string, { answered: boolean; talkingDuration: number; ringingDuration: number }>;
     };
 }
+
+export interface DailyAnalicsData {
+    local: {
+        totalCalls: number;
+    };
+    incoming: {
+        totalCalls: number;
+        cities: Record<string, number>;
+        regions: Record<string, number>;
+        totalDuration: number;
+        totalRingingDuration: number;
+        totalAnsweredCalls: number;
+        totalUnansweredCalls: number;
+    };
+    outgoing: {
+        totalCalls: number;
+        cities: Record<string, number>;
+        regions: Record<string, number>;
+        totalDuration: number;
+        totalRingingDuration: number;
+        totalAnsweredCalls: number;
+        totalUnansweredCalls: number;
+    };
+}
+
+export interface CallAnanliticsData {
+    totalDailyCalls: number;
+    totalDailyAnsweredCalls: number;
+    totalDailyUnansweredCalls: number;
+    averageDailyTalkTime: string;
+    extensionDaliyStatistic: {
+        maxInboundUnanswered: {
+            callTalkingDur: string;
+            id: number;
+            extension: string;
+            displayName: string;
+            inboundAnsweredCount: number;
+            inboundUnansweredCount: number;
+            outboundCallCount: number;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
+        maxCallTalkingDur: {
+            callTalkingDur: string;
+            id: number;
+            extension: string;
+            displayName: string;
+            inboundAnsweredCount: number;
+            inboundUnansweredCount: number;
+            outboundCallCount: number;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
+        maxInboundAnswered: {
+            callTalkingDur: string;
+            id: number;
+            extension: string;
+            displayName: string;
+            inboundAnsweredCount: number;
+            inboundUnansweredCount: number;
+            outboundCallCount: number;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
+    };
+    dayCallScheduleByHour: {
+        answered: number[];
+        unanswered: number[];
+    };
+    lastSevenDaysCalls: Record<
+        string,
+        {
+            answered: number;
+            unanswered: number;
+        }
+    >[];
+    dayRegionCall: {
+        name: string;
+        value: number;
+    }[];
+}
