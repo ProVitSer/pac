@@ -15,6 +15,7 @@ import { SyncPbxCallStatisticsSchedule } from './schedules/sync-pbx-call-statist
 import { SyncAnaliticsSchedule } from './schedules/sync-analytics.schedule';
 import { HourlyAnalitics } from './entities/hourly-analytics.entity';
 import { DailyAnalitics } from './entities/daily-analytics.entity';
+import { CallCdrService } from './services/call-cdr.service';
 
 @Module({
     imports: [
@@ -30,6 +31,7 @@ import { DailyAnalitics } from './entities/daily-analytics.entity';
         SyncExtensionAnaliticSchedule,
         SyncPbxCallStatisticsSchedule,
         SyncAnaliticsSchedule,
+        CallCdrService,
     ],
     controllers: [CallAnaliticsController],
 })
