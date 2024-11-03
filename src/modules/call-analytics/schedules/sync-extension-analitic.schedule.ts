@@ -43,7 +43,7 @@ export class SyncExtensionAnaliticSchedule {
             [
                 {
                     extension: aggregatedData.extension,
-                    displayName: aggregatedData.extension,
+                    displayName: aggregatedData.displayName,
                     inboundAnsweredCount: aggregatedData.inboundAnsweredCount,
                     inboundUnansweredCount: aggregatedData.inboundUnansweredCount,
                     outboundCallCount: aggregatedData.outboundCallCount,
@@ -74,7 +74,7 @@ export class SyncExtensionAnaliticSchedule {
 
     private aggregatePbxExtensionsData(data: PbxExtensionsStatisticsData[]): TransformedPbxExtensionsStatisticsData[] {
         const aggregatedMap: { [key: string]: TransformedPbxExtensionsStatisticsData } = {};
-        console.log(JSON.stringify(data));
+
         data.forEach((item) => {
             const extension = item.dn_;
             const displayName = item.display_name_;
