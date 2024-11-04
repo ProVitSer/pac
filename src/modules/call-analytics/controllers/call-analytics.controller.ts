@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import ProductGuard from '@app/modules/auth/guards/product.guard';
@@ -26,5 +26,10 @@ export class CallAnaliticsController {
     @Get('cdr')
     async getCdr(@Query() query: GetCdrQuery) {
         return await this.callCdrService.getCdr(query);
+    }
+
+    @Get('cdr/call/:callId')
+    async getCallData(@Param('callId') callId: string) {
+        return await this.callCdrService.getCallData(Number(callId));
     }
 }

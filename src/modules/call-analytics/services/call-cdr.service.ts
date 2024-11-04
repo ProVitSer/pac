@@ -12,6 +12,33 @@ export class CallCdrService {
         private pbxCallStatisticsRepository: Repository<PbxCallStatistics>,
     ) {}
 
+    public async getCallData(callId: number): Promise<CdrData[]> {
+        const cdrs = await this.pbxCallStatisticsRepository
+            .createQueryBuilder('pbx_call_statistics')
+            .where('pbx_call_statistics.call_id = :callId', { callId })
+            .orderBy('pbx_call_statistics.call_id', 'DESC')
+            .getMany();
+
+        const formattedCdrs: CdrData[] = [];
+
+        cdrs.map((cdr: PbxCallStatistics) =>
+            formattedCdrs.push({
+                callDate: format(parseISO(cdr.startTime), 'dd.MM.yyyy HH:mm:ss'),
+                callId: cdr.callId,
+                sourceDisplayName: cdr.sourceDisplayName,
+                destinationDisplayName: cdr.destinationDisplayName,
+                answered: cdr.answered,
+                ringingDuration: cdr.ringingDuration.split('.')[0],
+                talkingDuration: cdr.talkingDuration.split('.')[0],
+                reason: cdr.reason,
+                recordingUrl: cdr.recordingUrl,
+                date: format(parseISO(cdr.startTime), 'yyyy-MM-dd'),
+            }),
+        );
+
+        return formattedCdrs;
+    }
+
     public async getCdr(query: GetCdrQuery): Promise<GetCdrResult> {
         const parsePage = parseInt(query.page || '1');
 

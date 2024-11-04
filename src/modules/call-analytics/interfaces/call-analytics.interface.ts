@@ -194,10 +194,12 @@ export interface CallAnanliticsData {
             unanswered: number;
         }
     >[];
-    dayRegionCall: {
-        name: string;
-        value: number;
-    }[];
+    dayRegionCall:
+        | {
+              name: string;
+              value: number;
+          }[]
+        | null;
 }
 
 export interface GetCdrQuery {
