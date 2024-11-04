@@ -88,8 +88,17 @@ export class CallAnaliticsService {
             },
         });
 
+        if (!dayAnalitic) {
+            return {
+                totalDailyCalls: 0,
+                totalDailyAnsweredCalls: 0,
+                totalDailyUnansweredCalls: 0,
+                averageDailyTalkTime: '00:00:00',
+                dayRegionCall: null,
+            };
+        }
         return {
-            totalDailyCalls: dayAnalitic.data.incoming.totalCalls + dayAnalitic.data.outgoing.totalCalls,
+            totalDailyCalls: dayAnalitic?.data.incoming.totalCalls + dayAnalitic?.data.outgoing.totalCalls,
             totalDailyAnsweredCalls: dayAnalitic.data.incoming.totalAnsweredCalls + dayAnalitic.data.outgoing.totalAnsweredCalls,
             totalDailyUnansweredCalls: dayAnalitic.data.incoming.totalUnansweredCalls + dayAnalitic.data.outgoing.totalUnansweredCalls,
             averageDailyTalkTime: this.formatDuration(dayAnalitic.data.incoming.totalDuration / 2),
