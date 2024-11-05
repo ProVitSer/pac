@@ -3,6 +3,7 @@ import { STTProviderType, SttRecognizeStatus } from './stt.enum';
 export interface RecognizeSpeechData {
     recordingUrl: string;
     sttProviderType: STTProviderType;
+    applicationId: string;
 }
 
 export interface RecognizeSpeechResult {
@@ -59,6 +60,7 @@ export interface CreateSttData {
     downloadVoiceFileId?: string;
     processedVoiceFileId?: string;
     sttRecognizeStatus: SttRecognizeStatus;
+    applicationId: string;
 }
 
 export interface CheckRecognizeTaskResult {
@@ -92,4 +94,11 @@ export interface GetRecognizeResultData extends CheckRecognizeTaskData {}
 export interface RecognizeResultData {
     transformedDialog: string[];
     originalResult: any;
+}
+
+export interface GetStt {
+    sttId: number;
+    applicationId: string;
+    sttRecognizeStatus: SttRecognizeStatus;
+    textDialog?: string[];
 }
