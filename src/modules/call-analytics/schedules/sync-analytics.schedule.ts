@@ -22,10 +22,10 @@ export class SyncAnaliticsSchedule {
         private dailyAnaliticsRepository: Repository<DailyAnalitics>,
     ) {}
 
-    // @Cron(CronExpression.EVERY_HOUR)
-    // async syncHourlyAnalitic() {
-    //     await this._syncHourlyAnalitic(new Date(Date.now() - 60 * 60 * 1000), new Date());
-    // }
+    @Cron(CronExpression.EVERY_HOUR)
+    async syncHourlyAnalitic() {
+        await this._syncHourlyAnalitic(new Date(Date.now() - 60 * 60 * 1000), new Date());
+    }
 
     // @Timeout(5000)
     // async initProjSyncHourlyAnalitic() {
