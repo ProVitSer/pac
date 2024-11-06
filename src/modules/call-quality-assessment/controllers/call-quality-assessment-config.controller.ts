@@ -51,7 +51,7 @@ export class CallQualityAssessmentConfigController {
     @UseInterceptors(AnyFilesInterceptor())
     @UseGuards(PermissionGuard([Permission.Update]))
     @Put('files')
-    async updateTrunk(@Req() req: RequestWithUser, @UploadedFiles() files: Array<Express.Multer.File>) {
+    async updateCqacAudioFiles(@Req() req: RequestWithUser, @UploadedFiles() files: Array<Express.Multer.File>) {
         const soundMain = files.find((file) => file.fieldname === CqaFileType.cqaMain);
         const soundGoodbye = files.find((file) => file.fieldname === CqaFileType.cqaGoodbye);
 
