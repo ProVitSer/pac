@@ -14,6 +14,7 @@ export const enum BitrixMetod {
     CrmActivityAdd = 'crm.activity.add',
     ExternalCallAttachRecord = 'telephony.externalCall.attachRecord',
     ContactList = 'crm.contact.list',
+    AddContact = 'crm.contact.add',
 }
 
 export const enum ActiveUser {

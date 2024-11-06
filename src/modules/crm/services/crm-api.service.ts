@@ -94,7 +94,6 @@ export class CrmApiService {
                 .post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ExternalCallRegister}`, { ...dataAdapter.registerCallData })
                 .pipe(
                     catchError((error: AxiosError) => {
-                        console.log(error);
                         this.logger.error(error);
                         throw error;
                     }),
@@ -180,6 +179,26 @@ export class CrmApiService {
 
         const response = await firstValueFrom(
             this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ContactList}`, searchData).pipe(
+                catchError((error: AxiosError) => {
+                    this.logger.error(error);
+                    throw error;
+                }),
+            ),
+        );
+
+        return response.data;
+    }
+
+    public async addContact(crmConfig: CrmConfig, number: string): Promise<void> {
+        const params = {
+            'fields[NAME]': 'Неизвестный Абонент',
+            'fields[PHONE][0][VALUE]': number,
+        };
+
+        this.logger.log(JSON.stringify(params));
+
+        const response = await firstValueFrom(
+            this.httpService.get(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.AddContact}`, { params }).pipe(
                 catchError((error: AxiosError) => {
                     this.logger.error(error);
                     throw error;
