@@ -55,7 +55,7 @@ export class CallProcessor {
 
     private async getEndCallData(callRingiingData: CallRingingData): Promise<EndCallData | undefined> {
         const externalCdr = await this.pacSqlService.sqlRequest(callRingiingData.clientId, {
-            query: `${END_CALL_SQL} '%\\_${callRingiingData.callHistoryId}'  ESCAPE '\\' ORDER BY id DESC`,
+            query: `${END_CALL_SQL} '%\\_${callRingiingData.callHistoryId}'  ESCAPE '\\'  AND DATE(t.start_time) = CURRENT_DATE ORDER BY id DESC`,
         });
 
         const parseResult = JSON.parse(externalCdr.result);
