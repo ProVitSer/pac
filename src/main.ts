@@ -40,13 +40,11 @@ async function bootstrap() {
         await app.listen(appPort);
 
         process
-
             .on('unhandledRejection', (reason, p) => {
                 console.log(reason);
 
                 loggerService.error({ reason, p }, 'Unhandled Rejection');
             })
-
             .on('uncaughtException', (error: Error) => {
                 console.log(error);
 
