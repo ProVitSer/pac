@@ -20,6 +20,10 @@ export class SmsService {
     public async sendSms(data: SmsData) {
         const smsConfig = await this.smsConfigService.getSmsConfig(data.clientId);
 
+        const formatNumber = this.formatPhoneNumber(data.externalNumber);
+
+        if (!formatNumber) return;
+
         const sendingResult = await this.smscService.smsSending({
             externalNumber: data.externalNumber,
             sender: smsConfig.sender,
@@ -112,5 +116,23 @@ export class SmsService {
             data: smsStatisticData,
             totalRecords: totalRecords || 0,
         };
+    }
+
+    private formatPhoneNumber(phone: string): string | null {
+        const cleanedPhone = phone.replace(/\D/g, '');
+
+        if (cleanedPhone.length === 10) {
+            return '7' + cleanedPhone;
+        } else if (cleanedPhone.length === 11) {
+            if (cleanedPhone.startsWith('8')) {
+                return '7' + cleanedPhone.slice(1);
+            } else if (cleanedPhone.startsWith('7') && cleanedPhone[1] === '9') {
+                return cleanedPhone;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }
