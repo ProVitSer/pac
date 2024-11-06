@@ -70,7 +70,7 @@ export interface BitirxUserGet {
         UF_TWITTER: string | null;
         UF_SKYPE: string | null;
         UF_DISTRICT: string | null;
-        UF_PHONE_INNER: string;
+        UF_PHONE_INNER: string | null;
         USER_TYPE: string;
     }[];
     next: number;
