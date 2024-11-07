@@ -11,6 +11,7 @@ import { DaDataPhoneObj } from '@app/modules/dadata-api/interfaces/dadata-api.in
 import { DadataTypes, SuggestionsStatus } from '@app/modules/dadata-api/interfaces/dadata-api.enum';
 import AddCqasData from '../dto/add-cqas-data.dto';
 import { CHANNEL_NAME_REGEXP } from '@app/modules/voip/modules/asterisk/apis/ari/ari.constants';
+import { UtilsService } from '@app/common/utils/utils.service';
 
 @Injectable()
 export class CallQualityAssessmentAddCallService {
@@ -47,6 +48,8 @@ export class CallQualityAssessmentAddCallService {
     }
 
     public async addCqasDataVox(clientId: number, data: AddCqasData): Promise<void> {
+        await UtilsService.sleep(10000);
+
         const externalCdrData = await this.getExternalCdrCallData(clientId, data.number, data.exten);
 
         if (!externalCdrData) return;
@@ -54,12 +57,6 @@ export class CallQualityAssessmentAddCallService {
         const match = data.channelId.match(CHANNEL_NAME_REGEXP);
 
         if (!match && !match[1]) return;
-
-        await this.cqas.addCqasStatistic({
-            trunkId: match[1],
-            uniqueid: data.uniqueid,
-            clientNumber: externalCdrData.clientNumber,
-        });
 
         const phosneData = await this.getPhoneData(externalCdrData.clientNumber);
 

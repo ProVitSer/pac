@@ -34,6 +34,8 @@ export class CallQualityAssessmentConfigService {
 
             const trunkId = data.client.voip[0].trunkId;
 
+            await this.cqac.clear();
+
             const mainFile = await this.addSoundFile(data.soundMain, clientId);
 
             const goodByeFile = data.soundGoodbye ? await this.addSoundFile(data.soundGoodbye, clientId) : undefined;

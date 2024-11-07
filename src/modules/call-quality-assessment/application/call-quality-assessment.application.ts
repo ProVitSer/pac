@@ -14,6 +14,7 @@ import { CallResult, CqaFileType } from '../interfaces/call-quality-assessment.e
 import { CallQualityAssessmentStatisticService } from '../services/call-quality-assessment-statistic.service';
 import { AmqpService } from '@app/modules/amqp/services/amqp.service';
 import { Exchange, RoutingKey } from '@app/common/constants/amqp';
+import { UtilsService } from '@app/common/utils/utils.service';
 
 @Injectable()
 export class CallQualityAssessmentApplication implements OnApplicationBootstrap {
@@ -54,7 +55,7 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
                 await this.handleCall(event, incoming, cqac);
 
-                return incoming.hangup();
+                await incoming.hangup();
             } catch (e) {
                 incoming.hangup();
 
@@ -93,6 +94,8 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
         if (!cqaMainSound) return;
 
+        let dtmfReceived = '0';
+
         return await new Promise<string>(async (resolve) => {
             const playback = this.ariCall.ariClient.Playback();
 
@@ -106,13 +109,21 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             incomingChannel.on('ChannelDtmfReceived', async (event: ChannelDtmfReceived, _channel: Channel) => {
-                await play.stop();
-                resolve(event.digit);
+                dtmfReceived = event.digit;
+
+                try {
+                    await play.stop();
+                    resolve(event.digit);
+                } catch (e) {
+                    resolve(event.digit);
+                }
             });
 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             play.once('PlaybackFinished', async (event: PlaybackStarted, _: Playback) => {
-                resolve('0');
+                await UtilsService.sleep(5000);
+
+                resolve(dtmfReceived);
             });
         });
     }
@@ -133,6 +144,8 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             play.once('PlaybackFinished', async (event: PlaybackStarted, _: Playback) => {
+                await UtilsService.sleep(5000);
+
                 resolve();
             });
         });
@@ -184,6 +197,7 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
             await this.ariCall.ariClient.channels.continueInDialplan({
                 channelId: event.channel.id,
                 context: this.aiContext,
+                extension: event.channel.dialplan.exten,
             });
         } catch (e) {
             this.logger.error(event);
