@@ -178,7 +178,7 @@ export class CrmApiService {
         this.logger.log(JSON.stringify({ searchData }));
 
         const response = await firstValueFrom(
-            this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ContactList}`, searchData).pipe(
+            this.httpService.post(`${crmConfig.domain}/${crmConfig.hash}/${BitrixMetod.ContactList}`, { ...searchData }).pipe(
                 catchError((error: AxiosError) => {
                     this.logger.error(error);
                     throw error;
