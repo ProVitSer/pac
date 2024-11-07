@@ -55,7 +55,6 @@ export interface VoipPbxService {
     sendCall(data: SendCallData): Promise<SendCallResult>;
     updateTrunk(data: UpdateTrunkData): Promise<UpdateTrunkResult>;
     deleteTrunk(trunkId: string): Promise<void>;
-    sendCall(data: SendCallData): Promise<SendCallResult>;
     sendCallWithAudio(data: SendCallWithAudioData): Promise<SendCallResult>;
 }
 
