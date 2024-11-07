@@ -49,9 +49,17 @@ export class CallAnaliticsService {
             .orderBy('hourly_analitics.report_hour', 'DESC')
             .getMany();
 
+        const hours = Array.from({ length: 24 }, (_, i) => i);
+
         return {
-            answered: hourlyAnalitic.map((h) => h.data.incoming.totalAnsweredCalls),
-            unanswered: hourlyAnalitic.map((h) => h.data.incoming.totalUnansweredCalls),
+            answered: hours.map((hour) => {
+                const matchingData = hourlyAnalitic.find((h) => h.reportHour === hour);
+                return matchingData ? matchingData.data.incoming.totalAnsweredCalls : 0;
+            }),
+            unanswered: hours.map((hour) => {
+                const matchingData = hourlyAnalitic.find((h) => h.reportHour === hour);
+                return matchingData ? matchingData.data.incoming.totalUnansweredCalls : 0;
+            }),
         };
     }
 
