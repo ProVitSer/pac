@@ -7,6 +7,9 @@ import httpsConfig from '@app/common/config/http.config';
 import { loadCorsConfiguration } from './common/config/cors.config';
 import { AppLoggerService } from './common/logger/logger.service';
 import { AllExceptionsFilter } from './common/filters/all-exception.filter';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { ErrorsInterceptor } from './common/interceptors/errors.interceptor';
+import { PostInterceptor } from './common/interceptors/post.interceptor';
 
 async function bootstrap() {
     try {
@@ -18,13 +21,17 @@ async function bootstrap() {
             ...(httpsOptions ? { httpsOptions } : {}),
         });
 
-        app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+        app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true, forbidUnknownValues: true }));
 
         app.enableCors(loadCorsConfiguration(configService.get('cors')));
+
+        app.useGlobalInterceptors(new ErrorsInterceptor(app.get(WINSTON_MODULE_NEST_PROVIDER)), new PostInterceptor());
 
         const httpAdapter = app.get(HttpAdapterHost);
 
         const loggerService = app.get<AppLoggerService>(AppLoggerService);
+
+        app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
         app.useGlobalFilters(new AllExceptionsFilter(loggerService, httpAdapter));
 
@@ -33,8 +40,16 @@ async function bootstrap() {
         await app.listen(appPort);
 
         process
-            .on('unhandledRejection', (reason, p) => loggerService.error({ reason, p }, 'Unhandled Rejection'))
-            .on('uncaughtException', (error: Error) => loggerService.error(error, 'Uncaught Exception'));
+            .on('unhandledRejection', (reason, p) => {
+                console.log(reason);
+
+                loggerService.error({ reason, p }, 'Unhandled Rejection');
+            })
+            .on('uncaughtException', (error: Error) => {
+                console.log(error);
+
+                loggerService.error(error, 'Uncaught Exception');
+            });
 
         loggerService.log(`App listen on port: ${appPort}`);
     } catch (e) {
@@ -43,4 +58,5 @@ async function bootstrap() {
         process.exit(1);
     }
 }
+
 bootstrap();
