@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column } from 'typeorm';
-import { CallProcess, CallDirection } from '../interfaces/call-event-handler.enum';
 import { FullCallInfo } from '../interfaces/call-event-handler.interface';
 import { ApiActiveConnectionsInfo } from '@app/modules/api/modules/call/interfaces/api-call.interface';
+import { CallDirection, CallProcess } from '../interfaces/call-event-handler.enum';
 
 @Entity()
 export class CallEventHandler {

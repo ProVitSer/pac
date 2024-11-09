@@ -2,7 +2,7 @@ import * as ffmpeg from 'fluent-ffmpeg';
 import { Readable } from 'stream';
 
 export class AudioConverterService {
-    private static readonly supportedFormats = ['audio/wave', 'audio/mpeg'];
+    private static readonly supportedFormats = ['audio/wave', 'audio/wav', 'audio/mpeg'];
 
     // Метод для конвертации аудио в WAV mono, 8000Hz, 64kbps
     public static async convertToWav(file: Express.Multer.File, outputPath: string): Promise<string> {

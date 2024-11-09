@@ -10,6 +10,7 @@ import { Role } from '@app/common/interfaces/enums';
 import ProductGuard from '@app/modules/auth/guards/product.guard';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { ProductType } from '@app/modules/products/interfaces/products.enum';
+import SendTestMessage from '../dto/send-test-message.dto';
 @UseGuards(RoleGuard([Role.Admin]))
 @UseGuards(ProductGuard(ProductType.telegram))
 @UseGuards(JwtAuthenticationGuard)
@@ -35,5 +36,10 @@ export class TgConfigController {
     @Put()
     async updateTgConfig(@Req() request: RequestWithUser, @Body() data: UpdateTgConfig): Promise<TgConfig> {
         return this.tgConfigService.updateTgConfig(request.user.client, data);
+    }
+
+    @Post('test-send')
+    async sendTestMessage(@Body() data: SendTestMessage) {
+        return this.tgConfigService.sendTestMessage(data.id);
     }
 }

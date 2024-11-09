@@ -17,8 +17,8 @@ export class CrmConfig {
     @Column({ nullable: false, name: 'task_group' })
     taskGroup: number;
 
-    @Column({ nullable: true, name: 'daedline_min' })
-    daedlineMin?: number;
+    @Column({ nullable: true, name: 'deadline_min' })
+    deadlineMin?: number;
 
     @Column({ nullable: false, name: 'domain' })
     domain: string;

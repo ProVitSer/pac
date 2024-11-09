@@ -28,7 +28,7 @@ import { ProductType } from '@app/modules/products/interfaces/products.enum';
 export class ApiExtensionController {
     constructor(private readonly apiExtensionService: ApiExtensionService) {}
 
-    @Get(':extension')
+    @Get('info/:extension')
     async getExtensionInfo(@Req() req: RequestWithUser, @Param('extension') extension: string): Promise<ExtensionInfo> {
         return await this.apiExtensionService.getExtensionInfo(req.user.client.clientId, extension);
     }

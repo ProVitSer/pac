@@ -9,6 +9,9 @@ export class Stt {
     @Column({ nullable: false, name: 'stt_id' })
     sttId: number;
 
+    @Column({ unique: true, nullable: false, name: 'application_id' })
+    applicationId: string;
+
     @Column({ nullable: true, name: 'external_stt_id' })
     externalSttId?: string;
 

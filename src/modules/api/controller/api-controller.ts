@@ -17,9 +17,9 @@ export class AuthController {
     @UseGuards(ProductGuard(ProductType.api))
     @UseGuards(JwtAuthenticationGuard)
     @Get('api-token')
-    async getApiToken(@Req() request: RequestWithUser) {
-        const { user } = request;
+    async getApiToken(@Req() req: RequestWithUser) {
+        const { user } = req;
 
-        return await this.tokenService.getApioken(user.id);
+        return await this.tokenService.getApiToken(user.id);
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import JwtAuthenticationGuard from '@app/modules/auth/guards/jwt-authentication.guard';
 import { RequestWithUser } from '@app/common/interfaces/interfaces';
 import { TgUsersService } from '../services/tg-users.service';
@@ -10,6 +10,7 @@ import { Role } from '@app/common/interfaces/enums';
 import ProductGuard from '@app/modules/auth/guards/product.guard';
 import RoleGuard from '@app/modules/auth/guards/role.guard';
 import { ProductType } from '@app/modules/products/interfaces/products.enum';
+import { GetTgUsersQuery } from '../interfaces/tg.interface';
 @UseGuards(RoleGuard([Role.Admin]))
 @UseGuards(ProductGuard(ProductType.telegram))
 @UseGuards(JwtAuthenticationGuard)
@@ -18,8 +19,8 @@ export class TgUsersController {
     constructor(private readonly tgUsersService: TgUsersService) {}
 
     @Get()
-    async getTgUsers(@Req() request: RequestWithUser): Promise<TgUsers[]> {
-        return this.tgUsersService.getTgUsers(request.user.client);
+    async getTgUsers(@Req() request: RequestWithUser, @Query() query: GetTgUsersQuery) {
+        return this.tgUsersService.getTgUsers(request.user.client, query);
     }
 
     @Post()

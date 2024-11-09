@@ -5,6 +5,7 @@ import {
     SendCallData,
     SendCallResult,
     SendCallWithAudioData,
+    TrunkInfo,
     UpdateTrunkData,
     UpdateTrunkResult,
     VoipPbxService,
@@ -58,6 +59,20 @@ export class AstersikService implements VoipPbxService {
         await this.sorceryService.deleteTrunk(trunkId);
     }
 
+    public async getTrunkInfo(trunkId: string): Promise<TrunkInfo> {
+        const trunk = await this.sorceryService.findTrunkById(trunkId);
+
+        if (!trunk) {
+            throw new TrunkNotFoundException();
+        }
+
+        return {
+            authId: trunk.psAuths.username,
+            authPassword: trunk.psAuths.password,
+            pbxIp: trunk.psEndpointIdIps.match,
+        };
+    }
+
     public async updateTrunk(data: UpdateTrunkData): Promise<UpdateTrunkResult> {
         const trunk = await this.sorceryService.findTrunkById(data.trunkId);
 
@@ -74,6 +89,8 @@ export class AstersikService implements VoipPbxService {
         const updateTrunk = await this.sorceryService.updateTrunk(dataWithTrunkId);
 
         await this.sendResiterAction.sendRegisterToTrunk({ trunkId: updateTrunk.trunkId });
+
+        await UtilsService.sleep(10000);
 
         return updateTrunk;
     }

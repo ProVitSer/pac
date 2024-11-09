@@ -11,9 +11,9 @@ export class TokenService {
         private jwtService: JwtService,
     ) {}
 
-    public async getTokens(userId: number): Promise<GetTokensResult> {
+    public async getAccessToken(data: TokenPayload): Promise<GetTokensResult> {
         return {
-            ...(await this.getAccessToken(userId)),
+            ...(await this._getAccessToken(data)),
         };
     }
 
@@ -27,13 +27,13 @@ export class TokenService {
         return this.jwtService.verify(token);
     }
 
-    public async getAccessToken(userId: number) {
+    private async _getAccessToken(data: TokenPayload) {
         return {
-            accessToken: await this.getToken({ userId }),
+            accessToken: await this.getToken(data),
         };
     }
 
-    public async getApioken(userId: number) {
+    public async getApiToken(userId: number) {
         const { secret, exp, algorithm } = this.configService.get<JwtEnvironmentVariables>('api') as ApiEnvironmentVariables;
 
         return {

@@ -12,7 +12,7 @@ export class CreateClientAdapter implements Partial<Client> {
     constructor(clientData: CreateClientDto) {
         this.clientId = getUnixTime(new Date());
         this.companyName = clientData.companyName;
-        this.contactPersonName = clientData.contactPersonName;
+        this.contactPersonName = `${clientData.firstname} ${clientData.lastname}`;
         this.phone = clientData.companyPhone;
         this.email = clientData.companyEmail;
     }

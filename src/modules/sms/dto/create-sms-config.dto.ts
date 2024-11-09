@@ -6,6 +6,9 @@ export class CreateSmsConfig {
 
     @IsString()
     psw: string;
+
+    @IsString()
+    smsText: string;
 }
 
 export default CreateSmsConfig;

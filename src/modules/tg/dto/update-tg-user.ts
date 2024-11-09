@@ -6,7 +6,7 @@ export class UpdateTgUser {
 
     @IsString()
     @IsOptional()
-    userName?: string;
+    name?: string;
 
     @IsString()
     @IsOptional()

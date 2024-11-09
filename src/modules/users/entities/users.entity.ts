@@ -16,8 +16,11 @@ export class Users implements UsersInterface {
     @Column({ nullable: true, name: 'phone_number' })
     phoneNumber?: string;
 
-    @Column()
-    name: string;
+    @Column({ nullable: true })
+    firstname: string;
+
+    @Column({ nullable: true })
+    lastname: string;
 
     @Column({ nullable: false })
     @Exclude()

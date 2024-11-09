@@ -9,6 +9,7 @@ import { CallResult } from '../interfaces/call-quality-assessment.enum';
 import ProductGuard from '@app/modules/auth/guards/product.guard';
 import { ProductType } from '@app/modules/products/interfaces/products.enum';
 import PermissionGuard from '@app/modules/auth/guards/permission.guard';
+import { GetCqaStatisticQuery } from '../interfaces/call-quality-assessment.interface';
 
 @UseGuards(RoleGuard([Role.Admin, Role.User]))
 @UseGuards(ProductGuard(ProductType.cqa))
@@ -22,8 +23,8 @@ export class CallQualityAssessmentStatisticController {
 
     @UseGuards(PermissionGuard([Permission.Read]))
     @Get()
-    async getCqaStatistic(@Req() req: RequestWithUser) {
-        return this.cqas.getCqaStatistic(req.user.client.clientId);
+    async getCqaStatistic(@Req() req: RequestWithUser, @Query() query: GetCqaStatisticQuery) {
+        return this.cqas.getCqaStatistic(query);
     }
 
     @Get('vox-add')

@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Repository } from 'typeorm';
 import { CallQualityAssessmentConfig } from '../entities/call-quality-assessment.-config.entity';
-import { CreateTrunkResult } from '@app/modules/voip/interfaces/voip.interface';
 import { ApplicationServiceType } from '@app/common/interfaces/enums';
 import { AudioFilesService } from '@app/modules/files/services/audio-files.service';
 import { CreateCallQualityAssessmentConfigAdapter } from '../adapters/create-call-quality-assessment-config.adapter';
@@ -33,14 +32,16 @@ export class CallQualityAssessmentConfigService {
         try {
             const { clientId } = data.client;
 
-            const trunk = await this.createTrunk(data);
+            const trunkId = data.client.voip[0].trunkId;
+
+            await this.cqac.clear();
 
             const mainFile = await this.addSoundFile(data.soundMain, clientId);
 
             const goodByeFile = data.soundGoodbye ? await this.addSoundFile(data.soundGoodbye, clientId) : undefined;
 
             const cqac = this.cqac.create(
-                new CreateCallQualityAssessmentConfigAdapter({ trunk, mainFile, goodByeFile, client: data.client }),
+                new CreateCallQualityAssessmentConfigAdapter({ trunkId, mainFile, goodByeFile, client: data.client }),
             );
 
             await this.cqac.save(cqac);
@@ -88,7 +89,7 @@ export class CallQualityAssessmentConfigService {
     }
 
     public async updateCqacAudioFiles(data: UpdateCqacAudioFiles) {
-        const cqac = await this.getCqaConfig(data.client.id);
+        const cqac = await this.getCqaConfig(data.client.clientId);
 
         const originAudioFiles: AudioFilesData[] = [...cqac.audioFiles];
 
@@ -146,13 +147,17 @@ export class CallQualityAssessmentConfigService {
         return await this.audioFilesService.saveAudioFile(clientId, file, ApplicationServiceType.cqa);
     }
 
-    private async createTrunk(data: CreateCqacConfigData): Promise<CreateTrunkResult> {
-        return await this.voipService.addNewTrunk({
-            client: data.client,
-            applicationServiceType: ApplicationServiceType.cqa,
-            authId: data.authId,
-            authPassword: data.authPassword,
-            pbxIp: data.pbxIp,
-        });
+    public async getCqaVoiceFile(fileId: string): Promise<Files> {
+        return await this.filesService.getFile(Number(fileId));
+    }
+
+    public async updateAi(client: Client, isAiEnabled: boolean): Promise<void> {
+        const cqac = await this.getCqaConfig(client.clientId);
+
+        if (isAiEnabled) {
+            await this.cqac.update(cqac.id, { aiEnabled: isAiEnabled, audioFiles: [] });
+        } else {
+            await this.cqac.update(cqac.id, { aiEnabled: isAiEnabled });
+        }
     }
 }

@@ -2,7 +2,10 @@ import { IsString } from 'class-validator';
 
 export class CreatTgUser {
     @IsString()
-    userName: string;
+    name: string;
+
+    @IsString()
+    tgUserName: string;
 
     @IsString()
     extension: string;

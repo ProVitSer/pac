@@ -24,9 +24,9 @@ export interface ConnectionsData {
     externalParty: string;
     recordingState: string;
     partyConnectionId: number;
-    referredBy: number;
-    isOutbound: boolean;
-    isInbound: boolean;
+    referredBy?: number;
+    isOutbound?: boolean;
+    isInbound?: boolean;
     dialedNumber: string;
     internalParty: string;
     internalPartyNumber: string;

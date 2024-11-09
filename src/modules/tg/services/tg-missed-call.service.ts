@@ -45,7 +45,7 @@ export class TgMissedCallService implements OnModuleInit {
 
             const message = `${DAFAULT_MISSED_CALL_START_MESSAGE} ${number}. ${DAFAULT_MISSED_CALL_END_MESSAGE}`;
 
-            await this.addTgMessage({ clientId, messageId, message, tgConfigId: tg.id });
+            await this.addTgMessage({ clientId, messageId, message, tgConfigId: tg.id, externalNumber: number });
 
             await this.botManagerService.sendMessageWithExtra(tg.token, tg.chatId, message, {
                 reply_markup: Markup.inlineKeyboard([Markup.button.callback('📞 Перезвонить', this.getCallbackAction(messageId, number))])
@@ -60,7 +60,7 @@ export class TgMissedCallService implements OnModuleInit {
         const bot = this.botManagerService.getBot(token);
 
         bot.action(callbackAction, async (ctx) => {
-            const user = await this.tgUsersService.getTgUserByUsername(ctx.update.callback_query.from.username);
+            const user = await this.tgUsersService.getTgUserByTgUserName(ctx.update.callback_query.from.username);
 
             const { messageId, number } = this.getMessageInfo(ctx.match[0]);
 
@@ -94,6 +94,8 @@ export class TgMissedCallService implements OnModuleInit {
 
     private async addTgMessage(data: AddTgMessageData): Promise<void> {
         const tgMessage = this.tgMessagesRepository.create();
+
+        tgMessage.externalNumber = data.externalNumber;
 
         tgMessage.clientId = data.clientId;
 

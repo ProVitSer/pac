@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateTrunkData, SendCallResult, TrunkStatusResult, VoipPbxService } from '../interfaces/voip.interface';
+import { CreateTrunkData, SendCallResult, TrunkDataResult, VoipPbxService } from '../interfaces/voip.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Voip } from '../entities/voip.entity';
@@ -16,7 +16,7 @@ export class VoipService {
         private voipRepository: Repository<Voip>,
     ) {}
 
-    public async addNewTrunk(data: CreateTrunkData): Promise<TrunkStatusResult> {
+    public async addNewTrunk(data: CreateTrunkData): Promise<TrunkDataResult> {
         const trunk = await this.voipPbxService.addTrunk(data);
 
         const voip = await this.voipRepository.create({
@@ -30,10 +30,10 @@ export class VoipService {
 
         await this.voipPbxService.updateTrunkRegisterStatus(trunk.trunkId);
 
-        return this.getTrunkStatusById(trunk.trunkId);
+        return this.getTrunkDataById(trunk.trunkId);
     }
 
-    public async getTrunkStatusByType(client: Client, applicationServiceType: ApplicationServiceType): Promise<TrunkStatusResult> {
+    public async getTrunkStatusByType(client: Client, applicationServiceType: ApplicationServiceType): Promise<TrunkDataResult> {
         const trunk = client.voip.filter((v: Voip) => v.applicationServiceType == applicationServiceType);
 
         if (trunk.length) {
@@ -41,26 +41,44 @@ export class VoipService {
                 where: { trunkId: trunk[0].trunkId },
             });
 
+            const trunkData = await this.voipPbxService.getTrunkInfo(trunk[0].trunkId);
+
             return {
                 trunkId: trunk[0].trunkId,
                 trunkStatus: voip.trunkStatus,
+                trunkData,
             };
         }
 
         throw new TrunkNotFoundException();
     }
 
-    public async getTrunkStatusById(trunkId: string): Promise<TrunkStatusResult> {
+    public async getTrunkDataById(trunkId: string): Promise<TrunkDataResult> {
         const voip = await this.voipRepository.findOne({
             where: { trunkId: trunkId },
         });
 
         if (!voip) throw new TrunkNotFoundException();
 
+        const trunkData = await this.voipPbxService.getTrunkInfo(voip.trunkId);
+
         return {
             trunkId: voip.trunkId,
             trunkStatus: voip.trunkStatus,
+            trunkData,
         };
+    }
+
+    public async getTrunksData(client: Client): Promise<TrunkDataResult[]> {
+        const voip = client.voip;
+
+        const result: TrunkDataResult[] = [];
+
+        for (const v of voip) {
+            result.push(await this.getTrunkDataById(v.trunkId));
+        }
+
+        return result;
     }
 
     public async getTrunks(client: Client): Promise<Voip[]> {
@@ -80,7 +98,7 @@ export class VoipService {
         await this.voipRepository.delete({ trunkId: trunkId });
     }
 
-    public async updateTrunk(client: Client, trunkData: UpdateTrunkDto): Promise<TrunkStatusResult> {
+    public async updateTrunk(client: Client, trunkData: UpdateTrunkDto): Promise<TrunkDataResult> {
         const voip = await this.voipRepository.findOne({
             where: { trunkId: trunkData.trunkId },
         });
@@ -93,7 +111,7 @@ export class VoipService {
 
         await this.voipRepository.update({ trunkId: trunkData.trunkId }, { trunkId: updateTrunk.trunkId });
 
-        return this.getTrunkStatusById(updateTrunk.trunkId);
+        return this.getTrunkDataById(updateTrunk.trunkId);
     }
 
     public async makeExternalCall(clientId: number, dstNumber: string, srcNumber: string): Promise<SendCallResult> {

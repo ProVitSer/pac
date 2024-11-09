@@ -84,3 +84,24 @@ export interface CheckStatusSendingSms {
 export interface CheckSmsStatus {
     smsSendStatus: SmsSendStatus;
 }
+
+export interface GetSmsStatisticQuery {
+    page: string;
+    pageSize: string;
+    dateString?: string;
+    phoneNumber?: string;
+}
+
+export interface GetSmsStatisticResult {
+    data: SmsStatisticData[];
+    totalRecords: number;
+}
+
+export interface SmsStatisticData {
+    smsId: string;
+    externalNumber: string;
+    smsText: string;
+    smsSendStatus: SmsSendStatus;
+    smsSendResult: string;
+    date: string;
+}

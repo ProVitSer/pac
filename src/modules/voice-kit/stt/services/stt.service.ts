@@ -7,6 +7,7 @@ import {
     CheckRecognizeTaskResult,
     CreateSttData,
     GetRecignizeResultData,
+    GetStt,
     RecognizeSpeechData,
 } from '../interfaces/stt.interface';
 import { SttGetVoiceFileService } from './stt-get-voice-file.service';
@@ -83,8 +84,26 @@ export class SttService {
         stt.fullFilePath = data.fullFilePath;
         stt.externalSttId = data.externalSttId || null;
         stt.downloadVoiceFileId = data.downloadVoiceFileId || null;
+        stt.applicationId = data.applicationId;
         await this.sstRepository.save<Stt>(stt);
 
         return stt.sttId;
+    }
+
+    public async deteleStt(applicationId: string): Promise<void> {
+        await this.sstRepository.delete({ applicationId });
+    }
+
+    public async getStt(applicationId: string): Promise<GetStt | undefined> {
+        const stt = await this.sstRepository.findOne({ where: { applicationId } });
+
+        if (!stt) return;
+
+        return {
+            sttId: stt.sttId,
+            applicationId: stt.applicationId,
+            sttRecognizeStatus: stt.sttRecognizeStatus,
+            textDialog: stt.textDialog,
+        };
     }
 }

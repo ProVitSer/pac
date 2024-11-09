@@ -11,6 +11,9 @@ export class TgMessages {
     @Column({ nullable: false, name: 'message' })
     message: string;
 
+    @Column({ nullable: true, name: 'external_number' })
+    externalNumber: string;
+
     @Column({ nullable: true, name: 'tg_config_id' })
     tgConfigId: number;
 

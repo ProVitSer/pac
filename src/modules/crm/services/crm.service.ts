@@ -38,10 +38,10 @@ export class CrmService {
         try {
             switch (data.callDireciton) {
                 case CallDirection.incoming:
-                    return await this.sendInfoByIncomingCall(data);
-
+                    if (data.fullCallInfo.isDstInUsers) return await this.sendInfoByIncomingCall(data);
+                    return await this.addContactIfNotExists(data);
                 case CallDirection.outgoing:
-                    return await this.sendInfoByOutgoingCall(data);
+                    if (data.fullCallInfo.isDstInUsers) return await this.sendInfoByOutgoingCall(data);
 
                 default:
                     break;
@@ -67,6 +67,16 @@ export class CrmService {
         return await this.crmApiService.searchContact(crmConfig, searchData);
     }
 
+    private async addContactIfNotExists(data: CrmCallData) {
+        const crmConfig = await this.crmConfigService.getCrmConfig(data.clientId);
+
+        const contact = await this.searchClientByPhone(data.clientId, data?.fullCallInfo.srcCallerNumber);
+
+        if (contact.result.length !== 0) return;
+
+        return await this.crmApiService.addContact(crmConfig, data?.fullCallInfo.srcCallerNumber);
+    }
+
     public async addMissedCallToCrm(data: MissedCallToCrmData): Promise<void> {
         const crmConfig = await this.crmConfigService.getCrmConfig(data.clientId);
 
@@ -82,8 +92,8 @@ export class CrmService {
                 DESCRIPTION: `Пропущенный вызов от абонента ${data.externalNumber} по номеру ${data.trunkName}`,
                 PRIORITY: '2',
                 GROUP_ID: crmConfig.taskGroup,
-                ...(crmConfig?.daedlineMin
-                    ? { DEADLINE: format(addMinutes(new Date(), crmConfig.daedlineMin), 'yyyy-MM-dd H:mm:ss') }
+                ...(crmConfig?.deadlineMin
+                    ? { DEADLINE: format(addMinutes(new Date(), crmConfig.deadlineMin), 'yyyy-MM-dd H:mm:ss') }
                     : {}),
             },
         };

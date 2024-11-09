@@ -1,6 +1,13 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { TTSProviderService } from './tts.provider';
-import { ListVoicesData, TTSConvertVoiceFileData, TTSData } from '../interfaces/tts.interface';
+import {
+    GetTtsFilesQuery,
+    GetTtsFilesResult,
+    ListVoicesData,
+    TTSConvertVoiceFileData,
+    TTSData,
+    TtsFilesData,
+} from '../interfaces/tts.interface';
 import { TTSProviderType } from '../interfaces/tts.enum';
 import TTSFileNotFoundException from '../exceptions/tts-file-not-found.exception';
 import { FileUtilsService } from '@app/common/utils/file.utils';
@@ -10,6 +17,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getUnixTime } from 'date-fns';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { format } from 'date-fns';
+import * as fs from 'fs';
 
 @Injectable()
 export class TtsService {
@@ -79,7 +88,58 @@ export class TtsService {
         tts.generatedFileName = ttsData.generatedFileName;
         tts.fullFilePath = ttsData.fullFilePath;
         tts.text = data.text;
+        tts.name = data.name || ttsData.generatedFileName;
 
         return await this.ttsRepository.save<Tts>(tts);
+    }
+
+    public async getTTSFiles(query: GetTtsFilesQuery): Promise<GetTtsFilesResult> {
+        const parsePage = parseInt(query.page || '1');
+
+        const parsePageSize = parseInt(query.pageSize || '10');
+
+        const searchDate = query.dateString || null; //format(new Date(), 'yyyy-MM-dd');
+
+        const queryBuilder = this.ttsRepository.createQueryBuilder('tts').orderBy('tts.id', 'DESC');
+
+        if (searchDate) {
+            queryBuilder.where('DATE(tts.createdAt) = :searchDate', { searchDate });
+        }
+
+        if (query.name) {
+            queryBuilder.andWhere('tts.name LIKE :name', { name: `%${query.name}%` });
+        }
+
+        const totalRecords = await queryBuilder.getCount();
+
+        const ttsFiles = await queryBuilder
+            .skip((parsePage - 1) * parsePageSize)
+            .take(parsePageSize)
+            .getMany();
+
+        const formattedTtsFiless: TtsFilesData[] = [];
+
+        ttsFiles.map((file: Tts) =>
+            formattedTtsFiless.push({
+                name: file.name,
+                ttsId: file.ttsId,
+                ttsProviderType: file.ttsProviderType,
+                text: file.text,
+                date: format(new Date(file.createdAt), 'yyyy-MM-dd'),
+            }),
+        );
+
+        return {
+            data: formattedTtsFiless,
+            totalRecords: totalRecords || 0,
+        };
+    }
+
+    public async deleteTtsFile(ttsId: string) {
+        const tts = await this.getTTSVoiceFile(ttsId);
+
+        fs.unlinkSync(`${tts.fullFilePath}${tts.fileName}`);
+
+        await this.ttsRepository.remove(tts);
     }
 }

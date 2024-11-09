@@ -1,5 +1,5 @@
-import { CallDirection } from '@app/modules/call-event-handler/interfaces/call-event-handler.enum';
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column } from 'typeorm';
+import { CallDirection } from '../interfaces/call-analytics.enum';
 
 @Entity()
 export class CallAnalytics {

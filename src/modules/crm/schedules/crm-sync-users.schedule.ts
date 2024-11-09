@@ -25,6 +25,8 @@ export class CrmSyncUsersSchedule {
 
         if (!crmConfig) return;
 
+        await this.crmUsersRepository.clear();
+
         await this.updateOrAddCrmUsersInfo(crmConfig[0], this.startPage);
     }
 
@@ -43,13 +45,15 @@ export class CrmSyncUsersSchedule {
     private async _updateCrmUsersInfo(crmUsers: BitirxUserGet): Promise<void> {
         await Promise.all(
             crmUsers.result.map(async (user) => {
-                await this.crmUsersRepository.upsert(
-                    {
-                        pbxExtension: Number(user.UF_PHONE_INNER),
-                        crmUserId: Number(user.ID),
-                    },
-                    ['pbxExtension'],
-                );
+                if (user?.UF_PHONE_INNER) {
+                    await this.crmUsersRepository.upsert(
+                        {
+                            pbxExtension: Number(user.UF_PHONE_INNER),
+                            crmUserId: Number(user.ID),
+                        },
+                        ['pbxExtension'],
+                    );
+                }
             }),
         );
     }

@@ -17,16 +17,15 @@ const DEV_CONF: ConfigEnvironment = {
     appPort: 3000,
     appProtocol: AppProtocol.http,
     licenseServer: process.env.LICENSE_SERVER,
-    domain: 'localhost',
+    domain: process.env.DOMAIN,
     certsPathFile: {
         key: `${process.env.CERT_KEY_PATH_FILE}`,
         ca: `${process.env.CERT_CA_PATH_FILE}`,
         cert: `${process.env.CERT_CERT_PATH_FILE}`,
     },
     cors: {
-        allowedHeaders:
-            'Content-Type, Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Credentials, Authorization',
-        origin: ['*'],
+        allowedHeaders: 'Origin, Content-Type, Authorization',
+        origin: ['http://localhost:4200'],
         methods: 'GET, POST, PUT, DELETE, OPTIONS',
         credentials: true,
         maxAge: 3600,
@@ -194,9 +193,8 @@ const PROD_CONF: ConfigEnvironment = {
         cert: `${process.env.CERT_CERT_PATH_FILE}`,
     },
     cors: {
-        allowedHeaders:
-            'Content-Type, Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Credentials, Authorization',
-        origin: ['*'],
+        allowedHeaders: 'Origin, Content-Type, Authorization',
+        origin: ['http://localhost:4200'],
         methods: 'GET, POST, PUT, DELETE, OPTIONS',
         credentials: true,
         maxAge: 3600,

@@ -19,9 +19,14 @@ export interface CreateTrunkData {
     authPassword: string;
     pbxIp: string;
 }
-export interface TrunkStatusResult {
+export interface TrunkDataResult {
     trunkId: string;
     trunkStatus: TrunkRegistryStatus;
+    trunkData: {
+        authId: string;
+        authPassword: string;
+        pbxIp: string;
+    };
 }
 
 export interface SendCallData {
@@ -46,10 +51,10 @@ export interface CreateTrunkResult {
 export interface VoipPbxService {
     addTrunk(data: CreateTrunkData): Promise<CreateTrunkResult>;
     updateTrunkRegisterStatus(trunkId: string): Promise<void>;
+    getTrunkInfo(trunkId: string): Promise<TrunkInfo>;
     sendCall(data: SendCallData): Promise<SendCallResult>;
     updateTrunk(data: UpdateTrunkData): Promise<UpdateTrunkResult>;
     deleteTrunk(trunkId: string): Promise<void>;
-    sendCall(data: SendCallData): Promise<SendCallResult>;
     sendCallWithAudio(data: SendCallWithAudioData): Promise<SendCallResult>;
 }
 
@@ -66,4 +71,10 @@ export interface UpdateTrunkData {
     authId?: string;
     authPassword?: string;
     pbxIp?: string;
+}
+
+export interface TrunkInfo {
+    authId: string;
+    authPassword: string;
+    pbxIp: string;
 }

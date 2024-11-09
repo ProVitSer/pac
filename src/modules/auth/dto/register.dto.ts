@@ -13,7 +13,11 @@ export class RegisterDto {
 
     @IsString()
     @IsNotEmpty()
-    contactPersonName: string;
+    firstname: string;
+
+    @IsString()
+    @IsNotEmpty()
+    lastname: string;
 
     @IsString()
     @IsPhoneNumber({ message: 'Phone number must be in the format 79134567891' })

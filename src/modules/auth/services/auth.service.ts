@@ -1,19 +1,14 @@
 import { UsersService } from '../../../modules/users/services/users.service';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import RegisterDto from '../dto/register.dto';
 import { ArgonUtilService } from '../../../common/utils/argon.service';
 import { PasswordNotMatchesException } from '../exceptions/password-not-matches.exeption';
 import LoginDto from '../dto/login.dto';
-import { ForgotPasswordResponse, LoginResponse } from '../interfaces/auth.interface';
+import { LoginResponse } from '../interfaces/auth.interface';
 import { TokenService } from './token.service';
 import { Users } from '../../../modules/users/entities/users.entity';
 import { LicensesService } from '../../../modules/licenses/services/licenses.service';
 import { ClientService } from '../../../modules/client/services/client.service';
-import ForgotPassword from '../dto/forgot-password.dto';
-import { v4 as uuidv4 } from 'uuid';
-import ResetPassword from '../dto/reset-password.dto';
-import { ConfigService } from '@nestjs/config';
-import { NotificationsService } from '@app/modules/notifications/services/notifications.service';
 
 @Injectable()
 export class AuthService {
@@ -22,8 +17,6 @@ export class AuthService {
         private readonly tokenService: TokenService,
         private readonly licensesService: LicensesService,
         private readonly clientService: ClientService,
-        private readonly configService: ConfigService,
-        private readonly notificationsService: NotificationsService,
     ) {}
 
     public async register(registrationData: RegisterDto): Promise<void> {
@@ -35,7 +28,8 @@ export class AuthService {
 
         await this.usersService.create({
             email: registrationData.userEmail,
-            name: registrationData.name,
+            firstname: registrationData.firstname,
+            lastname: registrationData.lastname,
             phoneNumber: registrationData.userPhoneNumber,
             clientId: client.clientId,
             password: password,
@@ -55,7 +49,16 @@ export class AuthService {
 
         await this.verifyPassword(data.password, user.password);
 
-        const tokens = await this.tokenService.getTokens(user.id);
+        const tokens = await this.tokenService.getAccessToken({
+            userId: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            company: user.client.companyName,
+            clientId: user.client.clientId,
+            permissions: user.permissions,
+            products: user.client.licenses.products,
+            roles: user.roles,
+        });
 
         await this.usersService.updateLatestActivity(user.id);
 
@@ -64,37 +67,6 @@ export class AuthService {
 
     public async validateUser(userId: number): Promise<Users> {
         return await this.usersService.getById(userId);
-    }
-
-    public async forgotPassword(data: ForgotPassword): Promise<ForgotPasswordResponse> {
-        const user = await this.usersService.getByEmail(data.email);
-
-        const validationToken = uuidv4();
-
-        await this.usersService.updateValidationToken(user.id, validationToken);
-
-        await this.notificationsService.forgotPasswordNotification({
-            to: data.email,
-            url: `${this.configService.get('domain')}/resetPassword/${validationToken}`,
-        });
-
-        return {
-            message: 'Письмо для сброса пароля успешно отправлено',
-        };
-    }
-
-    public async resetPassword(data: ResetPassword) {
-        const user = await this.usersService.getUserByValidationToken(data.verificationCode);
-
-        if (!user) throw new UnauthorizedException();
-
-        const hash = await ArgonUtilService.hashData(data.password);
-
-        await this.usersService.updateUser({ id: user.id, password: hash, validationToken: null });
-
-        return {
-            message: 'Пароль пользователя успешно изменен',
-        };
     }
 
     public async logout(userId: number) {

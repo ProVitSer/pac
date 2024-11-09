@@ -14,10 +14,12 @@ import { CallResult, CqaFileType } from '../interfaces/call-quality-assessment.e
 import { CallQualityAssessmentStatisticService } from '../services/call-quality-assessment-statistic.service';
 import { AmqpService } from '@app/modules/amqp/services/amqp.service';
 import { Exchange, RoutingKey } from '@app/common/constants/amqp';
+import { UtilsService } from '@app/common/utils/utils.service';
 
 @Injectable()
 export class CallQualityAssessmentApplication implements OnApplicationBootstrap {
     private readonly soundRuPath: string = 'ru';
+    private readonly aiContext = 'ai';
     constructor(
         @Inject(AriProvider.cqa)
         private readonly ariCall: {
@@ -43,9 +45,17 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
                 this.cqas.addCqasStatistic({ uniqueid: event.channel.id, clientNumber: event.channel.caller.name, trunkId: match[1] });
 
-                await this.handleCall(event, incoming, match[1]);
+                const trunk = await this.getTrunkData(match[1]);
 
-                return incoming.hangup();
+                const cqac = await this.getCqacConfig(trunk.client.clientId);
+
+                if (cqac.aiEnabled) {
+                    return this.continueAiDialplan(event, incoming);
+                }
+
+                await this.handleCall(event, incoming, cqac);
+
+                await incoming.hangup();
             } catch (e) {
                 incoming.hangup();
 
@@ -58,11 +68,7 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
         this.ariCall.ariClient.start('ari-call');
     }
 
-    private async handleCall(event: StasisStart, incomingChannel: Channel, trunkId: string): Promise<void> {
-        const trunk = await this.getTrunkData(trunkId);
-
-        const cqac = await this.getCqacConfig(trunk.client.clientId);
-
+    private async handleCall(event: StasisStart, incomingChannel: Channel, cqac: CallQualityAssessmentConfig): Promise<void> {
         const callQualitySound = await this.getCallQualitySound(cqac);
 
         await incomingChannel.answer();
@@ -88,6 +94,8 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
         if (!cqaMainSound) return;
 
+        let dtmfReceived = '0';
+
         return await new Promise<string>(async (resolve) => {
             const playback = this.ariCall.ariClient.Playback();
 
@@ -101,13 +109,21 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             incomingChannel.on('ChannelDtmfReceived', async (event: ChannelDtmfReceived, _channel: Channel) => {
-                await play.stop();
-                resolve(event.digit);
+                dtmfReceived = event.digit;
+
+                try {
+                    await play.stop();
+                    resolve(event.digit);
+                } catch (e) {
+                    resolve(event.digit);
+                }
             });
 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             play.once('PlaybackFinished', async (event: PlaybackStarted, _: Playback) => {
-                resolve('0');
+                await UtilsService.sleep(5000);
+
+                resolve(dtmfReceived);
             });
         });
     }
@@ -128,6 +144,8 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
 
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             play.once('PlaybackFinished', async (event: PlaybackStarted, _: Playback) => {
+                await UtilsService.sleep(5000);
+
                 resolve();
             });
         });
@@ -172,5 +190,18 @@ export class CallQualityAssessmentApplication implements OnApplicationBootstrap 
         }
 
         return callQualitySound;
+    }
+
+    private async continueAiDialplan(event: StasisStart, incoming: Ari.Channel) {
+        try {
+            await this.ariCall.ariClient.channels.continueInDialplan({
+                channelId: event.channel.id,
+                context: this.aiContext,
+                extension: event.channel.dialplan.exten,
+            });
+        } catch (e) {
+            this.logger.error(event);
+            return incoming.hangup();
+        }
     }
 }

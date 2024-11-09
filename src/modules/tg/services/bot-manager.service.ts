@@ -6,6 +6,7 @@ import { TgBotService } from './tg-bot.service';
 import { ExtraReplyMessage } from 'telegraf/typings/telegram-types';
 import { Message } from 'telegraf/typings/core/types/typegram';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { TgConfig } from '../entities/tg-config.entity';
 
 @Injectable()
 export class BotManagerService {
@@ -20,7 +21,19 @@ export class BotManagerService {
         this.bots.set(token, botService.bot);
     }
 
-    async sendMessage(token: string, chatId: number, message: string): Promise<Message.TextMessage> {
+    public async reinacializeBots(tgCofigList: TgConfig[]) {
+        this.bots = new Map<string, Telegraf<any>>();
+
+        for (const tg of tgCofigList) {
+            const app = await NestFactory.createApplicationContext(DynamicBotModule.forRoot(tg.token));
+
+            const botService = app.get(TgBotService);
+
+            this.bots.set(tg.token, botService.bot);
+        }
+    }
+
+    public async sendMessage(token: string, chatId: number | string, message: string): Promise<Message.TextMessage> {
         const bot = this.bots.get(token);
 
         if (bot) {

@@ -94,7 +94,7 @@ import { SmsModule } from '../sms/sms.module';
         SmsModule,
         RouterModule.register([
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'software-distribution',
@@ -103,7 +103,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'auth',
@@ -112,7 +112,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'voip',
@@ -121,7 +121,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'files',
@@ -130,7 +130,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'cqa',
@@ -139,7 +139,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'pac',
@@ -148,7 +148,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'pac',
@@ -157,7 +157,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'tg',
@@ -166,7 +166,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'smart-routing',
@@ -175,7 +175,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'crm',
@@ -184,7 +184,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'missed-call',
@@ -193,7 +193,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'call-analytics',
@@ -202,7 +202,7 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'voice-kit',
@@ -211,11 +211,20 @@ import { SmsModule } from '../sms/sms.module';
                 ],
             },
             {
-                path: 'api',
+                path: '',
                 children: [
                     {
                         path: 'sms',
                         module: SmsModule,
+                    },
+                ],
+            },
+            {
+                path: '',
+                children: [
+                    {
+                        path: 'user',
+                        module: UsersModule,
                     },
                 ],
             },

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -24,9 +24,9 @@ export class ApiJwtStrategy extends PassportStrategy(Strategy, 'api-jwt') {
 
         const user = await this.authService.validateUser(userId);
 
-        if (!user) return new UnauthorizedException();
+        if (!user) return false;
 
-        if (!user.client.licenses.isActive) return new UnauthorizedException();
+        if (!user.client.licenses.isActive) return false;
 
         return user;
     }

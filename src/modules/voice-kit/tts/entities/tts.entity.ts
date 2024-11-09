@@ -6,6 +6,9 @@ export class Tts {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ nullable: true, name: 'name' })
+    name: string;
+
     @Column({ nullable: false, name: 'tts_id' })
     ttsId: number;
 
